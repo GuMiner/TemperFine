@@ -1,0 +1,8 @@
+## Ignore files that shouldn't be pushed to GitHub.
+
+# Actual binaries.
+*.exe
+*.depend
+
+# Build results
+[Oo]bj/

@@ -1,0 +1,20 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 12/31/2015
+
+# General Settings
+ConfigVersion 3
+
+# Graphics Settings
+# This program is limited to a 16:9 screen resolution and 
+#  *will* letterbox if the aspect ratio differs.
+FullScreen false
+ScreenWidth 1280
+ScreenHeight 720
+
+# Maximum size of the text image.
+# Text will fail to be displayed if this is too small, but certain GPUs won't support their reported maximum texture size.
+TextImageSize 1024
