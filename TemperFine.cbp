@@ -59,6 +59,9 @@
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/ConversionUtils.h">
+			<Option virtualFolder="Utility/" />
+		</Unit>
 		<Unit filename="include/FontManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -70,6 +73,10 @@
 		</Unit>
 		<Unit filename="include/Logger.h">
 			<Option virtualFolder="Utility/" />
+		</Unit>
+		<Unit filename="include/MapInfo.h" />
+		<Unit filename="include/MapManager.h">
+			<Option virtualFolder="Managers/" />
 		</Unit>
 		<Unit filename="include/Physics.h">
 			<Option virtualFolder="Physics/" />
@@ -106,6 +113,9 @@
 		<Unit filename="src/Constants.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="src/ConversionUtils.cpp">
+			<Option virtualFolder="Utility/" />
+		</Unit>
 		<Unit filename="src/FontManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -117,6 +127,9 @@
 		</Unit>
 		<Unit filename="src/Logger.cpp">
 			<Option virtualFolder="Utility/" />
+		</Unit>
+		<Unit filename="src/MapManager.cpp">
+			<Option virtualFolder="Managers/" />
 		</Unit>
 		<Unit filename="src/Physics.cpp">
 			<Option virtualFolder="Physics/" />

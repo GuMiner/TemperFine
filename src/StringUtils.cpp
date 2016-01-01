@@ -3,9 +3,46 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include "Logger.h"
 #include "StringUtils.h"
 
-// Loads a file as a really big string; returns true on success.
+const char* StringUtils::Comment = "#";
+
+bool StringUtils::LoadConfigurationFile(const std::string& filename, std::vector<std::string>& lines, std::map<int, std::string>& commentLines)
+{
+    std::string entireFile;
+    if (!StringUtils::LoadStringFromFile(filename, entireFile))
+    {
+        Logger::Log("Unable to load the config file!");
+        return false;
+    }
+
+    int currentLine = 0;
+    StringUtils::Split(entireFile, Newline, false, lines);
+    for (unsigned int i = 0; i < lines.size(); i++)
+    {
+        std::string commentString = std::string(Comment);
+        if (StringUtils::StartsWith(lines[i], commentString))
+        {
+            commentLines[currentLine] = std::string(lines[i]);
+
+            lines.erase(lines.begin() + i);
+            i--;
+        }
+        else if (StringUtils::IsWhitespaceOrEmpty(lines[i]))
+        {
+            commentLines[currentLine] = std::string(lines[i]);
+
+            lines.erase(lines.begin() + i);
+            i--;
+        }
+
+        ++currentLine;
+    }
+
+    return true;
+}
+
 bool StringUtils::LoadStringFromFile(const std::string& filename, std::string& result)
 {
     std::ifstream file(filename.c_str());

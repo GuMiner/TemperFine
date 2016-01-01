@@ -10,18 +10,11 @@ class ConfigManager
 {
 private:
 	// Empty lines are counted as comment lines to preserve formatting of spacing.
-	std::string CommentString;
 	std::map<int, std::string> commentLines;
 
     const char* configFileName;
 protected:
-	std::string currentLine;
 	int lineCounter;
-    bool LoadBool(bool& boolean);
-    bool LoadInt(int& integer);
-    bool LoadFloat(float& floatingPoint);
-    bool LoadKey(sf::Keyboard::Key& key);
-	bool LoadVector(vmath::vec3& vector);
 
     bool ReadBool(std::vector<std::string>& configFileLines, bool& boolean, const char* errorMessage);
     bool ReadInt(std::vector<std::string>& configFileLines, int& integer, const char* errorMessage);

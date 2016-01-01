@@ -82,6 +82,13 @@ Constants::Status TemperFine::Initialize()
         return Constants::Status::BAD_CONFIG;
     }
 
+    Logger::Log("Loading maps...");
+    if (!mapManager.ReadMap("maps/test.txt", testMap))
+    {
+        Logger::Log("Bad test map!");
+        return Constants::Status::BAD_MAP;
+    }
+
     Logger::Log("Configuration loaded!");
     return Constants::Status::OK;
 }
@@ -231,11 +238,11 @@ Constants::Status TemperFine::Run()
             glClearBufferfv(GL_COLOR, 0, color);
             glClearBufferfv(GL_DEPTH, 0, &one);
 
-            // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
-            statistics.RenderStats(perspectiveMatrix);
-
             // Renders the projection matrix.
             voxelMap.Render(projectionMatrix);
+
+            // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
+            statistics.RenderStats(perspectiveMatrix);
 
             window.display();
         }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 #include <vector>
 
 class StringUtils
@@ -8,6 +9,10 @@ class StringUtils
 public:
     static const char Newline = '\n';
     static const char Space = ' ';
+    static const char* Comment;
+
+    // Loads in a configuration-style file, removing comment and blank lines.
+    static bool LoadConfigurationFile(const std::string& filename, std::vector<std::string>& lines, std::map<int, std::string>& commentLines);
 
     // Writes a really big string to a file; returns true on success.
     static bool WriteStringToFile(const std::string& filename, std::string& data);

@@ -4,6 +4,7 @@
 #include "FontManager.h"
 #include "GraphicsConfig.h"
 #include "KeyBindingConfig.h"
+#include "MapManager.h"
 #include "Physics.h"
 #include "PhysicsConfig.h"
 #include "ShaderManager.h"
@@ -20,13 +21,15 @@ class TemperFine
     PhysicsConfig physicsConfig;
 
     // Managers
-    ShaderManager shaderManager;
     FontManager fontManager;
+    MapManager mapManager;
+    ShaderManager shaderManager;
 
     // Game data
     Physics physics;
     Statistics statistics;
     Viewer viewer;
+    MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
     VoxelMap voxelMap;
     vmath::mat4 perspectiveMatrix;
 

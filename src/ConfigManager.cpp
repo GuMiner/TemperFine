@@ -2,72 +2,17 @@
 #include <sstream>
 #include "Logger.h"
 #include "StringUtils.h"
+#include "ConversionUtils.h"
 #include "ConfigManager.h"
 
 ConfigManager::ConfigManager(const char* configFileName)
-	: CommentString("#"), configFileName(configFileName)
+	: configFileName(configFileName)
 {
-}
-
-// Loads in a boolean configuration value.
-bool ConfigManager::LoadBool(bool& boolean)
-{
-    std::string tempInput;
-    return !(!StringUtils::SplitAndGrabSecondary(currentLine, tempInput) || !StringUtils::ParseBoolFromString(tempInput, boolean));
-}
-
-// Loads in an integer configuration value.
-bool ConfigManager::LoadInt(int& integer)
-{
-    std::string tempInput;
-    return !(!StringUtils::SplitAndGrabSecondary(currentLine, tempInput) || !StringUtils::ParseIntFromString(tempInput, integer));
-}
-
-// Loads in a floating-point configuration value.
-bool ConfigManager::LoadFloat(float& floatingPoint)
-{
-    std::string tempInput;
-    return !(!StringUtils::SplitAndGrabSecondary(currentLine, tempInput) || !StringUtils::ParseFloatFromString(tempInput, floatingPoint));
-}
-
-// Loads in an SFML keyboard key.
-bool ConfigManager::LoadKey(sf::Keyboard::Key& key)
-{
-    int keyInt;
-    if (!LoadInt(keyInt))
-    {
-        return false;
-    }
-
-    key = (sf::Keyboard::Key)keyInt;
-    return true;
-}
-
-// Loads in a 3-valued floating point vector.
-bool ConfigManager::LoadVector(vmath::vec3& vector)
-{
-	std::vector<std::string> stringParts;
-	StringUtils::Split(currentLine, StringUtils::Space, true, stringParts);
-
-	if (stringParts.size() != 4)
-	{
-		return false;
-	}
-
-	if (!StringUtils::ParseFloatFromString(stringParts[1], vector[0]) ||
-		!StringUtils::ParseFloatFromString(stringParts[2], vector[1]) ||
-		!StringUtils::ParseFloatFromString(stringParts[3], vector[2]))
-	{
-		return false;
-	}
-
-	return true;
 }
 
 bool ConfigManager::ReadBool(std::vector<std::string>& configFileLines, bool& boolean, const char* errorMessage)
 {
-    currentLine = configFileLines[++lineCounter];
-	if (!LoadBool(boolean))
+	if (!ConversionUtils::LoadBool(configFileLines[++lineCounter], boolean))
 	{
 		Logger::Log(errorMessage);
 		return false;
@@ -78,8 +23,7 @@ bool ConfigManager::ReadBool(std::vector<std::string>& configFileLines, bool& bo
 
 bool ConfigManager::ReadInt(std::vector<std::string>& configFileLines, int& integer, const char* errorMessage)
 {
-    currentLine = configFileLines[++lineCounter];
-	if (!LoadInt(integer))
+	if (!ConversionUtils::LoadInt(configFileLines[++lineCounter], integer))
 	{
 		Logger::Log(errorMessage);
 		return false;
@@ -89,8 +33,7 @@ bool ConfigManager::ReadInt(std::vector<std::string>& configFileLines, int& inte
 }
 bool ConfigManager::ReadFloat(std::vector<std::string>& configFileLines, float& floatingPoint, const char* errorMessage)
 {
-    currentLine = configFileLines[++lineCounter];
-	if (!LoadFloat(floatingPoint))
+	if (!ConversionUtils::LoadFloat(configFileLines[++lineCounter], floatingPoint))
 	{
 		Logger::Log(errorMessage);
 		return false;
@@ -100,8 +43,7 @@ bool ConfigManager::ReadFloat(std::vector<std::string>& configFileLines, float& 
 }
 bool ConfigManager::ReadKey(std::vector<std::string>& configFileLines, sf::Keyboard::Key& key, const char* errorMessage)
 {
-    currentLine = configFileLines[++lineCounter];
-	if (!LoadKey(key))
+	if (!ConversionUtils::LoadKey(configFileLines[++lineCounter], key))
 	{
 		Logger::Log(errorMessage);
 		return false;
@@ -112,8 +54,7 @@ bool ConfigManager::ReadKey(std::vector<std::string>& configFileLines, sf::Keybo
 
 bool ConfigManager::ReadVector(std::vector<std::string>& configFileLines, vmath::vec3& vector, const char* errorMessage)
 {
-    currentLine = configFileLines[++lineCounter];
-	if (!LoadVector(vector))
+	if (!ConversionUtils::LoadVector(configFileLines[++lineCounter], vector))
 	{
 		Logger::Log(errorMessage);
 		return false;
@@ -168,8 +109,7 @@ bool ConfigManager::LoadConfigurationValues(std::vector<std::string>& configFile
 {
     lineCounter = 0;
 
-	currentLine = configFileLines[lineCounter];
-    if (!LoadInt(configVersion))
+    if (!ConversionUtils::LoadInt(configFileLines[lineCounter], configVersion))
     {
         Logger::Log("Error decoding the configuration file version!");
         return false;
@@ -187,35 +127,11 @@ void ConfigManager::WriteConfigurationValues()
 // Reads in the configuration and sets up the variables listed
 bool ConfigManager::ReadConfiguration()
 {
-    // Load, split, and remove comment lines from the configuration file.
-    std::string entireFile;
     std::vector<std::string> lines;
-    if (!StringUtils::LoadStringFromFile(configFileName, entireFile))
+    if (!StringUtils::LoadConfigurationFile(configFileName, lines, commentLines))
     {
-        Logger::Log("Unable to load the config file!");
+        Logger::Log("Unable to properly-parse the config-style file!");
         return false;
-    }
-
-    int currentLine = 0;
-    StringUtils::Split(entireFile, StringUtils::Newline, false, lines);
-    for (unsigned int i = 0; i < lines.size(); i++)
-    {
-        if (StringUtils::StartsWith(lines[i], CommentString))
-        {
-            commentLines[currentLine] = std::string(lines[i]);
-
-            lines.erase(lines.begin() + i);
-            i--;
-        }
-        else if (StringUtils::IsWhitespaceOrEmpty(lines[i]))
-        {
-            commentLines[currentLine] = std::string(lines[i]);
-
-            lines.erase(lines.begin() + i);
-            i--;
-        }
-
-        ++currentLine;
     }
 
     // Parse out the configuration values from the file.
