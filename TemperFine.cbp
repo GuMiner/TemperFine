@@ -92,11 +92,14 @@
 			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="include/Viewer.h" />
+		<Unit filename="include/VoxelMap.h" />
 		<Unit filename="include/vmath.hpp">
 			<Option virtualFolder="Physics/" />
 		</Unit>
 		<Unit filename="shaders/fontRender.fs" />
 		<Unit filename="shaders/fontRender.vs" />
+		<Unit filename="shaders/voxelMapRender.fs" />
+		<Unit filename="shaders/voxelMapRender.vs" />
 		<Unit filename="src/ConfigManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -133,6 +136,7 @@
 			<Option virtualFolder="Physics/" />
 		</Unit>
 		<Unit filename="src/Viewer.cpp" />
+		<Unit filename="src/VoxelMap.cpp" />
 		<Unit filename="src/stb_implementations.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>

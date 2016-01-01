@@ -1,15 +1,18 @@
 #pragma once
 #include "Statistics.h"
 #include "Viewer.h"
+#include "VoxelMap.h"
 
 class Physics
 {
     Viewer* viewer;
+    VoxelMap* voxelMap;
+
     public:
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(Viewer* viewer);
+        void Initialize(Viewer* viewer, VoxelMap* voxelMap);
 
         // Runs actions on the physics thread.
         void Run();

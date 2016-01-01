@@ -9,6 +9,7 @@
 #include "ShaderManager.h"
 #include "Statistics.h"
 #include "Viewer.h"
+#include "VoxelMap.h"
 
 // Handles startup and the base graphics rendering loop.
 class TemperFine
@@ -26,6 +27,7 @@ class TemperFine
     Physics physics;
     Statistics statistics;
     Viewer viewer;
+    VoxelMap voxelMap;
     vmath::mat4 perspectiveMatrix;
 
     // Non-graphics threads

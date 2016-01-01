@@ -3,7 +3,7 @@
 
 Viewer::Viewer()
 {
-    viewPosition = vmath::vec3(65, 0, 0);
+    viewPosition = vmath::vec3(3, 4, 2);
 	viewOrientation = vmath::quaternion(0, 0, 0, 1);
 }
 

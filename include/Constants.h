@@ -23,7 +23,7 @@ public:
     // Allowable return codes
     enum Status { OK = 0, BAD_SHADERS = 1, BAD_FONT = 2,
         BAD_IMAGES = 3, BAD_SOUND = 4, BAD_MUSIC = 5,
-        BAD_CONFIG = 6, BAD_GLEW = 7, BAD_STATS = 8 };
+        BAD_CONFIG = 6, BAD_GLEW = 7, BAD_STATS = 8, BAD_VOXEL_MAP = 9 };
 
     // Graphics viewport settings
     static float FOV_Y;

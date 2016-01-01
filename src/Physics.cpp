@@ -8,9 +8,10 @@ Physics::Physics()
     isPaused = false;
 }
 
-void Physics::Initialize(Viewer* viewer)
+void Physics::Initialize(Viewer* viewer, VoxelMap* voxelMap)
 {
     this->viewer = viewer;
+    this->voxelMap = voxelMap;
 }
 
 void Physics::Run()
@@ -25,7 +26,10 @@ void Physics::Run()
             viewer->InputUpdate();
 
             // Updates statistics.
-            viewer->viewPosition[2] = longRunningClock.getElapsedTime().asSeconds();
+            viewer->viewPosition[2] = 2 + longRunningClock.getElapsedTime().asSeconds();
+
+            // Updates the voxel map.
+            voxelMap->Update();
         }
 
         // The physics thread runs at a configurable delay, which we abide by here.

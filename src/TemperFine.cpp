@@ -146,9 +146,16 @@ Constants::Status TemperFine::LoadAssets()
         return Constants::Status::BAD_STATS;
     }
 
+    // Voxel Map
+    Logger::Log("Voxel map...");
+    if (!voxelMap.Initialize(shaderManager))
+    {
+        return Constants::Status::BAD_VOXEL_MAP;
+    }
+
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&viewer);
+    physics.Initialize(&viewer, &voxelMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -195,7 +202,7 @@ Constants::Status TemperFine::Run()
             {
                 paused = true;
                 physics.Pause();
-                //musicManager.Pause();
+                // musicManager.Pause();
             }
             else if (event.type == sf::Event::GainedFocus)
             {
@@ -212,20 +219,23 @@ Constants::Status TemperFine::Run()
         // TODO only update if the view position has updated.
         statistics.UpdateStats(viewer.viewPosition);
 
-        // vmath::mat4 lookAtMatrix = shipia.shipOrientation.asMatrix() * vmath::translate(-shipia.shipPosition);
-        // vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;
+        vmath::mat4 lookAtMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
+        vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;
 
         // Render, only if non-paused.
         if (!paused)
         {
-            // Clear the screen, firstoff
+            // Clear the screen (and depth buffer) before any rendering begins.
             const GLfloat color[] = { 0, 0, 0, 1 };
             const GLfloat one = 1.0f;
             glClearBufferfv(GL_COLOR, 0, color);
             glClearBufferfv(GL_DEPTH, 0, &one);
 
-            // RENDER HERE
+            // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
             statistics.RenderStats(perspectiveMatrix);
+
+            // Renders the projection matrix.
+            voxelMap.Render(projectionMatrix);
 
             window.display();
         }
