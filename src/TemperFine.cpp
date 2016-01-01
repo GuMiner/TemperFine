@@ -155,7 +155,7 @@ Constants::Status TemperFine::LoadAssets()
 
     // Voxel Map
     Logger::Log("Voxel map...");
-    if (!voxelMap.Initialize(shaderManager))
+    if (!voxelMap.Initialize(imageManager, shaderManager))
     {
         return Constants::Status::BAD_VOXEL_MAP;
     }

@@ -68,6 +68,10 @@
 		<Unit filename="include/GraphicsConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="include/ImageManager.h">
+			<Option virtualFolder="Managers/" />
+		</Unit>
+		<Unit filename="include/ImageTexture.h" />
 		<Unit filename="include/KeyBindingConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
@@ -121,6 +125,9 @@
 		</Unit>
 		<Unit filename="src/GraphicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="src/ImageManager.cpp">
+			<Option virtualFolder="Managers/" />
 		</Unit>
 		<Unit filename="src/KeyBindingConfig.cpp">
 			<Option virtualFolder="Configs/" />

@@ -5,8 +5,18 @@ VoxelMap::VoxelMap()
 {
 }
 
-bool VoxelMap::Initialize(ShaderManager& shaderManager)
+bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManager)
 {
+    Logger::Log("Voxel texture loading...");
+    GLuint textureId = imageManager.AddImage("images/voxelTextureMap.png");
+    if (textureId == 0)
+    {
+        return false;
+    }
+
+    voxelTextures = imageManager.GetImage(textureId);
+    Logger::Log("Voxel texture loading successful.");
+
     // Voxel Map shader creation. Note we also get the location of the matrix to set later.
     Logger::Log("Voxel Map shader creation...");
 	if (!shaderManager.CreateShaderProgram("voxelMapRender", &voxelMapRenderProgram))

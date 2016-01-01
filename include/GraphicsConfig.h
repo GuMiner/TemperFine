@@ -12,6 +12,9 @@ public:
 
 	static int TextImageSize;
 
+	static int VoxelSubImageSize;
+	static int VoxelsPerRow;
+
 	GraphicsConfig(const char* configName);
 };
 

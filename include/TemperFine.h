@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
+#include "ImageManager.h"
 #include "KeyBindingConfig.h"
 #include "MapManager.h"
 #include "Physics.h"
@@ -22,6 +23,7 @@ class TemperFine
 
     // Managers
     FontManager fontManager;
+    ImageManager imageManager;
     MapManager mapManager;
     ShaderManager shaderManager;
 
