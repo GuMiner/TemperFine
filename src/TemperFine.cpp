@@ -110,6 +110,28 @@ Constants::Status TemperFine::LoadGraphics()
     // Perspective display
     perspectiveMatrix = vmath::perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
 
+    // Assets
+    return LoadAssets();
+}
+
+Constants::Status TemperFine::LoadAssets()
+{
+    // Fonts
+    Logger::Log("Font loading...");
+    if (!fontManager.LoadFont(&shaderManager, "fonts/DejaVuSans.ttf"))
+    {
+        return Constants::Status::BAD_FONT;
+    }
+
+    Logger::Log("Font loading done!");
+
+    // Statistics
+    Logger::Log("Statistics loading...");
+    if (!statistics.Initialize(&fontManager))
+    {
+        return Constants::Status::BAD_STATS;
+    }
+
     return Constants::Status::OK;
 }
 
@@ -128,6 +150,10 @@ Constants::Status TemperFine::Run()
     {
         return firstTimeSetup;
     }
+
+    // TODO TODO remove
+    vmath::vec3 pos = vmath::vec3(0, 0, 0);
+    statistics.UpdateStats(pos);
 
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
@@ -179,6 +205,7 @@ Constants::Status TemperFine::Run()
             glClearBufferfv(GL_DEPTH, 0, &one);
 
             // RENDER HERE
+            statistics.RenderStats(perspectiveMatrix);
 
             window.display();
         }

@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <string>
 #include <GL/glew.h>
 #include <stb/stb_truetype.h>
 #include <stb/stb_image.h>

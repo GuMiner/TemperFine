@@ -49,6 +49,7 @@
 		</Compiler>
 		<Unit filename="LICENSE" />
 		<Unit filename="README.md" />
+		<Unit filename="fonts/DejaVuSans.ttf" />
 		<Unit filename="include/ConfigManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -67,6 +68,7 @@
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="include/Statistics.h" />
 		<Unit filename="include/StringUtils.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
@@ -80,6 +82,8 @@
 		<Unit filename="include/vmath.hpp">
 			<Option virtualFolder="Physics/" />
 		</Unit>
+		<Unit filename="shaders/fontRender.fs" />
+		<Unit filename="shaders/fontRender.vs" />
 		<Unit filename="src/ConfigManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -98,6 +102,7 @@
 		<Unit filename="src/ShaderManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="src/Statistics.cpp" />
 		<Unit filename="src/StringUtils.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>

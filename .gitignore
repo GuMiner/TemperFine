@@ -4,5 +4,8 @@
 *.exe
 *.depend
 
+# Logs
+*.log
+
 # Build results
 [Oo]bj/
