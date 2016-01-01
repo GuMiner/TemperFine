@@ -1,8 +1,11 @@
 #pragma once
+#include <SFML\System.hpp>
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
 #include "KeyBindingConfig.h"
+#include "Physics.h"
+#include "PhysicsConfig.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
 #include "Viewer.h"
@@ -13,15 +16,20 @@ class TemperFine
     // Configuration
     GraphicsConfig graphicsConfig;
     KeyBindingConfig keyBindingConfig;
+    PhysicsConfig physicsConfig;
 
     // Managers
     ShaderManager shaderManager;
     FontManager fontManager;
 
     // Game data
+    Physics physics;
     Statistics statistics;
     Viewer viewer;
     vmath::mat4 perspectiveMatrix;
+
+    // Non-graphics threads
+    sf::Thread physicsThread;
 
     // Logs graphical settings so we have an idea of the OpenGL capabilities of the running machine.
     void LogGraphicsSettings();

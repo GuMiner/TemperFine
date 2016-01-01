@@ -8,7 +8,8 @@
 #include "../version.h"
 
 TemperFine::TemperFine()
-    : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt")
+    : physics(), physicsThread(&Physics::Run, &physics),
+      graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt")
 {
 }
 
@@ -74,8 +75,14 @@ Constants::Status TemperFine::Initialize()
         return Constants::Status::BAD_CONFIG;
     }
 
-    Logger::Log("Configuration loaded!");
+    Logger::Log("Loading physics config file...");
+    if (!physicsConfig.ReadConfiguration())
+    {
+        Logger::Log("Bad physics config file!");
+        return Constants::Status::BAD_CONFIG;
+    }
 
+    Logger::Log("Configuration loaded!");
     return Constants::Status::OK;
 }
 
@@ -139,6 +146,13 @@ Constants::Status TemperFine::LoadAssets()
         return Constants::Status::BAD_STATS;
     }
 
+    // Physics
+    Logger::Log("Physics loading...");
+    physics.Initialize(&viewer);
+
+    physicsThread.launch();
+    Logger::Log("Physics Thread Started!");
+
     return Constants::Status::OK;
 }
 
@@ -180,13 +194,13 @@ Constants::Status TemperFine::Run()
             else if (event.type == sf::Event::LostFocus)
             {
                 paused = true;
-                //physicsManager.Pause();
+                physics.Pause();
                 //musicManager.Pause();
             }
             else if (event.type == sf::Event::GainedFocus)
             {
                 paused = false;
-                // physicsManager.Resume();
+                physics.Resume();
                 // musicManager.Resume();
             }
             else if (event.type == sf::Event::Resized)
@@ -195,8 +209,7 @@ Constants::Status TemperFine::Run()
             }
         }
 
-        // TODO move to physics thread?
-        viewer.InputUpdate();
+        // TODO only update if the view position has updated.
         statistics.UpdateStats(viewer.viewPosition);
 
         // vmath::mat4 lookAtMatrix = shipia.shipOrientation.asMatrix() * vmath::translate(-shipia.shipPosition);
@@ -234,9 +247,9 @@ void TemperFine::Deinitialize()
     //musicManager.Stop();
 
     Logger::Log("Physica Thread Stopping...");
-    //physicsManager.Stop();
-    //physicaThread.wait();
-    Logger::Log("Physica Thread Stopped.");
+    physics.Stop();
+    physicsThread.wait();
+    Logger::Log("Physics Thread Stopped.");
 
    // musicThread.wait();
     Logger::Log("Music Thread Stopped.");

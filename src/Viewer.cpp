@@ -1,3 +1,4 @@
+#include "PhysicsConfig.h"
 #include "Viewer.h"
 
 Viewer::Viewer()
@@ -10,21 +11,21 @@ void Viewer::InputUpdate()
 {
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveLeft))
     {
-        viewPosition[0] -= 5.0f;
+        viewPosition[0] -= PhysicsConfig::ViewSidewaysSpeed;
     }
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveRight))
     {
-        viewPosition[0] += 5.0f;
+        viewPosition[0] += PhysicsConfig::ViewSidewaysSpeed;
     }
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveUp))
     {
-        viewPosition[1] -= 5.0f;
+        viewPosition[1] -= PhysicsConfig::ViewForwardsSpeed;
     }
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveDown))
     {
-        viewPosition[1] += 5.0f;
+        viewPosition[1] += PhysicsConfig::ViewForwardsSpeed;
     }
 }

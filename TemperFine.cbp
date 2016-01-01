@@ -49,6 +49,9 @@
 		</Compiler>
 		<Unit filename="LICENSE" />
 		<Unit filename="README.md" />
+		<Unit filename="config/graphics.txt" />
+		<Unit filename="config/keyBindings.txt" />
+		<Unit filename="config/physics.txt" />
 		<Unit filename="fonts/DejaVuSans.ttf" />
 		<Unit filename="include/ConfigManager.h">
 			<Option virtualFolder="Managers/" />
@@ -62,8 +65,17 @@
 		<Unit filename="include/GraphicsConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="include/KeyBindingConfig.h">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="include/Logger.h">
 			<Option virtualFolder="Utility/" />
+		</Unit>
+		<Unit filename="include/Physics.h">
+			<Option virtualFolder="Physics/" />
+		</Unit>
+		<Unit filename="include/PhysicsConfig.h">
+			<Option virtualFolder="Configs/" />
 		</Unit>
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
@@ -79,6 +91,7 @@
 		<Unit filename="include/Vertex.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/Viewer.h" />
 		<Unit filename="include/vmath.hpp">
 			<Option virtualFolder="Physics/" />
 		</Unit>
@@ -96,8 +109,17 @@
 		<Unit filename="src/GraphicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="src/KeyBindingConfig.cpp">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="src/Logger.cpp">
 			<Option virtualFolder="Utility/" />
+		</Unit>
+		<Unit filename="src/Physics.cpp">
+			<Option virtualFolder="Physics/" />
+		</Unit>
+		<Unit filename="src/PhysicsConfig.cpp">
+			<Option virtualFolder="Configs/" />
 		</Unit>
 		<Unit filename="src/ShaderManager.cpp">
 			<Option virtualFolder="Managers/" />
@@ -110,6 +132,7 @@
 		<Unit filename="src/Vertex.cpp">
 			<Option virtualFolder="Physics/" />
 		</Unit>
+		<Unit filename="src/Viewer.cpp" />
 		<Unit filename="src/stb_implementations.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>

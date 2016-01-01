@@ -1,0 +1,18 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 12/31/2015
+
+# General Settings
+ConfigVersion 3
+
+# Physics
+#  Delay in ms for physics thread updates. 30 Hz gives a reasonable speed and prevents excessive GPU updates,
+#   while also avoiding visible stuttering.
+PhysicsThreadDelay 33
+
+# Speed at which to move the viewer forwards and sideways
+ViewForwardsSpeed 2.0
+ViewSidewaysSpeed 2.0
