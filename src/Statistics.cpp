@@ -1,3 +1,5 @@
+#include <sstream>
+#include <string>
 #include "Statistics.h"
 
 Statistics::Statistics()
@@ -30,14 +32,20 @@ bool Statistics::Initialize(FontManager* fontManager)
 
 void Statistics::UpdateStats(vmath::vec3& position)
 {
-    std::string a = std::string("a");
-    fontManager->UpdateSentence(xPositionSentence, a, textPixelHeight, xPositionColor);
+    std::stringstream textStream;
+    textStream.precision(2);
+    textStream << std::fixed;
 
-    std::string b = std::string("b");
-    fontManager->UpdateSentence(yPositionSentence, b, textPixelHeight, yPositionColor);
+    textStream << "X: " << position[0];
+    fontManager->UpdateSentence(xPositionSentence, textStream.str().c_str(), textPixelHeight, xPositionColor);
 
-    std::string c =  std::string("c");
-    fontManager->UpdateSentence(zPositionSentence, c, textPixelHeight, zPositionColor);
+    textStream.str("");
+    textStream << "Y: " << position[1];
+    fontManager->UpdateSentence(yPositionSentence, textStream.str(), textPixelHeight, yPositionColor);
+
+    textStream.str("");
+    textStream << "Z: " << position[2];
+    fontManager->UpdateSentence(zPositionSentence, textStream.str(), textPixelHeight, zPositionColor);
 }
 
 void Statistics::RenderStats(vmath::mat4& perspectiveMatrix)

@@ -132,7 +132,7 @@ CharInfo& FontManager::GetCharacterInfo(int fontPixelHeight, int character)
     return fontData[character].characterSizes[fontPixelHeight];
 }
 
-int FontManager::GetSentenceVertexCount(std::string& sentence)
+int FontManager::GetSentenceVertexCount(const std::string& sentence)
 {
     // Note that we 'render' space, tab, etc.
     return sentence.size() * verticesPerChar;
@@ -140,7 +140,7 @@ int FontManager::GetSentenceVertexCount(std::string& sentence)
 
 // Given a sentence, allocates the vertexes corresponding to the sentence.
 // The vertexes start at (0, 0, 0) and go in the X-direction, with 1 unit == pixelHeight.
-universalVertices FontManager::AllocateSentenceVertices(std::string& sentence, int pixelHeight, vmath::vec3 textColor)
+universalVertices FontManager::AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vmath::vec3 textColor)
 {
     float lastZPos = 0.0f;
     float lastXPos = 0.0f;
@@ -221,7 +221,7 @@ int FontManager::CreateNewSentence()
 }
 
 // Updates the graphical components of a sentence so it can be drawn.
-void FontManager::UpdateSentence(int sentenceId, std::string& sentence, int pixelHeight, vmath::vec3 textColor)
+void FontManager::UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vmath::vec3 textColor)
 {
     SentenceInfo& sentenceInfo = sentences[sentenceId];
 

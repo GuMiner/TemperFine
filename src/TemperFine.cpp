@@ -8,7 +8,7 @@
 #include "../version.h"
 
 TemperFine::TemperFine()
-    : graphicsConfig("config/graphics.txt")
+    : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt")
 {
 }
 
@@ -64,6 +64,13 @@ Constants::Status TemperFine::Initialize()
     if (!graphicsConfig.ReadConfiguration())
     {
 		Logger::Log("Bad graphics config file!");
+        return Constants::Status::BAD_CONFIG;
+    }
+
+    Logger::Log("Loading key binding config file...");
+    if (!keyBindingConfig.ReadConfiguration())
+    {
+        Logger::Log("Bad key binding config file!");
         return Constants::Status::BAD_CONFIG;
     }
 
@@ -151,10 +158,6 @@ Constants::Status TemperFine::Run()
         return firstTimeSetup;
     }
 
-    // TODO TODO remove
-    vmath::vec3 pos = vmath::vec3(0, 0, 0);
-    statistics.UpdateStats(pos);
-
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
 
@@ -191,6 +194,10 @@ Constants::Status TemperFine::Run()
                 UpdatePerspective(event.size.width, event.size.height);
             }
         }
+
+        // TODO move to physics thread?
+        viewer.InputUpdate();
+        statistics.UpdateStats(viewer.viewPosition);
 
         // vmath::mat4 lookAtMatrix = shipia.shipOrientation.asMatrix() * vmath::translate(-shipia.shipPosition);
         // vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;

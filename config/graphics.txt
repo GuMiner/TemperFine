@@ -5,6 +5,8 @@
 #  Tabs are disallowed.
 # Gustave Granroth 12/31/2015
 
+## Graphics
+
 # General Settings
 ConfigVersion 3
 

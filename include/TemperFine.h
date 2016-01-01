@@ -2,14 +2,17 @@
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
+#include "KeyBindingConfig.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
+#include "Viewer.h"
 
 // Handles startup and the base graphics rendering loop.
 class TemperFine
 {
     // Configuration
     GraphicsConfig graphicsConfig;
+    KeyBindingConfig keyBindingConfig;
 
     // Managers
     ShaderManager shaderManager;
@@ -17,6 +20,7 @@ class TemperFine
 
     // Game data
     Statistics statistics;
+    Viewer viewer;
     vmath::mat4 perspectiveMatrix;
 
     // Logs graphical settings so we have an idea of the OpenGL capabilities of the running machine.

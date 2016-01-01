@@ -1,0 +1,20 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 12/31/2015
+
+## Key Bindings
+
+# General Settings
+ConfigVersion 3
+
+# Key Bindings
+# These are using SFML's key constants. These *may* change, but if so, that'll be reflected in 
+#  a config version change, which means AsteroidaGraphica can auto-update the values later on.
+
+MoveLeft 71
+MoveRight 72
+MoveForwards 73
+MoveBackwards 74

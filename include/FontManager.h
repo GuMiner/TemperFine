@@ -42,15 +42,15 @@ class FontManager
     int nextSentenceId;
     std::map<int, SentenceInfo> sentences;
 
-    int GetSentenceVertexCount(std::string& sentence);
-    universalVertices AllocateSentenceVertices(std::string& sentence, int pixelHeight, vmath::vec3 textColor);
+    int GetSentenceVertexCount(const std::string& sentence);
+    universalVertices AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vmath::vec3 textColor);
 
 public:
     FontManager();
     bool LoadFont(ShaderManager* shaderManager, const char *fontName);
 
     int CreateNewSentence();
-    void UpdateSentence(int sentenceId, std::string& sentence, int pixelHeight, vmath::vec3 textColor);
+    void UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vmath::vec3 textColor);
     void RenderSentence(int sentenceId, vmath::mat4& perpective, vmath::mat4& mvMatrix);
 
     ~FontManager();
