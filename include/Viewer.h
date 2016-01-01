@@ -14,4 +14,5 @@ class Viewer
         void InputUpdate();
     protected:
     private:
+        sf::Vector2i lastMousePos;
 };

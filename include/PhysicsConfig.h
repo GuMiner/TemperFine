@@ -10,6 +10,9 @@ public:
 	static float ViewForwardsSpeed;
 	static float ViewSidewaysSpeed;
 
+	static float ViewRotateUpFactor;
+	static float ViewRotateAroundFactor;
+
 	PhysicsConfig(const char* configName);
 };
 

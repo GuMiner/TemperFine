@@ -25,9 +25,6 @@ void Physics::Run()
 			// Update the viewer's position
             viewer->InputUpdate();
 
-            // Updates statistics.
-            viewer->viewPosition[2] = 2 + longRunningClock.getElapsedTime().asSeconds();
-
             // Updates the voxel map.
             voxelMap->Update();
         }
