@@ -29,10 +29,12 @@ class VoxelMap
 
         GLuint voxelMapRenderProgram;
         GLuint projLocation;
+        GLuint textureLocation;
 
         universalVertices testVertices;
 
         GLuint vao;
         GLuint positionBuffer;
         GLuint colorBuffer;
+        GLuint uvBuffer;
 };

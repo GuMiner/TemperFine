@@ -53,6 +53,7 @@
 		<Unit filename="config/keyBindings.txt" />
 		<Unit filename="config/physics.txt" />
 		<Unit filename="fonts/DejaVuSans.ttf" />
+		<Unit filename="images/voxelTextureMap.png" />
 		<Unit filename="include/ConfigManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
