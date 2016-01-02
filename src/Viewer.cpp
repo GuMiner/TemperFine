@@ -11,24 +11,34 @@ Viewer::Viewer()
 
 void Viewer::InputUpdate()
 {
+    vmath::vec3 forwardsVector = viewOrientation.forwardVector();
+    vmath::vec3 sidewaysVector = vmath::cross(viewOrientation.upVector(), forwardsVector);
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveLeft))
     {
-        viewPosition[0] -= PhysicsConfig::ViewSidewaysSpeed;
+        viewPosition -= sidewaysVector * PhysicsConfig::ViewSidewaysSpeed;
     }
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveRight))
     {
-        viewPosition[0] += PhysicsConfig::ViewSidewaysSpeed;
+        viewPosition += sidewaysVector * PhysicsConfig::ViewSidewaysSpeed;
     }
+
+    forwardsVector[2] = 0; // Moving forwards doesn't move you down in the Z-direction.
+    if (forwardsVector[0] < 0.01f && forwardsVector[0] > -0.01f)
+    {
+        forwardsVector[0] = 0.01f; // Tiny nudge to avoid div/zero issues.
+    }
+
+    forwardsVector = vmath::normalize(forwardsVector);
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveUp))
     {
-        viewPosition[1] -= PhysicsConfig::ViewForwardsSpeed;
+        viewPosition += forwardsVector * PhysicsConfig::ViewForwardsSpeed;
     }
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveDown))
     {
-        viewPosition[1] += PhysicsConfig::ViewForwardsSpeed;
+        viewPosition -= forwardsVector * PhysicsConfig::ViewForwardsSpeed;
     }
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
