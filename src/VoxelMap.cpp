@@ -19,12 +19,13 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
 
     // Voxel Map shader creation. Note we also get the location of the matrix and texturee to set later.
     Logger::Log("Voxel Map shader creation...");
-	if (!shaderManager.CreateShaderProgram("voxelMapRender", &voxelMapRenderProgram))
+	if (!shaderManager.CreateShaderProgramWithGeometryShader("voxelMapRender", &voxelMapRenderProgram))
 	{
 		return false;
 	}
 
     projLocation = glGetUniformLocation(voxelMapRenderProgram, "projMatrix");
+    xyLengthsLocation = glGetUniformLocation(voxelMapRenderProgram, "xyLengths");
 
     textureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTextures");
     voxelTopTextureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTopTexture");
@@ -40,10 +41,10 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
 
 	glGenTextures(1, &voxelTopTexture);
 
-	// Send some test data to OpenGL
+	// Send some test data to OpenGL.
 	testVertices.positions.push_back(vmath::vec3(0, 0, 0));
-	testVertices.positions.push_back(vmath::vec3(0, 5, 0));
-	testVertices.positions.push_back(vmath::vec3(5, 5, 0));
+	testVertices.positions.push_back(vmath::vec3(0, 1, 0));
+	testVertices.positions.push_back(vmath::vec3(1, 1, 0));
 
 	testVertices.colors.push_back(vmath::vec3(1, 0, 0));
 	testVertices.colors.push_back(vmath::vec3(0, 1, 0));
@@ -108,6 +109,7 @@ void VoxelMap::Render(vmath::mat4& projectionMatrix)
     // Bind our vertex data
     glBindVertexArray(vao);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+	glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
 
 	glDrawArraysInstanced(GL_TRIANGLES, 0, testVertices.positions.size(), mapInfo->GetVoxelCount());
 }

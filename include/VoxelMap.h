@@ -37,6 +37,8 @@ class VoxelMap
         // The Voxel rendering program and locations of textures we need within it.
         GLuint voxelMapRenderProgram;
         GLuint projLocation;
+        GLuint xyLengthsLocation;
+
         GLuint textureLocation;
         GLuint voxelTopTextureLocation;
 

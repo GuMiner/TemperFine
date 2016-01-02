@@ -4,7 +4,7 @@ uniform sampler2D voxelTextures;
 
 out vec4 color;
 
-in VS_OUT
+in GS_OUT
 {
     vec4 color;
     vec2 uvPos;

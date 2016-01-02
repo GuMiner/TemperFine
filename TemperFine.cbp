@@ -111,6 +111,7 @@
 		<Unit filename="shaders/fontRender.fs" />
 		<Unit filename="shaders/fontRender.vs" />
 		<Unit filename="shaders/voxelMapRender.fs" />
+		<Unit filename="shaders/voxelMapRender.gs" />
 		<Unit filename="shaders/voxelMapRender.vs" />
 		<Unit filename="src/ConfigManager.cpp">
 			<Option virtualFolder="Managers/" />
