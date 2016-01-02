@@ -15,5 +15,5 @@ class MapManager
         int currentLine;
 
         // Loads in a segment of map block data into the provided array.
-        bool LoadMapBlockData(std::vector<std::string>& lines, unsigned short* dataStorage, unsigned int xSize, unsigned int ySize, unsigned int zSize);
+        bool LoadMapBlockData(std::vector<std::string>& lines, unsigned char* dataStorage, unsigned int xSize, unsigned int ySize, unsigned int zSize);
 };

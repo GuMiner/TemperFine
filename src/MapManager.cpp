@@ -10,7 +10,7 @@ MapManager::MapManager()
 {
 }
 
-bool MapManager::LoadMapBlockData(std::vector<std::string>& lines, unsigned short* dataStorage, unsigned int xSize, unsigned int ySize, unsigned int zSize)
+bool MapManager::LoadMapBlockData(std::vector<std::string>& lines, unsigned char* dataStorage, unsigned int xSize, unsigned int ySize, unsigned int zSize)
 {
     std::stringstream errorStream;
     for (unsigned int k = 0; k < zSize; k++)
@@ -38,7 +38,7 @@ bool MapManager::LoadMapBlockData(std::vector<std::string>& lines, unsigned shor
                     return false;
                 }
 
-                dataStorage[MapInfo::GetIndex(i, j, k, xSize, ySize)] = (unsigned short)value;
+                dataStorage[MapInfo::GetIndex(i, j, k, xSize, ySize)] = (unsigned char)value;
             }
         }
     }
@@ -97,9 +97,9 @@ bool MapManager::ReadMap(const char* filename, MapInfo& outputMap)
     outputMap.zSize = (unsigned int)zSize;
 
     int mapDataSize = outputMap.xSize * outputMap.ySize * outputMap.zSize;
-    outputMap.blockType = new unsigned short[mapDataSize];
-    outputMap.blockOrientation = new unsigned short[mapDataSize];
-    outputMap.blockProperty = new unsigned short[mapDataSize];
+    outputMap.blockType = new unsigned char[mapDataSize];
+    outputMap.blockOrientation = new unsigned char[mapDataSize];
+    outputMap.blockProperty = new unsigned char[mapDataSize];
 
     if (!LoadMapBlockData(lines, outputMap.blockType, outputMap.xSize, outputMap.ySize, outputMap.zSize))
     {

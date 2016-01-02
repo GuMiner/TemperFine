@@ -10,12 +10,18 @@ struct MapInfo
     unsigned int xSize;
     unsigned int ySize;
     unsigned int zSize;
-    unsigned short* blockType;
-    unsigned short* blockOrientation;
-    unsigned short* blockProperty;
+    unsigned char* blockType;
+    unsigned char* blockOrientation;
+    unsigned char* blockProperty;
 
-    // Simplifies index calculation.
-    inline int GetIndex(unsigned int x, unsigned int y, unsigned int z)
+    // Gets the voxels in the map, including empty ones!
+    inline int GetVoxelCount() const
+    {
+        return xSize * ySize * zSize;
+    }
+
+    // Gets the index of a voxel on the map as an array offset.
+    inline int GetIndex(unsigned int x, unsigned int y, unsigned int z) const
     {
         return z*xSize*ySize + y*xSize + x;
     }

@@ -25,7 +25,9 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
 	}
 
     projLocation = glGetUniformLocation(voxelMapRenderProgram, "projMatrix");
+
     textureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTextures");
+    voxelTopTextureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTopTexture");
 	Logger::Log("Voxel Map shader creation successful!");
 
     // OpenGL drawing data.
@@ -35,6 +37,8 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
     glGenBuffers(1, &positionBuffer);
 	glGenBuffers(1, &colorBuffer);
 	glGenBuffers(1, &uvBuffer);
+
+	glGenTextures(1, &voxelTopTexture);
 
 	// Send some test data to OpenGL
 	testVertices.positions.push_back(vmath::vec3(0, 0, 0));
@@ -56,6 +60,33 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
 	return true;
 }
 
+void VoxelMap::SetupFromMap(MapInfo* mapInfo)
+{
+    this->mapInfo = mapInfo;
+
+    Logger::Log("Creating 1D texture for voxel type, orientation, and property data.");
+    int textureLength = mapInfo->GetVoxelCount();
+    glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_1D, voxelTopTexture);
+	glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA8, textureLength);
+
+	Logger::Log("Interlacing the map data...");
+	unsigned char* interlacedData = new unsigned char[textureLength * 4];
+
+	for (int i = 0; i < textureLength; i++)
+    {
+        interlacedData[i * 4] = mapInfo->blockType[i];
+        interlacedData[i * 4 + 1] = mapInfo->blockOrientation[i];
+        interlacedData[i * 4 + 2] = mapInfo->blockProperty[i];
+        interlacedData[i * 4 + 3] = 128; // Some data can go here as it is an RGBA 8-bit image.
+    }
+
+	Logger::Log("Sending the data to OpenGL...");
+	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, textureLength, GL_RGBA, GL_UNSIGNED_BYTE, &interlacedData[0]);
+
+	delete[] interlacedData;
+}
+
 void VoxelMap::Update()
 {
     // TODO update the item we're rendering.
@@ -65,16 +96,20 @@ void VoxelMap::Render(vmath::mat4& projectionMatrix)
 {
     glUseProgram(voxelMapRenderProgram);
 
-    // Bind our texture
-    glUniform1i(textureLocation, 0);
+    // Bind our textures
 	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, voxelTextures.textureId);
+    glUniform1i(textureLocation, 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_1D, voxelTopTexture);
+    glUniform1i(voxelTopTextureLocation, 1);
 
     // Bind our vertex data
     glBindVertexArray(vao);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
 
-	glDrawArrays(GL_TRIANGLES, 0, testVertices.positions.size());
+	glDrawArraysInstanced(GL_TRIANGLES, 0, testVertices.positions.size(), mapInfo->GetVoxelCount());
 }
 
 VoxelMap::~VoxelMap()
@@ -83,4 +118,6 @@ VoxelMap::~VoxelMap()
 	glDeleteBuffers(1, &positionBuffer);
 	glDeleteBuffers(1, &colorBuffer);
 	glDeleteBuffers(1, &uvBuffer);
+
+	glDeleteTextures(1, &voxelTopTexture);
 }

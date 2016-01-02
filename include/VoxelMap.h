@@ -1,6 +1,7 @@
 #pragma once
 #include <GL\glew.h>
 #include "ImageManager.h"
+#include "MapInfo.h"
 #include "ShaderManager.h"
 #include "Vertex.h"
 #include "vmath.hpp"
@@ -14,6 +15,9 @@ class VoxelMap
         // Sets up the voxel map OpenGL data and compiles the associated shader.
         bool Initialize(ImageManager& imageManager, ShaderManager& shaderManager);
 
+        // Sets up the VoxelMap from the provided map info.
+        void SetupFromMap(MapInfo* mapInfo);
+
         // Updates the voxel map
         void Update();
 
@@ -24,13 +28,22 @@ class VoxelMap
         ~VoxelMap();
     protected:
     private:
+        // The map for which the voxel data is currently created from.
+        MapInfo *mapInfo;
+
         // The textures for all of the voxels in a single nicely-packed image.
         ImageTexture voxelTextures;
 
+        // The Voxel rendering program and locations of textures we need within it.
         GLuint voxelMapRenderProgram;
         GLuint projLocation;
         GLuint textureLocation;
+        GLuint voxelTopTextureLocation;
 
+        // Actual texture for voxel type, orientation, and property
+        GLuint voxelTopTexture;
+
+        // Vertices and associated OpenGL functionality for the vertices.
         universalVertices testVertices;
 
         GLuint vao;

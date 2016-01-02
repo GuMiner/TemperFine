@@ -3,7 +3,7 @@
 
 Viewer::Viewer()
 {
-    viewPosition = vmath::vec3(3, 4, 2);
+    viewPosition = vmath::vec3(0, 0, 10);
 	viewOrientation = vmath::quaternion(0, 0, 0, 1);
 
 	lastMousePos = sf::Vector2i(-1, -1);

@@ -160,6 +160,9 @@ Constants::Status TemperFine::LoadAssets()
         return Constants::Status::BAD_VOXEL_MAP;
     }
 
+    // TODO: This should be setup from some sort of menu / user input / network input
+    voxelMap.SetupFromMap(&testMap);
+
     // Physics
     Logger::Log("Physics loading...");
     physics.Initialize(&viewer, &voxelMap);

@@ -17,5 +17,5 @@ PhysicsThreadDelay 33
 ViewForwardsSpeed 0.1
 ViewSidewaysSpeed 0.1
 
-ViewRotateUpFactor 0.02
-ViewRotateAroundFactor 0.02
+ViewRotateUpFactor 0.012
+ViewRotateAroundFactor 0.012
