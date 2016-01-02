@@ -28,5 +28,6 @@ void main(void)
     vs_out.uvPos = uvPosition;
     vs_out.color = vec4(voxelInfo.x, voxelInfo.y, 1.0f, 1);
 
+    // Adding vertex position plus the position of the instance itself.
     gl_Position = projMatrix  * (vec4(position, 1) + vec4(4.0f * gl_InstanceID, amount, 0.0f, 0.0f));
 }
