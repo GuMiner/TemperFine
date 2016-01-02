@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="techtree.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3809">
+      <stop
+         style="stop-color:#c4832b;stop-opacity:1;"
+         offset="0"
+         id="stop3811" />
+      <stop
+         style="stop-color:#c4832b;stop-opacity:0;"
+         offset="1"
+         id="stop3813" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3809"
+       id="linearGradient3815"
+       x1="-505.71429"
+       y1="-54.066376"
+       x2="-15.714294"
+       y2="-54.066376"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.71757606,0,0,0.35667233,511.15365,177.35288)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3809-2"
+       id="linearGradient3815-8"
+       x1="-505.71429"
+       y1="-54.066376"
+       x2="-15.714294"
+       y2="-54.066376"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(5.1967943,0,0,2.5830749,2122.3789,-217.45464)" />
+    <linearGradient
+       id="linearGradient3809-2">
+      <stop
+         style="stop-color:#73c42b;stop-opacity:1;"
+         offset="0"
+         id="stop3811-4" />
+      <stop
+         style="stop-color:#7fc42b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-5" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.71757606,0,0,0.35667233,511.15365,316.83527)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3858"
+       xlink:href="#linearGradient3809-2"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(5.1967943,0,0,2.5830749,2122.3789,792.69787)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3858-7"
+       xlink:href="#linearGradient3809-2-6"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3809-2-6">
+      <stop
+         style="stop-color:#2b83c4;stop-opacity:1;"
+         offset="0"
+         id="stop3811-4-1" />
+      <stop
+         style="stop-color:#2b85c4;stop-opacity:0;"
+         offset="1"
+         id="stop3813-5-4" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.71757606,0,0,0.35667233,511.15365,455.75973)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3907"
+       xlink:href="#linearGradient3809-2-6"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3809-7"
+       id="linearGradient3815-85"
+       x1="-505.71429"
+       y1="-54.066376"
+       x2="-15.714294"
+       y2="-54.066376"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(5.1967943,0,0,2.5830749,2122.3789,-217.45464)" />
+    <linearGradient
+       id="linearGradient3809-7">
+      <stop
+         style="stop-color:#c42b2b;stop-opacity:1;"
+         offset="0"
+         id="stop3811-6" />
+      <stop
+         style="stop-color:#c4832b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-1" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.61290861,0,0,0.10936393,509.50888,118.61249)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3959"
+       xlink:href="#linearGradient3809-7"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(4.4387768,0,0,0.79203014,2110.4672,-642.86144)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3959-9"
+       xlink:href="#linearGradient3809-7-2"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3809-7-2">
+      <stop
+         style="stop-color:#c4782b;stop-opacity:1;"
+         offset="0"
+         id="stop3811-6-7" />
+      <stop
+         style="stop-color:#c4832b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-1-9" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.61290861,0,0,0.10936393,509.50888,161.2202)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3993"
+       xlink:href="#linearGradient3809-7-2"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(4.4387768,0,0,0.79203014,2110.4672,-334.28999)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3993-4"
+       xlink:href="#linearGradient3809-7-2-3"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3809-7-2-3">
+      <stop
+         style="stop-color:#2b74c4;stop-opacity:1;"
+         offset="0"
+         id="stop3811-6-7-1" />
+      <stop
+         style="stop-color:#c4832b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-1-9-2" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.61290861,0,0,0.10936393,509.50888,205.40596)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4027"
+       xlink:href="#linearGradient3809-7-2-3"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(5.1967943,0,0,2.5830749,2122.3789,792.69787)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3858-3"
+       xlink:href="#linearGradient3809-2-1"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3809-2-1">
+      <stop
+         style="stop-color:#73c42b;stop-opacity:1;"
+         offset="0"
+         id="stop3811-4-9" />
+      <stop
+         style="stop-color:#7fc42b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-5-8" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.60968808,0,0,0.09216731,509.45827,251.90062)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4187"
+       xlink:href="#linearGradient3809-2-1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(4.4154532,0,0,0.89650773,2110.1007,378.65412)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4187-6"
+       xlink:href="#linearGradient3809-2-1-3"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3809-2-1-3">
+      <stop
+         style="stop-color:#c42bb5;stop-opacity:1;"
+         offset="0"
+         id="stop3811-4-9-7" />
+      <stop
+         style="stop-color:#7fc42b;stop-opacity:0;"
+         offset="1"
+         id="stop3813-5-8-8" />
+    </linearGradient>
+    <linearGradient
+       y2="-54.066376"
+       x2="-15.714294"
+       y1="-54.066376"
+       x1="-505.71429"
+       gradientTransform="matrix(0.60968808,0,0,0.12379025,509.45827,297.15676)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4493"
+       xlink:href="#linearGradient3809-2-1-3"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="207.09848"
+     inkscape:cy="814.81214"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showborder="true"
+     inkscape:window-width="1857"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:connector-spacing="27" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient3815);fill-opacity:1;stroke:none"
+       id="rect3759-0"
+       width="351.61227"
+       height="136.55455"
+       x="148.26518"
+       y="89.791626" />
+    <rect
+       style="fill:#abb0b3;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2985"
+       width="56.613018"
+       height="11.835471"
+       x="4.2534671"
+       y="281.8288" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="7.8041186"
+       y="289.91638"
+       id="text3755"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3757"
+         x="7.8041186"
+         y="289.91638">Research Tree Start</tspan></text>
+    <rect
+       style="fill:#c7c7c7;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759"
+       width="35.900936"
+       height="17.950468"
+       x="152.80211"
+       y="145.56908" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="155.95824"
+       y="153.8539"
+       id="text3761"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763"
+         x="155.95824"
+         y="153.8539">Pea Shooter</tspan><tspan
+         sodipodi:role="line"
+         x="155.95824"
+         y="160.75793"
+         id="tspan4094">Turret</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#c4832b;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-225.70364"
+       y="147.26149"
+       id="text3761-9"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3763-48"
+         x="-225.70364"
+         y="147.26149">Weapon Tree</tspan></text>
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient3858);fill-opacity:1;stroke:none"
+       id="rect3759-0-5"
+       width="351.61227"
+       height="136.55455"
+       x="148.26518"
+       y="229.27402" />
+    <rect
+       style="fill:#a5e175;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-17"
+       width="35.789352"
+       height="17.950468"
+       x="153.36003"
+       y="285.05145" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="155.95824"
+       y="292.97745"
+       id="text3761-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-1"
+         x="155.95824"
+         y="292.97745">Light Repair </tspan><tspan
+         sodipodi:role="line"
+         x="155.95824"
+         y="299.88147"
+         id="tspan4474">Turret</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#4cc42b;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-365.18604"
+       y="147.26149"
+       id="text3761-9-5"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3763-48-2"
+         x="-365.18604"
+         y="147.26149">Manufacture Tree</tspan></text>
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient3907);fill-opacity:1;stroke:none"
+       id="rect3759-0-5-2"
+       width="351.61227"
+       height="136.55455"
+       x="148.26518"
+       y="368.19849" />
+    <rect
+       style="fill:#5ccfdc;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-17-3"
+       width="52.192478"
+       height="17.950468"
+       x="153.19267"
+       y="423.58536" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="155.95824"
+       y="435.4169"
+       id="text3761-1-2"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-1-2"
+         x="155.95824"
+         y="435.4169">Light Sense Turret</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#2b9dc4;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-504.1105"
+       y="147.26149"
+       id="text3761-9-5-1"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3763-48-2-6"
+         x="-504.1105"
+         y="147.26149">Science Tree</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 38.699418,281.8288 161.44109,163.51954"
+       id="path3938"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect2985"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 60.866485,289.02826 92.493545,4.18815"
+       id="path3940"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect2985"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-17"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 38.555962,293.66427 170.195,423.58536"
+       id="path3942"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect2985"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-17-3"
+       inkscape:connection-end-point="d4" />
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient3959);fill-opacity:1;stroke:none"
+       id="rect3759-0-8"
+       width="300.32523"
+       height="41.870762"
+       x="199.55223"
+       y="91.764206" />
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient3993);fill-opacity:1;stroke:none"
+       id="rect3759-0-8-5"
+       width="300.32523"
+       height="41.870762"
+       x="199.55223"
+       y="134.3719" />
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient4027);fill-opacity:1;stroke:none"
+       id="rect3759-0-8-5-3"
+       width="300.32523"
+       height="41.870762"
+       x="199.55223"
+       y="178.55768" />
+    <rect
+       style="fill:#e68b8b;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3"
+       width="35.900936"
+       height="17.950468"
+       x="205.66722"
+       y="103.84903" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="208.82335"
+       y="115.28999"
+       id="text3761-4"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11"
+         x="208.82335"
+         y="115.28999">Light rockets</tspan></text>
+    <rect
+       style="fill:#e5bd87;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3"
+       width="35.900936"
+       height="17.950468"
+       x="205.66722"
+       y="143.69513" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="208.82335"
+       y="155.13608"
+       id="text3761-4-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7"
+         x="208.82335"
+         y="155.13608">Light MG</tspan></text>
+    <rect
+       style="fill:#bbbbbb;fill-opacity:1;stroke:none"
+       id="rect4096"
+       width="145.97083"
+       height="78.508636"
+       x="147.87067"
+       y="7.4885535" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="151.7195"
+       y="15.745253"
+       id="text3761-4-4"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-2"
+         x="151.7195"
+         y="15.745253">Mini weapon guide</tspan><tspan
+         sodipodi:role="line"
+         x="151.7195"
+         y="22.649282"
+         id="tspan4119">Rockets are good against tanks</tspan><tspan
+         sodipodi:role="line"
+         x="151.7195"
+         y="29.553305"
+         id="tspan4121">MG is good against infantry</tspan><tspan
+         sodipodi:role="line"
+         x="151.7195"
+         y="36.457333"
+         id="tspan4123">Cannon is good against structures</tspan><tspan
+         sodipodi:role="line"
+         x="151.7195"
+         y="43.361355"
+         id="tspan4125">and Pea shooter sucks at everything</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 182.12545,145.56908 212.24482,121.7995"
+       id="path4127"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="100"
+       inkscape:connection-start="#rect3759"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 188.70304,153.90801 16.96418,-0.60134"
+       id="path4129"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3"
+       inkscape:connection-end-point="d4" />
+    <rect
+       style="fill:#97cce8;fill-opacity:1;stroke:#000000;stroke-width:0.6591965;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3-7"
+       width="41.818672"
+       height="17.950468"
+       x="205.66722"
+       y="189.85345" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="210.44803"
+       y="200.41101"
+       id="text3761-4-8-7"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7-9"
+         x="210.44803"
+         y="200.41101">Light Cannon</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 182.06657,163.51954 33.19599,26.33391"
+       id="path4170"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3-7"
+       inkscape:connection-end-point="d4" />
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient4187);fill-opacity:1;stroke:none"
+       id="rect3759-0-5-6"
+       width="298.74716"
+       height="35.286911"
+       x="201.13029"
+       y="229.27402" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#6ec42b;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-263.23166"
+       y="199.43701"
+       id="text3761-9-50"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3763-48-28"
+         x="-263.23166"
+         y="199.43701">Towers</tspan></text>
+    <rect
+       style="fill:#db5858;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-6"
+       width="45.943668"
+       height="17.950468"
+       x="311.3949"
+       y="103.84903" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="314.55099"
+       y="115.28999"
+       id="text3761-4-0"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-24"
+         x="314.55099"
+         y="115.28999">Medium rockets</tspan></text>
+    <rect
+       style="fill:#c42b2b;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-6-8"
+       width="45.943668"
+       height="17.950468"
+       x="410.14841"
+       y="103.84903" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="413.30453"
+       y="115.28999"
+       id="text3761-4-0-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-24-5"
+         x="413.30453"
+         y="115.28999">Heavy rockets</tspan></text>
+    <rect
+       style="fill:#daa256;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3-0"
+       width="35.900936"
+       height="17.950468"
+       x="311.16074"
+       y="143.69513" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="314.31686"
+       y="155.13608"
+       id="text3761-4-8-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7-0"
+         x="314.31686"
+         y="155.13608">Medium MG</tspan></text>
+    <rect
+       style="fill:#c4832b;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3-0-0"
+       width="35.900936"
+       height="17.950468"
+       x="414.72113"
+       y="143.69513" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="417.87726"
+       y="155.13608"
+       id="text3761-4-8-9-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7-0-1"
+         x="417.87726"
+         y="155.13608">Heavy MG</tspan></text>
+    <rect
+       style="fill:#54abd9;fill-opacity:1;stroke:#000000;stroke-width:0.6591965;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3-7-3"
+       width="50.379665"
+       height="17.950468"
+       x="307.57065"
+       y="189.85349" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="312.35147"
+       y="200.41101"
+       id="text3761-4-8-7-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7-9-9"
+         x="312.35147"
+         y="200.41101">Medium Cannon</tspan></text>
+    <rect
+       style="fill:#2b8ec4;fill-opacity:1;stroke:#000000;stroke-width:0.6591965;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-3-3-7-3-3"
+       width="47.341892"
+       height="17.950468"
+       x="415.54962"
+       y="189.85349" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="420.33041"
+       y="200.41101"
+       id="text3761-4-8-7-8-4"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-11-7-9-9-4"
+         x="420.33041"
+         y="200.41101">Heavy Cannon</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 241.56816,112.82426 69.82674,0"
+       id="path4371"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-6"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 357.33857,112.82426 52.80984,0"
+       id="path4373"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3-6"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-6-8"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 241.56816,152.67036 69.59258,0"
+       id="path4375"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3-3"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3-0"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 347.06167,152.67036 67.65946,0"
+       id="path4377"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3-3-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3-0-0"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 247.48589,198.82869 60.08476,2e-5"
+       id="path4379"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3-3-7"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3-7-3"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 357.95031,198.82872 57.59931,0"
+       id="path4381"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-3-3-7-3"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-3-3-7-3-3"
+       inkscape:connection-end-point="d4" />
+    <rect
+       style="fill:#6ec42b;fill-opacity:1;stroke:#000000;stroke-width:0.65919644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3759-17-6"
+       width="50.044456"
+       height="17.950468"
+       x="242.18063"
+       y="237.47589" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="246.01749"
+       y="247.87912"
+       id="text3761-1-0"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3763-1-6"
+         x="246.01749"
+         y="247.87912">Light Tower Body</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="207.45253"
+       y="238.4335"
+       id="text3761-18"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="207.45253"
+         y="238.4335"
+         id="tspan4094-9">Towers are</tspan><tspan
+         sodipodi:role="line"
+         x="207.45253"
+         y="245.33752"
+         id="tspan4466">designed </tspan><tspan
+         sodipodi:role="line"
+         x="207.45253"
+         y="252.24155"
+         id="tspan4470">through</tspan><tspan
+         sodipodi:role="line"
+         x="207.45253"
+         y="259.14557"
+         id="tspan4468">the HQ</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.13808052px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 189.14938,285.15367 59.95265,-29.72731"
+       id="path4472"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3759-17"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect3759-17-6"
+       inkscape:connection-end-point="d4" />
+    <rect
+       style="opacity:0.23451329;fill:url(#linearGradient4493);fill-opacity:1;stroke:none"
+       id="rect3759-0-5-6-8"
+       width="298.74716"
+       height="47.393982"
+       x="201.13029"
+       y="266.76688" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.52322102px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#c12bc4;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-312.8316"
+       y="199.43701"
+       id="text3761-9-50-2"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3763-48-28-9"
+         x="-312.8316"
+         y="199.43701">Pipes</tspan></text>
+  </g>
+</svg>
