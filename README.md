@@ -27,5 +27,6 @@ TemperFine is (being created) to be a voxel-based RTS game.
 Licenses for dependencies that require one are included within the appropriate folder.
 
 * SFML
+* SFGUI
 * GLEW
 * STB
