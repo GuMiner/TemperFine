@@ -2,7 +2,8 @@
 #include <sstream>
 #include <thread>
 #include <GL/glew.h>
-#include <SFML/Window.hpp>
+#include <SFML/OpenGL.hpp>
+#include <SFML/Graphics.hpp>
 #include "Logger.h"
 #include "TemperFine.h"
 #include "../version.h"
@@ -163,6 +164,9 @@ Constants::Status TemperFine::LoadAssets()
     // TODO: This should be setup from some sort of menu / user input / network input
     voxelMap.SetupFromMap(&testMap);
 
+    // TODO Test setup code remove.
+    testLabel = sfg::Label::Create("Temper Fine Test Label.");
+
     // Physics
     Logger::Log("Physics loading...");
     physics.Initialize(&viewer, &voxelMap);
@@ -180,7 +184,7 @@ Constants::Status TemperFine::Run()
     sf::ContextSettings contextSettings = sf::ContextSettings(24, 8, 8, 4, 0);
 
     sf::Uint32 style = GraphicsConfig::IsFullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close;
-    sf::Window window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
+    sf::RenderWindow window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
 
     // Now that we have an OpenGL Context, load our graphics.
     Constants::Status firstTimeSetup = LoadGraphics();
@@ -192,7 +196,19 @@ Constants::Status TemperFine::Run()
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
 
+    // Setup UI specific stuffs TODO remove testing code here
+    sfg::Box::Ptr testBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
+    testBox->Pack(testLabel);
+
+    sfg::Window::Ptr uiWindow = sfg::Window::Create();
+    uiWindow->SetTitle("Temper Fine Test Window!");
+    uiWindow->Add(testBox);
+
+    sfg::Desktop desktop;
+    desktop.Add(uiWindow);
+
     sf::Clock clock;
+    sf::Clock frameClock;
     sf::Time clockStartTime;
     bool alive = true;
     bool paused = false;
@@ -204,6 +220,9 @@ Constants::Status TemperFine::Run()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            // Update SF GUI
+            desktop.HandleEvent(event);
+
             if (event.type == sf::Event::Closed)
             {
                 alive = false;
@@ -246,6 +265,11 @@ Constants::Status TemperFine::Run()
 
             // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
             statistics.RenderStats(perspectiveMatrix);
+
+            // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
+            window.resetGLStates();
+            desktop.Update(frameClock.restart().asSeconds());
+            sfgui.Display(window);
 
             window.display();
         }

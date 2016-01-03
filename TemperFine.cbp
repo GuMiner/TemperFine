@@ -22,6 +22,8 @@
 					<Add library="lib\libsfml-system-d.a" />
 					<Add library="lib\libsfml-window-d.a" />
 					<Add library="opengl32" />
+					<Add library="lib\libsfgui.a" />
+					<Add library="lib\libsfml-graphics-d.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -41,6 +43,8 @@
 					<Add library="lib\libsfml-system.a" />
 					<Add library="lib\libsfml-window.a" />
 					<Add library="opengl32" />
+					<Add library="lib\libsfgui.a" />
+					<Add library="lib\libsfml-graphics.a" />
 				</Linker>
 			</Target>
 		</Build>

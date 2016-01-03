@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML\System.hpp>
+#include <SFGUI/SFGUI.hpp>
+#include <SFGUI/Widgets.hpp>
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
@@ -22,6 +24,7 @@ class TemperFine
     PhysicsConfig physicsConfig;
 
     // Managers
+    sfg::SFGUI sfgui;
     FontManager fontManager;
     ImageManager imageManager;
     MapManager mapManager;
@@ -31,9 +34,12 @@ class TemperFine
     Physics physics;
     Statistics statistics;
     Viewer viewer;
-    MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
     VoxelMap voxelMap;
     vmath::mat4 perspectiveMatrix;
+
+    sfg::Label::Ptr testLabel; // TODO remove when we work on GUI stuffs.
+    MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
+
 
     // Non-graphics threads
     sf::Thread physicsThread;
@@ -43,6 +49,7 @@ class TemperFine
 
     // Updates the camera perspective when the screen width / height has changed.
     void UpdatePerspective(unsigned int width, unsigned int height);
+
 public:
     static Constants Constant;
 
