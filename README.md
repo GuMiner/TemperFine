@@ -2,31 +2,31 @@
 ## About
 --------
 
-TemperFine is (being created) to be a voxel-based RTS game.
-*This project is in progress; more details will be added when closer to completion*
+TemperFine is a voxel-based multiplayer real-time strategy game which takes place on an alien world.
 
-## Status
----------
-### ACTIVE 
+Written in C++ with OpenGL 4.0.
 
+## Documentation
+----------------
 
-## Build
---------
-1. Install CodeBlocks from [their website](http://www.codeblocks.org/downloads/26), selecting the release with MinGW.
-2. Download SFML v2.1 for MinGW. *Included with integration.*
-3. Download GLEW 1.13 from [SourceForge](http://glew.sourceforge.net/) *Included with integration.*
+* [Contributing to TemperFine] (./docs/Contributing.md)
+* [TemperFine Structure] (./docs/Structure.md)
+* [OpenGL Concepts] (./docs/OpenGL4.md)
+* [Game Design] (./docs/GameDesign.md)
+* [Active Tasks] (./docs/ActiveTasks.md)
 
 ## System Requirements
 ----------------------
 
-* Intel Atom Z3735F or higher.
-* OpenGL 4.0.0 compatible GPU or higher.
+* Intel Atom Z3735F
+* OpenGL 4.0.0 compatible GPU
+* 2 GB RAM
 
 ## Dependencies
 ---------------
-Licenses for dependencies that require one are included within the appropriate folder.
+Licenses for dependencies are within the *licenses* folder.
 
-* SFML
-* SFGUI
-* GLEW
-* STB
+* [SFML 2.3.2] (http://www.sfml-dev.org/index.php)
+* [SFGUI 0.3] (http://sfgui.sfml-dev.de/p/)
+* [GLEW 1.12] (http://glew.sourceforge.net/)
+* [STB latest] (https://github.com/nothings/stb)

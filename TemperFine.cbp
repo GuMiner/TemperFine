@@ -5,7 +5,7 @@
 		<Option title="TemperFine" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Configs\;Managers\;Utility\;Physics\;" />
+		<Option virtualFolders="Configs\;Managers\;Utility\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/TemperFine" prefix_auto="1" extension_auto="1" />
@@ -87,9 +87,7 @@
 		<Unit filename="include/MapManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
-		<Unit filename="include/Physics.h">
-			<Option virtualFolder="Physics/" />
-		</Unit>
+		<Unit filename="include/Physics.h" />
 		<Unit filename="include/PhysicsConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
@@ -110,7 +108,7 @@
 		<Unit filename="include/Viewer.h" />
 		<Unit filename="include/VoxelMap.h" />
 		<Unit filename="include/vmath.hpp">
-			<Option virtualFolder="Physics/" />
+			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="shaders/fontRender.fs" />
 		<Unit filename="shaders/fontRender.vs" />
@@ -144,9 +142,7 @@
 		<Unit filename="src/MapManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
-		<Unit filename="src/Physics.cpp">
-			<Option virtualFolder="Physics/" />
-		</Unit>
+		<Unit filename="src/Physics.cpp" />
 		<Unit filename="src/PhysicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
 		</Unit>
@@ -159,12 +155,12 @@
 		</Unit>
 		<Unit filename="src/TemperFine.cpp" />
 		<Unit filename="src/Vertex.cpp">
-			<Option virtualFolder="Physics/" />
+			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="src/Viewer.cpp" />
 		<Unit filename="src/VoxelMap.cpp" />
 		<Unit filename="src/stb_implementations.cpp">
-			<Option virtualFolder="Managers/" />
+			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="version.h" />
 		<Extensions>
