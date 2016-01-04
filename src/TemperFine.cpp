@@ -196,9 +196,20 @@ Constants::Status TemperFine::Run()
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
 
+    // TODO move to a menu class
+
+    sf::Image techImage;
+    // TODO error checking
+    techImage.loadFromFile("images/menu/techs.png");
+
+    sfg::Button::Ptr techsButton = sfg::Button::Create("Techs Button");
+    sfg::Image::Ptr techImageSfg = sfg::Image::Create(techImage);
+    techsButton->SetImage(techImageSfg);
+
     // Setup UI specific stuffs TODO remove testing code here
     sfg::Box::Ptr testBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
     testBox->Pack(testLabel);
+    testBox->Pack(techsButton);
 
     sfg::Window::Ptr uiWindow = sfg::Window::Create();
     uiWindow->SetTitle("Temper Fine Test Window!");
