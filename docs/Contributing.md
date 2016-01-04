@@ -1,7 +1,7 @@
 # Contributing to TemperFine
 ## Introduction
 ---------------
-Outside assistance in creating TemperFine is highly encouraged. You are invited to pick an [Active Task] (./docs/ActiveTasks.md), perform the task, and create a pull request with your changes -- see the **Pull Request** section below.
+Outside assistance in creating TemperFine is highly encouraged. You are invited to pick an [Active Task] (./ActiveTasks.md), perform the task, and create a pull request with your changes -- see the **Pull Request** section below.
 
 Frequent contributers will be granted direct commit access to TemperFine.
 

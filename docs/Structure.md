@@ -54,7 +54,7 @@ Core game classes and headers are in the **Sources** and **Headers** folders wit
 ####Game Loops
 **TemperFine::Run()** initializes the main OpenGL context (using SFML) and runs the ReadEvents-DrawFrame-DisplayFrame render loop. 
 
-Physics events and timed updates should be handled from within the **Physics::Run()** loop, which runs at a slower framerate separately from the render loop. However, because the physics of **TemperFine** run on a separate thread, OpenGL updates cannot be performed from this thread -- see the [OpenGL Concepts] (./docs/OpenGL4.md) section for more information.
+Physics events and timed updates should be handled from within the **Physics::Run()** loop, which runs at a slower framerate separately from the render loop. However, because the physics of **TemperFine** run on a separate thread, OpenGL updates cannot be performed from this thread -- see the [OpenGL Concepts] (./OpenGL4.md) section for more information.
 
 ###Global Structures
 ---------------------
