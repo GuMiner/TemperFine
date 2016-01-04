@@ -222,7 +222,7 @@ void main(void)
 ```
 
 This code will produce a triangle looking something like this:
-![Textured Triangle Image](./texturedTriangle.png "Textured Triangles")
+![Textured Triangle Image](./texturedTriangle.PNG "Textured Triangles")
 
 #####Key Points
 * OpenGL uses a lot of state -- the **vertex buffer object** is setup, the **texture** is setup, both are bound to the active **vertex array object**, after which the single *glDrawArrays(...)* command draws the triangles.
