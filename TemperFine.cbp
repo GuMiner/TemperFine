@@ -87,10 +87,14 @@
 		<Unit filename="include/MapManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="include/ModelManager.h">
+			<Option virtualFolder="Managers/" />
+		</Unit>
 		<Unit filename="include/Physics.h" />
 		<Unit filename="include/PhysicsConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="include/Projectile.h" />
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -142,10 +146,14 @@
 		<Unit filename="src/MapManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="src/ModelManager.cpp">
+			<Option virtualFolder="Managers/" />
+		</Unit>
 		<Unit filename="src/Physics.cpp" />
 		<Unit filename="src/PhysicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="src/Projectile.cpp" />
 		<Unit filename="src/ShaderManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
