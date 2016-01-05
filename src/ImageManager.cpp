@@ -9,7 +9,7 @@ ImageManager::ImageManager()
 }
 
 // Gets additional image data given the texture ID.
-ImageTexture ImageManager::GetImage(GLuint textureId)
+const ImageTexture& ImageManager::GetImage(GLuint textureId)
 {
     return imageTextures[textureId];
 }

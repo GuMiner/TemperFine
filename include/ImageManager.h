@@ -14,7 +14,7 @@ class ImageManager
 public:
     ImageManager();
     GLuint AddImage(const char* filename);
-    ImageTexture GetImage(GLuint textureId);
+    const ImageTexture& GetImage(GLuint textureId);
 
     ~ImageManager();
 };

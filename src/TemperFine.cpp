@@ -9,8 +9,8 @@
 #include "../version.h"
 
 TemperFine::TemperFine()
-    : physics(), physicsThread(&Physics::Run, &physics),
-      graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt")
+    : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
+      imageManager(), modelManager(&imageManager), physics(), physicsThread(&Physics::Run, &physics)
 {
 }
 
@@ -167,6 +167,14 @@ Constants::Status TemperFine::LoadAssets()
     // TODO Test setup code remove.
     testLabel = sfg::Label::Create("Temper Fine Test Label.");
 
+    // TODO Test setup code remove
+    testModelId = modelManager.LoadModel("models/sensors/torus");
+    if (testModelId == 0)
+    {
+        Logger::Log("Model loading failed!");
+        return Constants::Status::BAD_IMAGES; // TODO wrong return code for model loading failure.
+    }
+
     // Physics
     Logger::Log("Physics loading...");
     physics.Initialize(&viewer, &voxelMap);
@@ -195,6 +203,29 @@ Constants::Status TemperFine::Run()
 
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
+
+    // TODO test code remove
+    TextureModel testModel = modelManager.GetModel(testModelId);
+    if (!shaderManager.CreateShaderProgram("modelRender", &testProgram))
+    {
+        Logger::Log("Error creating the model shader!");
+        return Constants::Status::BAD_SHADERS;
+    }
+
+    textureLocation = glGetUniformLocation(testProgram, "modelTexture");
+    mvLocation = glGetUniformLocation(testProgram, "mvMatrix");
+    projLocation = glGetUniformLocation(testProgram, "projMatrix");
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &positionBuffer);
+    glGenBuffers(1, &uvBuffer);
+    glGenBuffers(1, &indexBuffer);
+
+    testModel.vertices.TransferPositionToOpenGl(positionBuffer);
+    testModel.vertices.TransferUvsToOpenGl(uvBuffer);
+    testModel.vertices.TransferIndicesToOpenGl(indexBuffer);
 
     // TODO move to a menu class
 
@@ -270,6 +301,19 @@ Constants::Status TemperFine::Run()
             const GLfloat one = 1.0f;
             glClearBufferfv(GL_COLOR, 0, color);
             glClearBufferfv(GL_DEPTH, 0, &one);
+
+            // TEST CODE TODO REMOVE
+            glUseProgram(testProgram);
+            GLuint unit = 0;
+            glActiveTexture(GL_TEXTURE0 + unit);
+            glBindTexture(GL_TEXTURE_2D, testModel.textureId);
+            glUniform1i(textureLocation, unit);
+
+            glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+            glUniformMatrix4fv(mvLocation, 1, GL_FALSE, vmath::mat4::identity());
+
+            glBindVertexArray(vao);
+            glDrawElements(GL_TRIANGLES, testModel.vertices.indices.size(), GL_UNSIGNED_INT, nullptr);
 
             // Renders the projection matrix.
             voxelMap.Render(projectionMatrix);

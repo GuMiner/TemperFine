@@ -17,7 +17,7 @@ struct ImageTexture
     }
 
     ImageTexture(GLuint textureId, unsigned char* imageData, int width, int height)
-        : textureId(textureId), imageData(imageData), width(width), height(height)
+        : textureId(textureId), width(width), height(height), imageData(imageData)
     {
     }
 };
