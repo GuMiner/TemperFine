@@ -9,13 +9,13 @@ namespace vmath
     // Goes from radians to degrees
     inline float degrees(float angleInRadians)
     {
-        return angleInRadians * (float)(180.0 / M_PI);
+        return angleInRadians * (float)(180.0 / 3.14159);
     }
 
     // Goes from degrees to radians
     inline float radians(float angleInDegrees)
     {
-        return angleInDegrees * (float)(M_PI / 180.0);
+        return angleInDegrees * (float)(3.14159 / 180.0);
     }
 
     template <const int len>

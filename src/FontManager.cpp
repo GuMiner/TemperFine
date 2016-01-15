@@ -261,7 +261,7 @@ void FontManager::UpdateSentence(int sentenceId, const std::string& sentence, in
 // Renders the specified sentence.
 void FontManager::RenderSentence(int sentenceId, vmath::mat4& perpective, vmath::mat4& mvMatrix)
 {
-    SentenceInfo& sentenceInfo = sentences[sentenceId];
+    const SentenceInfo sentenceInfo = sentences[sentenceId];
     if (sentenceInfo.characterStartIndices == nullptr)
     {
         // No sentence data to render, exit early.

@@ -322,7 +322,7 @@ Constants::Status TemperFine::Run()
             statistics.RenderStats(perspectiveMatrix);
 
             // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
-            window.resetGLStates();
+            // window.resetGLStates(); // This crashes on my AMD card.
             desktop.Update(frameClock.restart().asSeconds());
             sfgui.Display(window);
 
