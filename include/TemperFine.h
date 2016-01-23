@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
+#include "TechConfig.h"
 #include "TechTreeWindow.h"
 #include "TurretConfig.h"
 #include "Viewer.h"
@@ -42,6 +43,7 @@ class TemperFine
     TechTreeWindow techTreeWindow;
 
     // Game Data Configuration
+    TechConfig techConfig;
     ArmorConfig armorConfig;
     BodyConfig bodyConfig;
     TurretConfig turretConfig;

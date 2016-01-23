@@ -10,7 +10,7 @@
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
-      imageManager(), modelManager(&imageManager),
+      imageManager(), modelManager(&imageManager), techConfig("config/technologies.txt"),
       armorConfig(&modelManager, "config/armors.txt"), bodyConfig(&modelManager, "config/bodies.txt"), turretConfig(&modelManager, "config/turrets.txt"),
       physics(), physicsThread(&Physics::Run, &physics)
 {
@@ -82,6 +82,13 @@ Constants::Status TemperFine::Initialize()
     if (!physicsConfig.ReadConfiguration())
     {
         Logger::Log("Bad physics config file!");
+        return Constants::Status::BAD_CONFIG;
+    }
+
+    Logger::Log("Loading technology config file...");
+    if (!techConfig.ReadConfiguration())
+    {
+        Logger::Log("Bad technology config file!");
         return Constants::Status::BAD_CONFIG;
     }
 

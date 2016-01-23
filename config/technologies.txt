@@ -1,0 +1,232 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 01/23/2016
+
+# General Settings
+ConfigVersion 3
+
+# Technologies
+# Format
+#  Display Name
+#  Image Name | Time Cost (sec) | Energy Cost
+#  Dependencies (via image name, converted to ID in-program. Use 'none' if there are no dependencies).
+# If techs have the same image name, they are the same tech, but reachable via different dependencies.
+Basic Tank
+tank 5 5.0
+none
+
+# Level One (Level == distance away from the starter tech.)
+
+Machine Gun Turret
+machineGun 15 15.0
+tank
+
+Terraforming
+terraforming 30 15.0
+tank
+
+Sensors
+sensors 10 8.0
+tank
+
+# Level Two
+
+Rockets
+rockets 30 25.0
+machineGun
+
+Light Cannon
+lightCannon 30 25.0
+machineGun
+
+Machine Gun Bigger Bullets
+biggerBullets 30 25.0
+machineGun
+
+Sensor Turret
+sensorTurret 25 12.0
+sensors terraforming
+
+Machine Gun Turret
+machineGunTurret 25 12.0
+machineGun terraforming
+
+Wedge Piece
+wedgePiece 25 12.0
+sensors
+
+Advanced Piping
+advancedPiping 25 12.0
+sensors
+
+Light Armor
+lightArmor 13 5.0
+sensors
+
+# Level Three
+
+Medium Sensors
+mediumSensor 25 12.0
+sensorTurret
+
+Rocket Accuracy Increase
+rocketAccuracy 25 12.0
+rockets
+
+Rocket Damage Increase
+rocketDamage 25 12.0
+rockets
+
+Rocket Blast Radius Increase
+rocketBlastRadius 25 12.0
+rockets
+
+Light Cannon Damage Increase
+lightCannonDamage 25 12.0
+lightCannon
+
+Light Cannon Reload Time Decrease
+lightCannonReload 25 12.0
+lightCannon
+
+Medium Machine Gun
+mediumMachineGun 25 12.0
+biggerBullets
+
+Sensor Piping
+sensorPiping 25 12.0
+advancedPiping
+
+Snooper Piping
+snooperPiping 25 12.0
+advancedPiping
+
+Bigger Piping
+biggerPiping 25 12.0
+advancedPiping
+
+Heavy Armor
+heavyArmor 25 12.0
+lightArmor
+
+Two Turret Body
+twoTurretBodies 25 12.0
+lightArmor
+
+# Level Four
+
+Transmission Viewer
+transmissionViewer 25 12.0
+mediumSensor
+
+Medium Rockets
+mediumRockets 25 12.0
+rocketDamage
+
+Cluster Cannon
+clusterCannon 25 12.0
+lightCannonDamage
+
+Ore Cannon
+oreCannon 25 12.0
+lightCannonReload
+
+Multi Rocket
+multiRocket 25 12.0
+rocketAccuracy
+
+Missiles
+missiles 25 12.0
+rocketBlastRadius
+
+Shotgun Machinegun
+shotgunMachineGun 25 12.0
+mediumMachineGun
+
+Gun Launcher
+gunLauncher 25 12.0
+mediumMachineGun
+
+Alert Piping
+alertPiping 25 12.0
+sensorPiping snooperPiping
+
+Three Turret Body
+threeTurretBodies 25 12.0
+twoTurretBodies
+
+# Level Five
+Satellite Imaging
+satelliteImaging 25 12.0
+transmissionViewer
+
+Heavy Rockets
+heavyRockets 25 12.0
+mediumRockets
+
+Sticky Bullets
+stickyBullets 25 12.0
+gunLauncher
+
+Artillery (Rockets)
+artillery 25 12.0
+missiles
+
+Artillery (Guns)
+artillery 25 12.0
+mediumMachineGun
+
+Artillery (Cannon)
+artillery 25 12.0
+oreCannon
+
+Artillery Bubble
+artilleryBubble 25 12.0
+mediumSensor
+
+Interceptors
+interceptors 25 12.0
+multiRocket
+
+Four Turret Body
+fourTurretBodies 25 12.0
+threeTurretBodies
+
+# Level Six
+Rocket Laser
+rocketLaser 25 12.0
+interceptors
+
+Counter-Battery (Rockets)
+counterBattery 25 12.0
+heavyRockets
+
+Counter-Battery (Bubbles)
+counterBattery 25 12.0
+artilleryBubble
+
+Five Turret Body
+fiveTurretBodies 25 12.0
+fourTurretBodies
+
+# Level Seven
+Adaptive Cannon
+adaptiveCannon 25 12.0
+rocketLaser
+
+Cross-Sector Plasma Launcher
+crossSectorPlasmaLauncher 25 12.0
+counterBattery
+
+Six Turret Body
+sixTurretBodies 25 12.0
+fiveTurretBodies
+
+# Level Eight
+
+Seven Turret Body
+sevenTurretBodies 25 12.0
+sixTurretBodies
