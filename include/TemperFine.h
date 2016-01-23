@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
+#include "TechTreeWindow.h"
 #include "TurretConfig.h"
 #include "Viewer.h"
 #include "VoxelMap.h"
@@ -37,6 +38,9 @@ class TemperFine
     ModelManager modelManager;
     ShaderManager shaderManager;
 
+    // GUI
+    TechTreeWindow techTreeWindow;
+
     // Game Data Configuration
     ArmorConfig armorConfig;
     BodyConfig bodyConfig;
@@ -50,7 +54,6 @@ class TemperFine
     vmath::mat4 perspectiveMatrix;
 
     std::vector<Player> players;
-    sfg::Label::Ptr testLabel; // TODO remove when we work on GUI stuffs.
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
 
     // Non-graphics threads
@@ -72,10 +75,10 @@ public:
     Constants::Status Initialize();
 
     // Initializes generic OpenGL data after an OpenGL context is created.
-    Constants::Status LoadGraphics();
+    Constants::Status LoadGraphics(sfg::Desktop* desktop);
 
     // Loads in assets after an OpenGL context is created.
-    Constants::Status LoadAssets();
+    Constants::Status LoadAssets(sfg::Desktop* desktop);
 
     // Runs the game loop.
     Constants::Status Run();

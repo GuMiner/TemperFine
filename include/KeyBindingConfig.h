@@ -11,6 +11,8 @@ class KeyBindingConfig : public ConfigManager
         static sf::Keyboard::Key MoveRight;
         static sf::Keyboard::Key MoveUp;
         static sf::Keyboard::Key MoveDown;
+
+        static sf::Keyboard::Key ToggleTechTreeWindow;
     protected:
     private:
         virtual bool LoadConfigValues(std::vector<std::string>& lines);

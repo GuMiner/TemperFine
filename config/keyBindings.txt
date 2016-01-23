@@ -13,8 +13,13 @@ ConfigVersion 3
 # Key Bindings
 # These are using SFML's key constants. These *may* change, but if so, that'll be reflected in 
 #  a config version change, which means AsteroidaGraphica can auto-update the values later on.
+#  See the enum in https://github.com/SFML/SFML/blob/2d1fab374f3d7e9765fe1e83b23dfb5b7f80f012/include/SFML/Window/Keyboard.hpp
 
+# Arrow keys
 MoveLeft 71
 MoveRight 72
 MoveForwards 73
 MoveBackwards 74
+
+# Tab key
+ToggleTechTreeWindow 60

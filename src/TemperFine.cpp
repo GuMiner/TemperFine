@@ -96,7 +96,7 @@ Constants::Status TemperFine::Initialize()
     return Constants::Status::OK;
 }
 
-Constants::Status TemperFine::LoadGraphics()
+Constants::Status TemperFine::LoadGraphics(sfg::Desktop* desktop)
 {
     // Setup GLEW
     GLenum err = glewInit();
@@ -135,10 +135,10 @@ Constants::Status TemperFine::LoadGraphics()
     perspectiveMatrix = vmath::perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
 
     // Assets
-    return LoadAssets();
+    return LoadAssets(desktop);
 }
 
-Constants::Status TemperFine::LoadAssets()
+Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 {
     // Game Data configuration files.
     Logger::Log("Loading armor config file...");
@@ -188,9 +188,6 @@ Constants::Status TemperFine::LoadAssets()
     // TODO: This should be setup from some sort of menu / user input / network input
     voxelMap.SetupFromMap(&testMap);
 
-    // TODO Test setup code remove.
-    testLabel = sfg::Label::Create("Temper Fine Test Label.");
-
     // Load the current player, who is always the first element in the players list.
     Player currentPlayer;
     players.push_back(currentPlayer);
@@ -202,6 +199,15 @@ Constants::Status TemperFine::LoadAssets()
     }
 
     modelManager.ResetOpenGlModelData();
+
+    // UI
+    if (!techTreeWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
+
+    // TODO test code remove
+    techTreeWindow.Display();
 
     // Physics
     Logger::Log("Physics loading...");
@@ -221,9 +227,10 @@ Constants::Status TemperFine::Run()
 
     sf::Uint32 style = GraphicsConfig::IsFullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close;
     sf::RenderWindow window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
+    sfg::Desktop desktop;
 
     // Now that we have an OpenGL Context, load our graphics.
-    Constants::Status firstTimeSetup = LoadGraphics();
+    Constants::Status firstTimeSetup = LoadGraphics(&desktop);
     if (firstTimeSetup != Constants::Status::OK)
     {
         return firstTimeSetup;
@@ -231,28 +238,6 @@ Constants::Status TemperFine::Run()
 
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
-
-    // TODO move to a menu class
-
-    sf::Image techImage;
-    // TODO error checking
-    techImage.loadFromFile("images/menu/techs.png");
-
-    sfg::Button::Ptr techsButton = sfg::Button::Create("Techs Button");
-    sfg::Image::Ptr techImageSfg = sfg::Image::Create(techImage);
-    techsButton->SetImage(techImageSfg);
-
-    // Setup UI specific stuffs TODO remove testing code here
-    sfg::Box::Ptr testBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
-    testBox->Pack(testLabel);
-    testBox->Pack(techsButton);
-
-    sfg::Window::Ptr uiWindow = sfg::Window::Create();
-    uiWindow->SetTitle("Temper Fine Test Window!");
-    uiWindow->Add(testBox);
-
-    sfg::Desktop desktop;
-    desktop.Add(uiWindow);
 
     sf::Clock clock;
     sf::Clock frameClock;
@@ -289,6 +274,13 @@ Constants::Status TemperFine::Run()
             else if (event.type == sf::Event::Resized)
             {
                 UpdatePerspective(event.size.width, event.size.height);
+            }
+            else if (event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == KeyBindingConfig::ToggleTechTreeWindow)
+                {
+                    techTreeWindow.ToggleDisplay();
+                }
             }
         }
 
