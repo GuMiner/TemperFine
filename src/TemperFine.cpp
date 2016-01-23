@@ -306,7 +306,7 @@ Constants::Status TemperFine::Run()
             vmath::mat4 translationMatrix = vmath::translate(200, 0, 0);
             modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, translationMatrix);
 
-            translationMatrix = vmath::translate(100, 0, 0);
+            translationMatrix = vmath::translate(100, 0, 0) * vmath::scale(0.1f, 0.1f, 0.1f);
             modelManager.RenderModel(projectionMatrix, TurretConfig::Turrets[0].turretModelId, translationMatrix);
 
             // Renders the voxel map

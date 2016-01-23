@@ -272,19 +272,21 @@ void ModelManager::ResetOpenGlModelData()
 {
     universalVertices temporaryCopyVertices;
 
-    unsigned int offset = 0;
+    unsigned int indexPositionReferralOffset = 0;
+    unsigned int indexOffset = 0;
     for (unsigned int i = 0; i < models.size(); i++)
     {
-        models[i].indexOffset = offset;
+        models[i].indexOffset = indexOffset;
         temporaryCopyVertices.positions.insert(temporaryCopyVertices.positions.end(), models[i].vertices.positions.begin(), models[i].vertices.positions.end());
         temporaryCopyVertices.uvs.insert(temporaryCopyVertices.uvs.end(), models[i].vertices.uvs.begin(), models[i].vertices.uvs.end());
 
         for (unsigned int j = 0; j < models[i].vertices.indices.size(); j++)
         {
-            temporaryCopyVertices.indices.push_back(models[i].vertices.indices[j] + offset);
+            temporaryCopyVertices.indices.push_back(models[i].vertices.indices[j] + indexPositionReferralOffset);
         }
 
-        offset += models[i].vertices.indices.size();
+        indexPositionReferralOffset += models[i].vertices.positions.size();
+        indexOffset += models[i].vertices.indices.size();
     }
 
     temporaryCopyVertices.TransferPositionToOpenGl(positionBuffer);
