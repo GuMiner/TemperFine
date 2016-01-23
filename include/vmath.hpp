@@ -695,7 +695,6 @@ namespace vmath
             return m;
         }
 
-    private:
         float x;
         float y;
         float z;

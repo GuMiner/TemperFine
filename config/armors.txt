@@ -1,0 +1,20 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 01/22/2016
+
+# General Settings
+ConfigVersion 3
+
+# Armors
+# Format
+#  Display Name
+#  Model | Translation Offset (3) | Rotation Offset (4)
+#  Max Machine Gun | Max Rocket | Max Cannon
+#  Max Machine Gun Penalty | ** | **
+Inflatable Tube
+inflatable 0.0 0.0 0.0 0.0 0.0 0.0 1.0
+10.0 5.0 1.0
+2.0 4.0 10.0

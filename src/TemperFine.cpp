@@ -10,7 +10,8 @@
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
-      imageManager(), modelManager(&imageManager), physics(), physicsThread(&Physics::Run, &physics)
+      imageManager(), modelManager(&imageManager), armorConfig(&modelManager, "config/armors.txt"),
+      physics(), physicsThread(&Physics::Run, &physics)
 {
 }
 
@@ -138,6 +139,14 @@ Constants::Status TemperFine::LoadGraphics()
 
 Constants::Status TemperFine::LoadAssets()
 {
+    // Game Data configuration files.
+    Logger::Log("Loading armor config file...");
+    if (!armorConfig.ReadConfiguration())
+    {
+        Logger::Log("Bad armor config file!");
+        return Constants::Status::BAD_CONFIG;
+    }
+
     // Fonts
     Logger::Log("Font loading...");
     if (!fontManager.LoadFont(&shaderManager, "fonts/DejaVuSans.ttf"))
@@ -175,6 +184,10 @@ Constants::Status TemperFine::LoadAssets()
         return Constants::Status::BAD_IMAGES; // TODO wrong return code for model loading failure.
     }
 
+    // Load the current player, who is always the first element in the players list.
+    Player currentPlayer;
+    players.push_back(currentPlayer);
+
     // Physics
     Logger::Log("Physics loading...");
     physics.Initialize(&viewer, &voxelMap);
@@ -205,7 +218,7 @@ Constants::Status TemperFine::Run()
     Logger::Log("Graphics Initialized!");
 
     // TODO test code remove
-    TextureModel testModel = modelManager.GetModel(testModelId);
+    TextureModel testModel = modelManager.GetModel(ArmorConfig::Armors[0].armorModelId);
     if (!shaderManager.CreateShaderProgram("modelRender", &testProgram))
     {
         Logger::Log("Error creating the model shader!");

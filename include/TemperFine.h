@@ -2,6 +2,8 @@
 #include <SFML\System.hpp>
 #include <SFGUI/SFGUI.hpp>
 #include <SFGUI/Widgets.hpp>
+#include <vector>
+#include "ArmorConfig.h"
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
@@ -11,6 +13,7 @@
 #include "ModelManager.h"
 #include "Physics.h"
 #include "PhysicsConfig.h"
+#include "Player.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
 #include "Viewer.h"
@@ -32,6 +35,9 @@ class TemperFine
     ModelManager modelManager;
     ShaderManager shaderManager;
 
+    // Game Data Configuration
+    ArmorConfig armorConfig;
+
     // Game data
     Physics physics;
     Statistics statistics;
@@ -39,6 +45,7 @@ class TemperFine
     VoxelMap voxelMap;
     vmath::mat4 perspectiveMatrix;
 
+    std::vector<Player> players;
     sfg::Label::Ptr testLabel; // TODO remove when we work on GUI stuffs.
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
     unsigned int testModelId; // TODO move this when we start using models for units and the like.

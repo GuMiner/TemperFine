@@ -1,0 +1,16 @@
+# AsteroidaGraphica Configuration File
+# Formatting
+#  Use the '#' symbol for comments.
+#  Line ordering *is* important! You can add whitespace, but don't rearrange the lines.
+#  Tabs are disallowed.
+# Gustave Granroth 01/22/2016
+
+# General Settings
+ConfigVersion 3
+
+# Bodies
+# Format
+#  Display Name
+#  Model | Max Turrets | Scale
+Starter Body
+starterBody 1 1.0

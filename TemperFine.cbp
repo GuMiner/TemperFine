@@ -38,7 +38,6 @@
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add library="lib\libglew32.dll.a" />
 					<Add library="lib\libsfml-audio.a" />
 					<Add library="lib\libsfml-system.a" />
@@ -107,6 +106,7 @@
 		<Unit filename="include/TextInfo.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/Unit.h" />
 		<Unit filename="include/Vertex.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
@@ -163,6 +163,7 @@
 			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="src/TemperFine.cpp" />
+		<Unit filename="src/Unit.cpp" />
 		<Unit filename="src/Vertex.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>
