@@ -48,16 +48,6 @@ class TemperFine
     std::vector<Player> players;
     sfg::Label::Ptr testLabel; // TODO remove when we work on GUI stuffs.
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
-    unsigned int testModelId; // TODO move this when we start using models for units and the like.
-
-    GLuint vao;
-    GLuint uvBuffer;
-    GLuint positionBuffer;
-    GLuint indexBuffer;
-    GLuint testProgram;
-    GLuint textureLocation;
-    GLuint mvLocation;
-    GLuint projLocation;
 
     // Non-graphics threads
     sf::Thread physicsThread;

@@ -58,6 +58,11 @@
 		<Unit filename="config/physics.txt" />
 		<Unit filename="fonts/DejaVuSans.ttf" />
 		<Unit filename="images/voxelTextureMap.png" />
+		<Unit filename="include/ArmorConfig.h">
+			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="include/ArmorInfo.h" />
+		<Unit filename="include/BodyInfo.h" />
 		<Unit filename="include/ConfigManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -87,6 +92,7 @@
 		<Unit filename="include/MapManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="include/Model.h" />
 		<Unit filename="include/ModelManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -94,6 +100,7 @@
 		<Unit filename="include/PhysicsConfig.h">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="include/Player.h" />
 		<Unit filename="include/Projectile.h" />
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
@@ -106,6 +113,7 @@
 		<Unit filename="include/TextInfo.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/TurretInfo.h" />
 		<Unit filename="include/Unit.h" />
 		<Unit filename="include/Vertex.h">
 			<Option virtualFolder="Utility/" />
@@ -120,6 +128,9 @@
 		<Unit filename="shaders/voxelMapRender.fs" />
 		<Unit filename="shaders/voxelMapRender.gs" />
 		<Unit filename="shaders/voxelMapRender.vs" />
+		<Unit filename="src/ArmorConfig.cpp">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="src/ConfigManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -150,10 +161,14 @@
 		<Unit filename="src/ModelManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="src/ModelRenderer.cpp">
+			<Option virtualFolder="Managers/" />
+		</Unit>
 		<Unit filename="src/Physics.cpp" />
 		<Unit filename="src/PhysicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Projectile.cpp" />
 		<Unit filename="src/ShaderManager.cpp">
 			<Option virtualFolder="Managers/" />

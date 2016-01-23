@@ -226,3 +226,78 @@ const TextureModel& ModelManager::GetModel(unsigned int id)
 {
     return models[id];
 }
+
+void ModelManager::RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix)
+{
+    // TEST CODE TODO REMOVE
+    glUseProgram(modelRenderProgram);
+
+    GLuint unit = 0;
+    glActiveTexture(GL_TEXTURE0 + unit);
+    glBindTexture(GL_TEXTURE_2D, models[id].textureId);
+    glUniform1i(textureLocation, unit);
+
+    glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+    glUniformMatrix4fv(mvLocation, 1, GL_FALSE, mvMatrix);
+
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, models[id].vertices.indices.size(), GL_UNSIGNED_INT, (const void*)(models[id].indexOffset*sizeof(GL_UNSIGNED_INT)));
+}
+
+// Initializes the OpenGL resources
+bool ModelManager::InitializeOpenGlResources(ShaderManager& shaderManager)
+{
+    if (!shaderManager.CreateShaderProgram("modelRender", &modelRenderProgram))
+    {
+        Logger::Log("Error creating the model shader!");
+        return false;
+    }
+
+    textureLocation = glGetUniformLocation(modelRenderProgram, "modelTexture");
+    mvLocation = glGetUniformLocation(modelRenderProgram, "mvMatrix");
+    projLocation = glGetUniformLocation(modelRenderProgram, "projMatrix");
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &positionBuffer);
+    glGenBuffers(1, &uvBuffer);
+    glGenBuffers(1, &indexBuffer);
+
+    return true;
+}
+
+// Sends in the model data to OpenGL.
+void ModelManager::ResetOpenGlModelData()
+{
+    universalVertices temporaryCopyVertices;
+
+    unsigned int offset = 0;
+    for (unsigned int i = 0; i < models.size(); i++)
+    {
+        models[i].indexOffset = offset;
+        temporaryCopyVertices.positions.insert(temporaryCopyVertices.positions.end(), models[i].vertices.positions.begin(), models[i].vertices.positions.end());
+        temporaryCopyVertices.uvs.insert(temporaryCopyVertices.uvs.end(), models[i].vertices.uvs.begin(), models[i].vertices.uvs.end());
+
+        for (unsigned int j = 0; j < models[i].vertices.indices.size(); j++)
+        {
+            temporaryCopyVertices.indices.push_back(models[i].vertices.indices[j] + offset);
+        }
+
+        offset += models[i].vertices.indices.size();
+    }
+
+    temporaryCopyVertices.TransferPositionToOpenGl(positionBuffer);
+    temporaryCopyVertices.TransferUvsToOpenGl(uvBuffer);
+    temporaryCopyVertices.TransferIndicesToOpenGl(indexBuffer);
+}
+
+// Deletes all initialized OpenGL resources.
+ModelManager::~ModelManager()
+{
+    glDeleteVertexArrays(1, &vao);
+
+    glDeleteBuffers(1, &positionBuffer);
+    glDeleteBuffers(1, &uvBuffer);
+    glDeleteBuffers(1, &indexBuffer);
+}

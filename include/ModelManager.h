@@ -1,9 +1,12 @@
 #pragma once
-#include <string>
+#include <GL/glew.h>
 #include <map>
+#include <string>
 #include <vector>
 #include "ImageManager.h"
+#include "ShaderManager.h"
 #include "Model.h"
+#include "vmath.hpp"
 
 struct PosUvPair
 {
@@ -24,12 +27,36 @@ class ModelManager
         // Retrieves a 3D model, returning the model ID.
         const TextureModel& GetModel(unsigned int id);
 
+        // Renders the specified model given by the ID.
+        void RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix);
+
+        // Initializes the OpenGL resources
+        bool InitializeOpenGlResources(ShaderManager& shaderManager);
+
+        // Sends in the model data to OpenGL.
+        void ResetOpenGlModelData();
+
+        // Deletes all initialized OpenGL resources.
+        ~ModelManager();
+
     private:
         ImageManager* imageManager;
 
+        // Rendering data
+        GLuint vao;
+        GLuint uvBuffer;
+        GLuint positionBuffer;
+        GLuint indexBuffer;
+        GLuint modelRenderProgram;
+        GLuint textureLocation;
+        GLuint mvLocation;
+        GLuint projLocation;
+
+        // Model data
         unsigned int nextModelId;
         std::map<unsigned int, TextureModel> models;
 
+        // Temporary loading structures.
         std::vector<vmath::vec2> rawUvs;
         std::vector<PosUvPair> rawIndices;
         std::map<unsigned int, std::vector<PosUvPair>> uvVertexRemapping;

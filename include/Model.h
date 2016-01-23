@@ -10,4 +10,7 @@ struct TextureModel
 
     // Vertex data -- only the position, uvs, and indices fields are expected to be filled.
     universalVertices vertices;
+
+    // Offset to apply to all the indicies in this model when sending to OpenGL and rendering.
+    GLuint indexOffset;
 };

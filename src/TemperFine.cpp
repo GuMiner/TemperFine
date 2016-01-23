@@ -176,17 +176,17 @@ Constants::Status TemperFine::LoadAssets()
     // TODO Test setup code remove.
     testLabel = sfg::Label::Create("Temper Fine Test Label.");
 
-    // TODO Test setup code remove
-    testModelId = modelManager.LoadModel("models/sensors/torus");
-    if (testModelId == 0)
-    {
-        Logger::Log("Model loading failed!");
-        return Constants::Status::BAD_IMAGES; // TODO wrong return code for model loading failure.
-    }
-
     // Load the current player, who is always the first element in the players list.
     Player currentPlayer;
     players.push_back(currentPlayer);
+
+    // Now that *all* the models have loaded, prepare for rendering models.
+    if (!modelManager.InitializeOpenGlResources(shaderManager))
+    {
+        return Constants::Status::BAD_SHADERS;
+    }
+
+    modelManager.ResetOpenGlModelData();
 
     // Physics
     Logger::Log("Physics loading...");
@@ -216,29 +216,6 @@ Constants::Status TemperFine::Run()
 
     UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
-
-    // TODO test code remove
-    TextureModel testModel = modelManager.GetModel(ArmorConfig::Armors[0].armorModelId);
-    if (!shaderManager.CreateShaderProgram("modelRender", &testProgram))
-    {
-        Logger::Log("Error creating the model shader!");
-        return Constants::Status::BAD_SHADERS;
-    }
-
-    textureLocation = glGetUniformLocation(testProgram, "modelTexture");
-    mvLocation = glGetUniformLocation(testProgram, "mvMatrix");
-    projLocation = glGetUniformLocation(testProgram, "projMatrix");
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &positionBuffer);
-    glGenBuffers(1, &uvBuffer);
-    glGenBuffers(1, &indexBuffer);
-
-    testModel.vertices.TransferPositionToOpenGl(positionBuffer);
-    testModel.vertices.TransferUvsToOpenGl(uvBuffer);
-    testModel.vertices.TransferIndicesToOpenGl(indexBuffer);
 
     // TODO move to a menu class
 
@@ -315,20 +292,14 @@ Constants::Status TemperFine::Run()
             glClearBufferfv(GL_COLOR, 0, color);
             glClearBufferfv(GL_DEPTH, 0, &one);
 
-            // TEST CODE TODO REMOVE
-            glUseProgram(testProgram);
-            GLuint unit = 0;
-            glActiveTexture(GL_TEXTURE0 + unit);
-            glBindTexture(GL_TEXTURE_2D, testModel.textureId);
-            glUniform1i(textureLocation, unit);
+            // TODO test code remove, renders a model using the model manager.
+            vmath::mat4 identityMatrix = vmath::mat4::identity();
+            modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, identityMatrix);
 
-            glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
-            glUniformMatrix4fv(mvLocation, 1, GL_FALSE, vmath::mat4::identity());
+            vmath::mat4 translationMatrix = vmath::translate(200, 0, 0);
+            modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, translationMatrix);
 
-            glBindVertexArray(vao);
-            glDrawElements(GL_TRIANGLES, testModel.vertices.indices.size(), GL_UNSIGNED_INT, nullptr);
-
-            // Renders the projection matrix.
+            // Renders the voxel map
             voxelMap.Render(projectionMatrix);
 
             // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
