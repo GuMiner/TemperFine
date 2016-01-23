@@ -2,7 +2,7 @@
 #include <string>
 
 // Represents a unit body that holds turrets and armor.
-struct Body
+struct BodyType
 {
     // The body model ID.
     unsigned int bodyModelId;

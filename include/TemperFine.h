@@ -4,6 +4,7 @@
 #include <SFGUI/Widgets.hpp>
 #include <vector>
 #include "ArmorConfig.h"
+#include "BodyConfig.h"
 #include "Constants.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
@@ -38,6 +39,7 @@ class TemperFine
 
     // Game Data Configuration
     ArmorConfig armorConfig;
+    BodyConfig bodyConfig;
     TurretConfig turretConfig;
 
     // Game data

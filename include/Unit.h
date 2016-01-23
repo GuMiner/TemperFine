@@ -20,7 +20,7 @@ class Unit
         std::vector<Turret> turretIds;
 
         // The body the unit has.
-        Body body;
+        BodyType body;
 
         // The armor applied to this unit.
         Armor armor;
