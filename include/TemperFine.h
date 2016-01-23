@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
+#include "TurretConfig.h"
 #include "Viewer.h"
 #include "VoxelMap.h"
 
@@ -37,6 +38,7 @@ class TemperFine
 
     // Game Data Configuration
     ArmorConfig armorConfig;
+    TurretConfig turretConfig;
 
     // Game data
     Physics physics;

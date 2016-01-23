@@ -10,7 +10,7 @@
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
-      imageManager(), modelManager(&imageManager), armorConfig(&modelManager, "config/armors.txt"),
+      imageManager(), modelManager(&imageManager), armorConfig(&modelManager, "config/armors.txt"), turretConfig(&modelManager, "config/turrets.txt"),
       physics(), physicsThread(&Physics::Run, &physics)
 {
 }
@@ -144,6 +144,13 @@ Constants::Status TemperFine::LoadAssets()
     if (!armorConfig.ReadConfiguration())
     {
         Logger::Log("Bad armor config file!");
+        return Constants::Status::BAD_CONFIG;
+    }
+
+    Logger::Log("Loading turret config file...");
+    if (!turretConfig.ReadConfiguration())
+    {
+        Logger::Log("Bad turret config file!");
         return Constants::Status::BAD_CONFIG;
     }
 
@@ -298,6 +305,9 @@ Constants::Status TemperFine::Run()
 
             vmath::mat4 translationMatrix = vmath::translate(200, 0, 0);
             modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, translationMatrix);
+
+            translationMatrix = vmath::translate(100, 0, 0);
+            modelManager.RenderModel(projectionMatrix, TurretConfig::Turrets[0].turretModelId, translationMatrix);
 
             // Renders the voxel map
             voxelMap.Render(projectionMatrix);

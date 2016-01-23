@@ -10,8 +10,8 @@ bool ArmorConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
     // Move from the ConfigVersion line to actual data.
     ++lineCounter;
 
-    int linesPerArmor = 3;
-    while (lineCounter + linesPerArmor < (int)configFileLines.size())
+    int linesPerArmor = 4;
+    while (lineCounter + linesPerArmor <= (int)configFileLines.size())
     {
         // Load in the armor name.
         ArmorType armorType;

@@ -113,6 +113,9 @@
 		<Unit filename="include/TextInfo.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/TurretConfig.h">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="include/TurretInfo.h" />
 		<Unit filename="include/Unit.h" />
 		<Unit filename="include/Vertex.h">
@@ -161,9 +164,6 @@
 		<Unit filename="src/ModelManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
-		<Unit filename="src/ModelRenderer.cpp">
-			<Option virtualFolder="Managers/" />
-		</Unit>
 		<Unit filename="src/Physics.cpp" />
 		<Unit filename="src/PhysicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
@@ -178,6 +178,9 @@
 			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="src/TemperFine.cpp" />
+		<Unit filename="src/TurretConfig.cpp">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="src/Unit.cpp" />
 		<Unit filename="src/Vertex.cpp">
 			<Option virtualFolder="Utility/" />
