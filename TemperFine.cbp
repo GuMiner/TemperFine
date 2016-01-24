@@ -5,7 +5,7 @@
 		<Option title="TemperFine" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Configs\;Managers\;Utility\;" />
+		<Option virtualFolders="Configs\;Managers\;Utility\;GUI\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/TemperFine" prefix_auto="1" extension_auto="1" />
@@ -62,6 +62,9 @@
 			<Option virtualFolder="Configs/" />
 		</Unit>
 		<Unit filename="include/ArmorInfo.h" />
+		<Unit filename="include/BodyConfig.h">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="include/BodyInfo.h" />
 		<Unit filename="include/ConfigManager.h">
 			<Option virtualFolder="Managers/" />
@@ -77,6 +80,9 @@
 		</Unit>
 		<Unit filename="include/GraphicsConfig.h">
 			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="include/GuiWindow.h">
+			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="include/ImageManager.h">
 			<Option virtualFolder="Managers/" />
@@ -109,6 +115,13 @@
 		<Unit filename="include/StringUtils.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="include/TechConfig.h">
+			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="include/TechInfo.h" />
+		<Unit filename="include/TechTreeWindow.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
 		<Unit filename="include/TemperFine.h" />
 		<Unit filename="include/TextInfo.h">
 			<Option virtualFolder="Utility/" />
@@ -134,6 +147,9 @@
 		<Unit filename="src/ArmorConfig.cpp">
 			<Option virtualFolder="Configs/" />
 		</Unit>
+		<Unit filename="src/BodyConfig.cpp">
+			<Option virtualFolder="Configs/" />
+		</Unit>
 		<Unit filename="src/ConfigManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -148,6 +164,9 @@
 		</Unit>
 		<Unit filename="src/GraphicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="src/GuiWindow.cpp">
+			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="src/ImageManager.cpp">
 			<Option virtualFolder="Managers/" />
@@ -176,6 +195,12 @@
 		<Unit filename="src/Statistics.cpp" />
 		<Unit filename="src/StringUtils.cpp">
 			<Option virtualFolder="Utility/" />
+		</Unit>
+		<Unit filename="src/TechConfig.cpp">
+			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="src/TechTreeWindow.cpp">
+			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="src/TemperFine.cpp" />
 		<Unit filename="src/TurretConfig.cpp">

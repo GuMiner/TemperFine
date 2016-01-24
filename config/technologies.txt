@@ -18,7 +18,7 @@ Basic Tank
 tank 5 5.0
 none
 
-# Level One (Level == distance away from the starter tech.)
+# Level Two (One away from basic tank).
 
 Machine Gun Turret
 machineGun 15 15.0
@@ -31,8 +31,6 @@ tank
 Sensors
 sensors 10 8.0
 tank
-
-# Level Two
 
 Rockets
 rockets 30 25.0
@@ -65,8 +63,6 @@ sensors
 Light Armor
 lightArmor 13 5.0
 sensors
-
-# Level Three
 
 Medium Sensors
 mediumSensor 25 12.0
@@ -116,10 +112,12 @@ Two Turret Body
 twoTurretBodies 25 12.0
 lightArmor
 
-# Level Four
-
 Transmission Viewer
 transmissionViewer 25 12.0
+mediumSensor
+
+Artillery Bubble
+artilleryBubble 25 12.0
 mediumSensor
 
 Medium Rockets
@@ -158,7 +156,6 @@ Three Turret Body
 threeTurretBodies 25 12.0
 twoTurretBodies
 
-# Level Five
 Satellite Imaging
 satelliteImaging 25 12.0
 transmissionViewer
@@ -183,10 +180,6 @@ Artillery (Cannon)
 artillery 25 12.0
 oreCannon
 
-Artillery Bubble
-artilleryBubble 25 12.0
-mediumSensor
-
 Interceptors
 interceptors 25 12.0
 multiRocket
@@ -195,7 +188,6 @@ Four Turret Body
 fourTurretBodies 25 12.0
 threeTurretBodies
 
-# Level Six
 Rocket Laser
 rocketLaser 25 12.0
 interceptors
@@ -212,21 +204,20 @@ Five Turret Body
 fiveTurretBodies 25 12.0
 fourTurretBodies
 
-# Level Seven
+Six Turret Body
+sixTurretBodies 25 12.0
+fiveTurretBodies
+
 Adaptive Cannon
 adaptiveCannon 25 12.0
 rocketLaser
+
+Seven Turret Body
+sevenTurretBodies 25 12.0
+sixTurretBodies
 
 Cross-Sector Plasma Launcher
 crossSectorPlasmaLauncher 25 12.0
 counterBattery
 
-Six Turret Body
-sixTurretBodies 25 12.0
-fiveTurretBodies
 
-# Level Eight
-
-Seven Turret Body
-sevenTurretBodies 25 12.0
-sixTurretBodies

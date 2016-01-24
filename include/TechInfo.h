@@ -25,4 +25,7 @@ struct Tech
 
     // Internal name, used for dependency formation. Not intended for other usages.
     std::string internalName;
+
+    // The effective dependency level of this technology.
+    int techLevel;
 };

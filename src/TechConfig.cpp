@@ -57,14 +57,14 @@ bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
         }
 
         // Given the dependencies, find the dependencies that were already loaded.
+        // Note that this assumes dependencies are in the proper order.
         std::vector<unsigned int> dependencyIds;
         for (unsigned int i = 0; i < dependencies.size(); i++)
         {
             bool foundDependency = false;
             for (unsigned int j = 0; j < Techs.size(); j++)
             {
-                if (Techs[j].internalName.size() == dependencies[i].size() &&
-                    strncmp(Techs[j].internalName.c_str(), dependencies[i].c_str(), dependencies[i].size()) == 0)
+                if (strcmp(Techs[j].internalName.c_str(), dependencies[i].c_str()) == 0)
                 {
                     foundDependency = true;
                     dependencyIds.push_back(j);
@@ -72,7 +72,7 @@ bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
                 }
             }
 
-            if (strncmp(dependencies[i].c_str(), "none", 4) == 0)
+            if (strcmp(dependencies[i].c_str(), LEVEL_ZERO) == 0)
             {
                 // Exit if there is no dependency for this technology.
                 foundDependency = true;
@@ -80,7 +80,7 @@ bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
 
             if (!foundDependency)
             {
-                Logger::Log("Missing dependency for tech!");
+                Logger::Log("Missing dependency for tech! Ensure dependencies are properly ordered in the technology file.");
                 Logger::Log(dependencies[i].c_str());
                 return false;
             }
@@ -93,10 +93,72 @@ bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
         lineCounter += linesPerTech;
     }
 
-    // TODO find techs with the same image name and merge them,
-    //  as they represent the same tech reachable via different routes.
+    CombineIdenticalTechs();
+    AssignTechLevels();
 
     return true;
+}
+
+void TechConfig::CombineIdenticalTechs()
+{
+    for (unsigned int i = 0; i < Techs.size() - 1; i++)
+    {
+        for (unsigned int j = i + 1; j < Techs.size(); j++)
+        {
+            if (strcmp(Techs[i].internalName.c_str(), Techs[j].internalName.c_str()) == 0)
+            {
+                // Techs are identical, combine them. Note that based on how we iterate through the arrays,
+                //  each 'j' tech will only have one name/dependency pair.
+                Techs[i].dependencies.push_back(Techs[j].dependencies[0]);
+                Techs[i].names.push_back(Techs[j].names[0]);
+
+                // Clear the duplicate tech and ensure we reparse the current element again.
+                Techs.erase(Techs.begin() + j);
+                --i;
+
+                // Lower the dependency ID for all upstream consumer...
+                for (unsigned int k = i + 1; k < Techs.size(); k++)
+                {
+                    // ... where their dependencies
+                    for (unsigned int m = 0; m < Techs[k].dependencies[0].size(); m++)
+                    {
+                        // ... are more than or equal to the item we just removed.
+                        if (Techs[k].dependencies[0][m] >= j)
+                        {
+                            Techs[k].dependencies[0][m]--;
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+}
+
+void TechConfig::AssignTechLevels()
+{
+    // Note that we're heavily-simplifying the logic by assuming that techs are *always* in dependency-order.
+    for (unsigned int i = 0; i < Techs.size(); i++)
+    {
+        // Mash together all the dependencies
+        std::vector<unsigned int> dependencies;
+        for (unsigned int j = 0; j < Techs[i].dependencies.size(); j++)
+        {
+            dependencies.insert(dependencies.end(), Techs[i].dependencies[0].begin(), Techs[i].dependencies[0].end());
+        }
+
+        int level = 0;
+        for (unsigned int j = 0; j < dependencies.size(); j++)
+        {
+            if (Techs[dependencies[j]].techLevel >= level)
+            {
+                level = Techs[dependencies[j]].techLevel + 1;
+            }
+        }
+
+        Techs[i].techLevel = level;
+    }
 }
 
 void TechConfig::WriteConfigValues()
