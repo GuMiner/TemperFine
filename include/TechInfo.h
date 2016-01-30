@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include <set>
 #include <string>
+#include <vector>
 #include "vmath.hpp"
 
 // Represents a technology
@@ -28,4 +30,21 @@ struct Tech
 
     // The effective dependency level of this technology.
     int techLevel;
+};
+
+struct TechProgress
+{
+    std::set<unsigned int> completedTechs;
+    std::set<unsigned int> techsAvailableForResearch;
+
+
+    int GetMinTechLevel()
+    {
+        return 0;
+    }
+
+    int GetMaxTechLevel()
+    {
+        return 0;
+    }
 };
