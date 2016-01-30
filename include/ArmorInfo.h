@@ -34,11 +34,11 @@ struct Armor
     unsigned int armorTypeId;
 
     // The amount of machine gun fire the armor has taken.
-    float machineGunStrength;
+    float machineGunDamage;
 
     // The amount of rocket fire the the armor has taken.
-    float rocketStrength;
+    float rocketDamage;
 
     // The amount of cannon fire the the armor has taken.
-    float cannonStrength;
+    float cannonDamage;
 };

@@ -197,9 +197,19 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Load the current player, who is always the first element in the players list.
     Player currentPlayer;
+
+    // TODO test code, the player shouldn't start with units.
+    Unit testUnit;
+    std::vector<unsigned int> turrets;
+    turrets.push_back(0); // TurretConfig::Turrets, first item.
+
+    // The zeros are the indexes into ArmorConfig::Armors and BodyConfig::Bodies
+    testUnit.CreateNew(0, 0, turrets, vmath::vec3(0, 0, 0), vmath::quaternion::fromAxisAngle(45.0f, vmath::vec3(0.0f, 1.0f, 0.0f)));
+    currentPlayer.AddUnit(testUnit);
+
     players.push_back(currentPlayer);
 
-    // Now that *all* the models have loaded, prepare for rendering models.
+    // Now that *all* the models have loaded, prepare for rendering models by initializing OpenGL and sending the model data to OpenGL
     if (!modelManager.InitializeOpenGlResources(shaderManager))
     {
         return Constants::Status::BAD_SHADERS;
@@ -306,18 +316,11 @@ Constants::Status TemperFine::Run()
             glClearBufferfv(GL_COLOR, 0, color);
             glClearBufferfv(GL_DEPTH, 0, &one);
 
-            // TODO test code remove, renders a model using the model manager.
-            vmath::mat4 identityMatrix = vmath::mat4::identity();
-            modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, identityMatrix);
-
-            vmath::mat4 translationMatrix = vmath::translate(200, 0, 0);
-            modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[0].armorModelId, translationMatrix);
-
-            translationMatrix = vmath::translate(100, 0, 0) * vmath::scale(0.1f, 0.1f, 0.1f);
-            modelManager.RenderModel(projectionMatrix, TurretConfig::Turrets[0].turretModelId, translationMatrix);
-
-            translationMatrix = vmath::translate(-50, 20, 0) * translationMatrix;
-            modelManager.RenderModel(projectionMatrix, BodyConfig::Bodies[0].bodyModelId, translationMatrix);
+            // Renders each players' units.
+            for (int i = 0; i < players.size(); i++)
+            {
+                players[i].RenderUnits(modelManager, projectionMatrix);
+            }
 
             // Renders the voxel map
             voxelMap.Render(projectionMatrix);

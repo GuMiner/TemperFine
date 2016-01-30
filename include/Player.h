@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "ModelManager.h"
 #include "Unit.h"
 #include "vmath.hpp"
 
@@ -9,9 +10,13 @@ class Player
 {
     public:
         Player();
-        void RenderUnits(vmath::mat4& projectionMatrix);
 
-        ~Player();
+        // Renders the player's units.
+        void RenderUnits(ModelManager& modelManager, vmath::mat4& projectionMatrix);
+
+        // Adds the unit to the units the player has under control.
+        void AddUnit(const Unit unit);
+
     protected:
     private:
 

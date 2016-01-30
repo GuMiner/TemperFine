@@ -5,12 +5,15 @@ Player::Player()
     name = std::string("Default Player");
 }
 
-void Player::RenderUnits(vmath::mat4& projectionMatrix)
+void Player::RenderUnits(ModelManager& modelManager, vmath::mat4& projectionMatrix)
 {
-
+    for (int i = 0; i < units.size(); i++)
+    {
+        units[i].Render(modelManager, projectionMatrix);
+    }
 }
 
-Player::~Player()
+void Player::AddUnit(const Unit unit)
 {
-    //dtor
+    units.push_back(unit);
 }
