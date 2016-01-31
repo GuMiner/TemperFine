@@ -25,7 +25,7 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
 
     // Note that if the user provides more turrets than this body can hold, we truncate and only take the top ones listed.
     turrets.clear();
-    for (int i = 0; i < turretTypeIds.size() && i < BodyConfig::Bodies[bodyTypeId].maxTurrets; i++)
+    for (unsigned int i = 0; i < turretTypeIds.size() && i < BodyConfig::Bodies[bodyTypeId].maxTurrets; i++)
     {
         Turret turret;
         turret.turretTypeId = turretTypeIds[i];
@@ -34,21 +34,29 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
 
         turrets.push_back(turret);
     }
-
 }
 
 void Unit::Render(ModelManager& modelManager, vmath::mat4& projectionMatrix)
 {
-    // TODO test code remove, renders a model using the model manager.
-    vmath::mat4 identityMatrix = vmath::mat4::identity();
-    modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[armor.armorTypeId].armorModelId, identityMatrix);
+    // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
+    vmath::mat4 unitOrientation = vmath::translate(position) * rotation.asMatrix();
 
-    vmath::mat4 translationMatrix = vmath::translate(200, 0, 0);
-    modelManager.RenderModel(projectionMatrix, ArmorConfig::Armors[armor.armorTypeId].armorModelId, translationMatrix);
+    const BodyType& bodyType = BodyConfig::Bodies[bodyTypeId];
 
-    translationMatrix = vmath::translate(100, 0, 0) * vmath::scale(0.1f, 0.1f, 0.1f);
-    modelManager.RenderModel(projectionMatrix, TurretConfig::Turrets[turrets[0].turretTypeId].turretModelId, translationMatrix);
+    vmath::mat4 bodyMatrix = unitOrientation * vmath::scale(bodyType.scale, bodyType.scale, bodyType.scale);
+    modelManager.RenderModel(projectionMatrix, bodyType.bodyModelId, bodyMatrix);
 
-    translationMatrix = vmath::translate(-50, 20, 0) * translationMatrix;
-    modelManager.RenderModel(projectionMatrix, BodyConfig::Bodies[bodyTypeId].bodyModelId, translationMatrix);
+    const ArmorType& armorType = ArmorConfig::Armors[armor.armorTypeId];
+
+    vmath::mat4 armorMatrix = vmath::translate(armorType.translationOffset) * bodyMatrix * armorType.rotationOffset.asMatrix();
+    modelManager.RenderModel(projectionMatrix, armorType.armorModelId, armorMatrix);
+
+    for (unsigned int i = 0; i < turrets.size(); i++)
+    {
+        const TurretType& turretType = TurretConfig::Turrets[turrets[i].turretTypeId];
+
+        vmath::mat4 turretDefaultMatrix = vmath::translate(turretType.translationOffset) * bodyMatrix * turretType.rotationOffset.asMatrix();
+        vmath::mat4 turretMatrix = vmath::translate(turrets[i].currentTranslation) * turretDefaultMatrix * turrets[i].currentRotation.asMatrix();
+        modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix);
+    }
 }

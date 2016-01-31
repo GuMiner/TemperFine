@@ -13,4 +13,4 @@ ConfigVersion 3
 #  Display Name
 #  Model | Max Turrets | Scale
 Starter Body
-starterBody 1 1.0
+starterBody 1 0.010

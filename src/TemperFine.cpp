@@ -204,8 +204,20 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     turrets.push_back(0); // TurretConfig::Turrets, first item.
 
     // The zeros are the indexes into ArmorConfig::Armors and BodyConfig::Bodies
-    testUnit.CreateNew(0, 0, turrets, vmath::vec3(0, 0, 0), vmath::quaternion::fromAxisAngle(45.0f, vmath::vec3(0.0f, 1.0f, 0.0f)));
-    currentPlayer.AddUnit(testUnit);
+    float step = 5.0f;
+    unsigned int maxSize = 5;
+    float rotation = 0.20;
+    for (unsigned int i = 0; i < maxSize; i++)
+    {
+        for (unsigned int j = 0; j < maxSize; j++)
+        {
+            testUnit.CreateNew(0, 0, turrets, vmath::vec3(step * i, step * j, 0),
+               vmath::quaternion::fromAxisAngle(rotation, vmath::vec3(0.0f, 1.0f, 0.0f)) * vmath::quaternion::fromAxisAngle(vmath::radians(-90.0f), vmath::vec3(1.0f, 0.0f, 0.0f)));
+            currentPlayer.AddUnit(testUnit);
+            rotation += 0.20;
+        }
+    }
+
 
     players.push_back(currentPlayer);
 
@@ -317,7 +329,7 @@ Constants::Status TemperFine::Run()
             glClearBufferfv(GL_DEPTH, 0, &one);
 
             // Renders each players' units.
-            for (int i = 0; i < players.size(); i++)
+            for (unsigned int i = 0; i < players.size(); i++)
             {
                 players[i].RenderUnits(modelManager, projectionMatrix);
             }

@@ -13,4 +13,4 @@ ConfigVersion 3
 #  Display Name
 #  Model | Translation Offset (3) | Rotation Offset (4)
 Pew Pew
-pewpew 0.0 0.0 1.0 0.0 0.0 0.0 1.0
+pewpew 0.0 0.0 1.0 0.0 0.7071 0.0 0.7071
