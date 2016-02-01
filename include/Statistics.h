@@ -1,8 +1,12 @@
 #pragma once
+#include <string>
 #include "FontManager.h"
+#include "RenderableSentence.h"
 #include "Vertex.h"
 #include "vmath.hpp"
 
+// Draws statistics information in a more fancier (and older) manner than using the GUI library.
+//  This information is drawn with the FontManager global font.
 class Statistics
 {
     // Holds a reference to the font manager so we can update text sentences
@@ -11,22 +15,29 @@ class Statistics
     public:
         Statistics();
         bool Initialize(FontManager* fontManager);
-        void UpdateStats(vmath::vec3& position);
+
+        void UpdateRunTime(float currentTime);
+        void UpdateViewPos(vmath::vec3& position);
+        void UpdateTechLevelRange(int minLevel, int maxLevel);
+        void UpdatePlayerDetails(std::string& playerName);
+
         void RenderStats(vmath::mat4& perspectiveMatrix);
-    protected:
+
     private:
         int textPixelHeight;
         vmath::mat4 textScale;
 
-        int xPositionSentence;
-        vmath::mat4 xPositionMatrix;
-        vmath::vec3 xPositionColor;
+        // Overall Details
+        RenderableSentence playerCount;
+        RenderableSentence runTime;
 
-        int yPositionSentence;
-        vmath::mat4 yPositionMatrix;
-        vmath::vec3 yPositionColor;
+        // Current player details.
+        RenderableSentence playerName;
+        RenderableSentence playerMinTechLevel;
+        RenderableSentence playerMaxTechLevel;
 
-        int zPositionSentence;
-        vmath::mat4 zPositionMatrix;
-        vmath::vec3 zPositionColor;
+        // (Viewer details (for current player))
+        RenderableSentence xPosition;
+        RenderableSentence yPosition;
+        RenderableSentence zPosition;
 };

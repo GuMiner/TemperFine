@@ -248,6 +248,80 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     return Constants::Status::OK;
 }
 
+void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
+{
+    // Update useful statistics that are fancier than the standard GUI
+    statistics.UpdateRunTime(currentGameTime);
+    statistics.UpdateViewPos(viewer.viewPosition);
+}
+
+void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused)
+{
+    // Handle all events.
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        // Update SF GUI
+        desktop.HandleEvent(event);
+
+        if (event.type == sf::Event::Closed)
+        {
+            alive = false;
+        }
+        else if (event.type == sf::Event::LostFocus)
+        {
+            paused = true;
+            physics.Pause();
+            // musicManager.Pause();
+        }
+        else if (event.type == sf::Event::GainedFocus)
+        {
+            paused = false;
+            physics.Resume();
+            // musicManager.Resume();
+        }
+        else if (event.type == sf::Event::Resized)
+        {
+            UpdatePerspective(event.size.width, event.size.height);
+        }
+        else if (event.type == sf::Event::KeyReleased)
+        {
+            if (event.key.code == KeyBindingConfig::ToggleTechTreeWindow)
+            {
+                techTreeWindow.ToggleDisplay();
+            }
+        }
+    }
+}
+
+void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock)
+{
+    vmath::mat4 lookAtMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
+    vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;
+
+    // Clear the screen (and depth buffer) before any rendering begins.
+    const GLfloat color[] = { 0, 0, 0, 1 };
+    const GLfloat one = 1.0f;
+    glClearBufferfv(GL_COLOR, 0, color);
+    glClearBufferfv(GL_DEPTH, 0, &one);
+
+    // Renders each players' units.
+    for (unsigned int i = 0; i < players.size(); i++)
+    {
+        players[i].RenderUnits(modelManager, projectionMatrix);
+    }
+
+    // Renders the voxel map
+    voxelMap.Render(projectionMatrix);
+
+    // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
+    statistics.RenderStats(perspectiveMatrix);
+
+    // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
+    // window.resetGLStates(); // This crashes on my AMD card.
+    desktop.Update(guiClock.restart().asSeconds());
+}
+
 Constants::Status TemperFine::Run()
 {
     // 24 depth bits, 8 stencil bits, 8x AA, major version 4.
@@ -269,91 +343,27 @@ Constants::Status TemperFine::Run()
     Logger::Log("Graphics Initialized!");
 
     sf::Clock clock;
-    sf::Clock frameClock;
+    sf::Clock guiClock;
     sf::Time clockStartTime;
     bool alive = true;
     bool paused = false;
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
-
-        // Handle all events.
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // Update SF GUI
-            desktop.HandleEvent(event);
-
-            if (event.type == sf::Event::Closed)
-            {
-                alive = false;
-            }
-            else if (event.type == sf::Event::LostFocus)
-            {
-                paused = true;
-                physics.Pause();
-                // musicManager.Pause();
-            }
-            else if (event.type == sf::Event::GainedFocus)
-            {
-                paused = false;
-                physics.Resume();
-                // musicManager.Resume();
-            }
-            else if (event.type == sf::Event::Resized)
-            {
-                UpdatePerspective(event.size.width, event.size.height);
-            }
-            else if (event.type == sf::Event::KeyReleased)
-            {
-                if (event.key.code == KeyBindingConfig::ToggleTechTreeWindow)
-                {
-                    techTreeWindow.ToggleDisplay();
-                }
-            }
-        }
-
-        // TODO only update if the view position has updated.
-        statistics.UpdateStats(viewer.viewPosition);
-
-        vmath::mat4 lookAtMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
-        vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;
+        HandleEvents(desktop, window, alive, paused);
+        PerformGuiThreadUpdates(clock.getElapsedTime().asSeconds());
 
         // Render, only if non-paused.
         if (!paused)
         {
-            // Clear the screen (and depth buffer) before any rendering begins.
-            const GLfloat color[] = { 0, 0, 0, 1 };
-            const GLfloat one = 1.0f;
-            glClearBufferfv(GL_COLOR, 0, color);
-            glClearBufferfv(GL_DEPTH, 0, &one);
-
-            // Renders each players' units.
-            for (unsigned int i = 0; i < players.size(); i++)
-            {
-                players[i].RenderUnits(modelManager, projectionMatrix);
-            }
-
-            // Renders the voxel map
-            voxelMap.Render(projectionMatrix);
-
-            // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
-            statistics.RenderStats(perspectiveMatrix);
-
-            // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
-            // window.resetGLStates(); // This crashes on my AMD card.
-            desktop.Update(frameClock.restart().asSeconds());
+            Render(desktop, window, guiClock);
             sfgui.Display(window);
-
             window.display();
         }
 
         // Delay to run approximately at our maximum framerate.
         sf::Int64 sleepDelay = (1000000 / Constants::MAX_FRAMERATE) - clock.getElapsedTime().asMicroseconds() - clockStartTime.asMicroseconds();
-        if (sleepDelay > 0)
-        {
-            sf::sleep(sf::microseconds(sleepDelay));
-        }
+        sf::sleep(sf::microseconds(sleepDelay));
     }
 
     return Constants::Status::OK;

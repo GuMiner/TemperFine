@@ -67,6 +67,16 @@ class TemperFine
     // Updates the camera perspective when the screen width / height has changed.
     void UpdatePerspective(unsigned int width, unsigned int height);
 
+
+    // Performs updates that must be performed on the OpenGL thread. Needs to coordinate with the physics thread.
+    void PerformGuiThreadUpdates(float currentGameTime);
+
+    // Handles GUI-based events, such as closing the application, resizing the window, etc.
+    void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
+
+    // Renders the scene.
+    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock);
+
 public:
     static Constants Constant;
 
