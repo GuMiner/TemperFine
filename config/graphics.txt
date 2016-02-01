@@ -21,8 +21,8 @@ ScreenHeight 720
 # Text will fail to be displayed if this is too small, but certain GPUs won't support their reported maximum texture size.
 TextImageSize 1024
 
-# Size of each voxel type image.
-VoxelSubImageSize 64
+# Voxel types there are in total
+VoxelTypes 1
 
 # Number of texture rectangles before the voxels are wrapped to the next row
 VoxelsPerRow 4

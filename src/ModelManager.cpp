@@ -125,7 +125,7 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
     return true;
 }
 
-bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertices)
+bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertices, vmath::vec3* minBounds, vmath::vec3* maxBounds)
 {
     std::string fileString;
     if (!StringUtils::LoadStringFromFile(objFilename, fileString))
@@ -154,6 +154,14 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     // Properly render out the vertices so that there is one UV per vertex.
     uvVertexRemapping.clear();
 
+    // Also figure out the min-max bounding box while we're at it.
+    (*minBounds)[0] = 1e20;
+    (*minBounds)[1] = 1e20;
+    (*minBounds)[2] = 1e20;
+    (*maxBounds)[0] = -1e20;
+    (*maxBounds)[1] = -1e20;
+    (*maxBounds)[2] = -1e20;
+
     // There's guaranteed to be a UV for each point. Find it, and set it.
     for (unsigned int i = 0; i < vertices.positions.size(); i++)
     {
@@ -178,6 +186,37 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
             errorStream << "Failed to load in the UV for point " << i << ".";
             Logger::Log(errorStream.str().c_str());
             return false;
+        }
+
+        // Perform min-max bounding check.
+        if (vertices.positions[i][0] < (*minBounds)[0])
+        {
+            (*minBounds)[0] = vertices.positions[i][0];
+        }
+
+        if (vertices.positions[i][1] < (*minBounds)[1])
+        {
+            (*minBounds)[1] = vertices.positions[i][1];
+        }
+
+        if (vertices.positions[i][2] < (*minBounds)[2])
+        {
+            (*minBounds)[2] = vertices.positions[i][2];
+        }
+
+        if (vertices.positions[i][0] > (*maxBounds)[0])
+        {
+            (*maxBounds)[0] = vertices.positions[i][0];
+        }
+
+        if (vertices.positions[i][1] > (*maxBounds)[1])
+        {
+            (*maxBounds)[1] = vertices.positions[i][1];
+        }
+
+        if (vertices.positions[i][2] > (*maxBounds)[2])
+        {
+            (*maxBounds)[2] = vertices.positions[i][2];
         }
     }
 
@@ -210,7 +249,7 @@ unsigned int ModelManager::LoadModel(const char* rootFilename)
         return 0;
     }
 
-    if (!LoadModel(objString.c_str(), textureModel.vertices))
+    if (!LoadModel(objString.c_str(), textureModel.vertices, &textureModel.minBounds, &textureModel.maxBounds))
     {
         Logger::Log("Error loading the OBJ model!");
         Logger::LogError(objString.c_str());
@@ -227,6 +266,11 @@ const TextureModel& ModelManager::GetModel(unsigned int id)
     return models[id];
 }
 
+unsigned int ModelManager::GetCurrentModelCount() const
+{
+    return nextModelId;
+}
+
 void ModelManager::RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix)
 {
     // TEST CODE TODO REMOVE
@@ -241,7 +285,7 @@ void ModelManager::RenderModel(vmath::mat4& projectionMatrix, unsigned int id, v
     glUniformMatrix4fv(mvLocation, 1, GL_FALSE, mvMatrix);
 
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, models[id].vertices.indices.size(), GL_UNSIGNED_INT, (const void*)(models[id].indexOffset*sizeof(GL_UNSIGNED_INT)));
+    glDrawElements(GL_TRIANGLES, models[id].vertices.indices.size(), GL_UNSIGNED_INT, (const void*)(models[id].indexOffset * sizeof(GL_UNSIGNED_INT)));
 }
 
 // Initializes the OpenGL resources

@@ -9,15 +9,18 @@ struct ImageTexture
     int width;
     int height;
 
-    // Image data as loaded in from stb.
+    // Image data as loaded in.
     unsigned char* imageData;
+
+    // True if loaded from STB (file), false otherwise.
+    bool loadedFromStb;
 
     ImageTexture()
     {
     }
 
     ImageTexture(GLuint textureId, unsigned char* imageData, int width, int height)
-        : textureId(textureId), width(width), height(height), imageData(imageData)
+        : textureId(textureId), width(width), height(height), imageData(imageData), loadedFromStb(true)
     {
     }
 };

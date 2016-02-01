@@ -27,6 +27,8 @@ class ModelManager
         // Retrieves a 3D model, returning the model ID.
         const TextureModel& GetModel(unsigned int id);
 
+        unsigned int GetCurrentModelCount() const;
+
         // Renders the specified model given by the ID.
         void RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix);
 
@@ -69,5 +71,5 @@ class ModelManager
 
         // Loads an OBJ model into the specified vertices, returning true on success.
         // Note that the OBJ model must fully specify all positions / UVs *before* any indices.
-        bool LoadModel(const char* objFilename, universalVertices& vertices);
+        bool LoadModel(const char* objFilename, universalVertices& vertices, vmath::vec3* minBounds, vmath::vec3* maxBounds);
 };

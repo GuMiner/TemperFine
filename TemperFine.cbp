@@ -108,6 +108,7 @@
 		</Unit>
 		<Unit filename="include/Player.h" />
 		<Unit filename="include/Projectile.h" />
+		<Unit filename="include/RenderableSentence.h" />
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>

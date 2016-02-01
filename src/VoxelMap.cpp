@@ -1,3 +1,5 @@
+#include <sstream>
+#include "GraphicsConfig.h"
 #include "Logger.h"
 #include "VoxelMap.h"
 
@@ -5,19 +7,22 @@ VoxelMap::VoxelMap()
 {
 }
 
-bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManager)
+void VoxelMap::InitOpenGl()
 {
-    Logger::Log("Voxel texture loading...");
-    GLuint textureId = imageManager.AddImage("images/voxelTextureMap.png");
-    if (textureId == 0)
-    {
-        return false;
-    }
+    // OpenGL drawing data.
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-    voxelTextures = imageManager.GetImage(textureId);
-    Logger::Log("Voxel texture loading successful.");
+    glGenBuffers(1, &positionBuffer);
+	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &uvBuffer);
 
-    // Voxel Map shader creation. Note we also get the location of the matrix and texturee to set later.
+	glGenTextures(1, &voxelTopTexture);
+}
+
+bool VoxelMap::CreateVoxelShader(ShaderManager& shaderManager)
+{
+    // Voxel Map shader creation. Note we also get the location of the matrix and textures to set later.
     Logger::Log("Voxel Map shader creation...");
 	if (!shaderManager.CreateShaderProgramWithGeometryShader("voxelMapRender", &voxelMapRenderProgram))
 	{
@@ -26,37 +31,152 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ShaderManager& shaderManag
 
     projLocation = glGetUniformLocation(voxelMapRenderProgram, "projMatrix");
     xyLengthsLocation = glGetUniformLocation(voxelMapRenderProgram, "xyLengths");
+    currentVoxelIdLocation = glGetUniformLocation(voxelMapRenderProgram, "currentVoxelId");
 
     textureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTextures");
     voxelTopTextureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTopTexture");
 	Logger::Log("Voxel Map shader creation successful!");
+	return true;
+}
 
-    // OpenGL drawing data.
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+std::vector<GLuint> VoxelMap::LoadVoxelTextures(ImageManager& imageManager)
+{
+    Logger::Log("Voxel texture loading...");
 
-    glGenBuffers(1, &positionBuffer);
-	glGenBuffers(1, &colorBuffer);
-	glGenBuffers(1, &uvBuffer);
+    std::vector<GLuint> voxelTextureIds;
+    for (int i = 0; i < GraphicsConfig::VoxelTypes; i++)
+    {
+        std::stringstream voxelModelTextureName;
+        voxelModelTextureName << "models/voxels/voxel_" << i << ".png";
 
-	glGenTextures(1, &voxelTopTexture);
+        GLuint textureId = imageManager.AddImage(voxelModelTextureName.str().c_str());
+        if (textureId == 0)
+        {
+            return std::vector<GLuint>();
+        }
+        voxelTextureIds.push_back(textureId);
+    }
 
-	// Send some test data to OpenGL.
-	testVertices.positions.push_back(vmath::vec3(0, 0, 0));
-	testVertices.positions.push_back(vmath::vec3(0, 1, 0));
-	testVertices.positions.push_back(vmath::vec3(1, 1, 0));
+    Logger::Log("Voxel texture loading successful.");
+    return voxelTextureIds;
+}
 
-	testVertices.colors.push_back(vmath::vec3(1, 0, 0));
-	testVertices.colors.push_back(vmath::vec3(0, 1, 0));
-	testVertices.colors.push_back(vmath::vec3(0, 0, 1));
+std::vector<int> VoxelMap::LoadModels(ModelManager& modelManager)
+{
+    Logger::Log("Voxel model loading...");
 
-    testVertices.uvs.push_back(vmath::vec2(0, 0));
-    testVertices.uvs.push_back(vmath::vec2(1, 0));
-    testVertices.uvs.push_back(vmath::vec2(1, 1));
+    std::vector<int> voxelModelIds;
+    for (int i = 0; i < GraphicsConfig::VoxelTypes; i++)
+    {
+        std::stringstream voxelModelTextureName;
+        voxelModelTextureName << "models/voxels/voxel_" << i;
 
-	testVertices.TransferPositionToOpenGl(positionBuffer);
-	testVertices.TransferColorToOpenGl(colorBuffer);
-	testVertices.TransferUvsToOpenGl(uvBuffer);
+        int modelId = modelManager.LoadModel(voxelModelTextureName.str().c_str());
+        if (modelId == 0)
+        {
+            return std::vector<int>();
+        }
+        voxelModelIds.push_back(modelId);
+    }
+
+    Logger::Log("Voxel model loading successful.");
+    return voxelModelIds;
+}
+
+bool VoxelMap::Initialize(ImageManager& imageManager, ModelManager& modelManager, ShaderManager& shaderManager)
+{
+    // Shaders, raw model/image data
+    if (!CreateVoxelShader(shaderManager))
+    {
+        return false; // Bad shader!
+    }
+
+    std::vector<GLuint> voxelTextureIds = LoadVoxelTextures(imageManager);
+    if (voxelTextureIds.size() == 0)
+    {
+        return false; // No textures loaded!
+    }
+
+    std::vector<int> voxelModelIds = LoadModels(modelManager);
+    if (voxelModelIds.size() == 0)
+    {
+        return false; // No models loaded!
+    }
+
+    // At this point, we need to combine the texture images into one larger image (and scale UVs accordingly)
+    //  and combine vertex data into one universal array (and scale indices appropriately).
+    Logger::Log("Combining voxel images and models into a composite structure...");
+
+    // Combine together the images. Images *must* all be the same size squares.
+    int edgeLength = imageManager.GetImage(voxelTextureIds[0]).width;
+    int width = GraphicsConfig::VoxelsPerRow * edgeLength;
+    int height = (int)voxelTextureIds.size() / GraphicsConfig::VoxelsPerRow;
+    if (height == 0 || height * GraphicsConfig::VoxelsPerRow < (int)voxelTextureIds.size())
+    {
+        ++height;
+    }
+
+    height *= edgeLength;
+    const ImageTexture& voxelTexture = imageManager.GetImage(imageManager.LoadEmpty(width, height));
+    voxelTextureId = voxelTexture.textureId;
+
+    // Store the UV offsets so we can modify them later below for proper texture mapping.
+    std::vector<vmath::vec2> newUvMin;
+    std::vector<vmath::vec2> newUvMax;
+
+    int xP = 0;
+    int yP = 0;
+    for (unsigned int i = 0; i < voxelTextureIds.size(); i++)
+    {
+        imageManager.CopyToImage(voxelTextureIds[i], voxelTexture.textureId, xP * edgeLength, yP * edgeLength);
+        newUvMin.push_back(vmath::vec2((float)(xP * edgeLength) / (float)width, (float)(yP * edgeLength) / (float) height));
+        newUvMax.push_back(vmath::vec2((float)((xP + 1) * edgeLength) / (float)width, (float)((yP + 1) * edgeLength) / (float) height));
+
+        xP++;
+        if (xP == GraphicsConfig::VoxelsPerRow)
+        {
+            xP = 0;
+            yP++;
+        }
+    }
+
+    // Combine together the vertex data.
+    unsigned int indexPositionReferralOffset = 0;
+    unsigned int indexOffset = 0;
+    for (unsigned int i = 0; i < voxelModelIds.size(); i++)
+    {
+        const TextureModel& model = modelManager.GetModel(voxelModelIds[i]);
+        voxelIndexOffsets.push_back(indexOffset);
+        voxelIndexCounts.push_back(model.vertices.indices.size());
+
+        voxelVertices.positions.insert(voxelVertices.positions.end(), model.vertices.positions.begin(), model.vertices.positions.end());
+
+        // Update the UVs appropriately, with a minor bit of vector math.
+        for (unsigned int j = 0; j < model.vertices.uvs.size(); j++)
+        {
+            vmath::vec2 newUv = newUvMin[i] + model.vertices.uvs[j] * (newUvMax[i] - newUvMin[i]);
+            voxelVertices.uvs.push_back(newUv);
+        }
+
+        // Update the indices appropriately
+        for (unsigned int j = 0; j < model.vertices.indices.size(); j++)
+        {
+            voxelVertices.indices.push_back(model.vertices.indices[j] + indexPositionReferralOffset);
+        }
+
+        indexPositionReferralOffset += model.vertices.positions.size();
+        indexOffset += model.vertices.indices.size();
+    }
+
+    Logger::Log("Combination complete!");
+
+    // Send our combined data to OpenGL.
+    imageManager.ResendToOpenGl(voxelTextureId);
+    InitOpenGl();
+
+	voxelVertices.TransferPositionToOpenGl(positionBuffer);
+	voxelVertices.TransferUvsToOpenGl(uvBuffer);
+	voxelVertices.TransferIndicesToOpenGl(indexBuffer);
 
 	return true;
 }
@@ -99,7 +219,7 @@ void VoxelMap::Render(vmath::mat4& projectionMatrix)
 
     // Bind our textures
 	glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, voxelTextures.textureId);
+    glBindTexture(GL_TEXTURE_2D, voxelTextureId);
     glUniform1i(textureLocation, 0);
 
     glActiveTexture(GL_TEXTURE1);
@@ -109,16 +229,21 @@ void VoxelMap::Render(vmath::mat4& projectionMatrix)
     // Bind our vertex data
     glBindVertexArray(vao);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+
 	glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
 
-	glDrawArraysInstanced(GL_TRIANGLES, 0, testVertices.positions.size(), mapInfo->GetVoxelCount());
+    for (unsigned int i = 0; i < (unsigned int)GraphicsConfig::VoxelTypes; i++)
+    {
+        glUniform1ui(currentVoxelIdLocation, i + 1);
+        glDrawElementsInstanced(GL_TRIANGLES, voxelIndexCounts[i], GL_UNSIGNED_INT, (const void*)(voxelIndexOffsets[i] * sizeof(GL_UNSIGNED_INT)), mapInfo->GetVoxelCount());
+    }
 }
 
 VoxelMap::~VoxelMap()
 {
     glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &positionBuffer);
-	glDeleteBuffers(1, &colorBuffer);
+	glDeleteBuffers(1, &indexBuffer);
 	glDeleteBuffers(1, &uvBuffer);
 
 	glDeleteTextures(1, &voxelTopTexture);

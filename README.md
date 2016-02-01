@@ -2,9 +2,9 @@
 ## About
 --------
 
-TemperFine is a voxel-based multiplayer real-time strategy game which takes place on an alien world.
+TemperFine is a 3D voxel-based multiplayer real-time strategy game which takes place on an alien world.
 
-Written in C++ with OpenGL 4.0.
+Written in C++ with raw OpenGL 4.0.
 
 ## Documentation
 ----------------
@@ -30,3 +30,4 @@ Licenses for dependencies are within the *licenses* folder.
 * [SFGUI 0.3] (http://sfgui.sfml-dev.de/p/)
 * [GLEW 1.12] (http://glew.sourceforge.net/)
 * [STB latest] (https://github.com/nothings/stb)
+* [GCC-TDM 4.7.1] (http://tdm-gcc.tdragon.net/)

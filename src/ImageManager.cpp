@@ -1,3 +1,4 @@
+#include <cstring>
 #include <string>
 #include <sstream>
 #include <GL\glew.h>
@@ -24,17 +25,7 @@ GLuint ImageManager::AddImage(const char* filename)
     unsigned char* imageData = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
     if (imageData && width && height)
     {
-        // Create a new texture for the image.
-        GLuint newTextureId;
-        glGenTextures(1, &newTextureId);
-
-        // Bind the texture and send in image data
-        glBindTexture(GL_TEXTURE_2D, newTextureId);
-        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-
-        imageTextures[newTextureId] = ImageTexture(newTextureId, imageData, width, height);
-        return newTextureId;
+        return CreateTexture(width, height, imageData);
     }
     else
     {
@@ -46,12 +37,75 @@ GLuint ImageManager::AddImage(const char* filename)
     return 0;
 }
 
+GLuint ImageManager::LoadEmpty(int width, int height)
+{
+    unsigned char* data = new unsigned char[width * height * 4];
+    for (unsigned int i = 0; i < width * height; i++)
+    {
+        unsigned char redFactor = (i % 3 == 0) ? 255 : 0;
+        unsigned char greenFactor = (i % 3 == 1) ? 255 : 0;
+        unsigned char blueFactor = (i % 3 == 2) ? 255 : 0;
+
+        data[i * 4] = redFactor;
+        data[i * 4 + 1] = greenFactor;
+        data[i * 4 + 2] = blueFactor;
+        data[i * 4 + 3] = 255;
+    }
+
+    GLuint imageId = CreateTexture(width, height, data);
+    imageTextures[imageId].loadedFromStb = false;
+
+    return imageId;
+}
+
+void ImageManager::CopyToImage(GLuint srcImage, GLuint dstImage, int dstX, int dstY)
+{
+    // We have to copy over data in scanlines because the destination image is likely a different size.
+    int scanlineSize = imageTextures[srcImage].width * 4;
+    for (int i = 0; i < imageTextures[srcImage].height; i++)
+    {
+        const unsigned char* startingLocation = imageTextures[srcImage].imageData + i * scanlineSize;
+        unsigned char* destinationLocation = imageTextures[dstImage].imageData + (dstX * 4) + (dstY + i) * 4 * imageTextures[dstImage].width;
+        memcpy(destinationLocation, startingLocation, sizeof(unsigned char) * scanlineSize);
+    }
+}
+
+GLuint ImageManager::CreateTexture(int width, int height, unsigned char* imageData)
+{
+    // Create a new texture for the image.
+    GLuint newTextureId;
+    glGenTextures(1, &newTextureId);
+
+    imageTextures[newTextureId] = ImageTexture(newTextureId, imageData, width, height);
+
+    // Bind the texture and send in image data
+    glBindTexture(GL_TEXTURE_2D, newTextureId);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+    ResendToOpenGl(newTextureId);
+
+    return newTextureId;
+}
+
+void ImageManager::ResendToOpenGl(GLuint imageId)
+{
+    const ImageTexture& image = imageTextures[imageId];
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, image.width, image.height, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData);
+}
+
 ImageManager::~ImageManager()
 {
     // Free all of the loaded textures and in-memory image data at program end.
     for (std::map<GLuint, ImageTexture>::iterator iterator = imageTextures.begin(); iterator != imageTextures.end(); iterator++)
     {
         glDeleteTextures(1, &iterator->first);
-        stbi_image_free(iterator->second.imageData);
+
+        if (iterator->second.loadedFromStb)
+        {
+            stbi_image_free(iterator->second.imageData);
+        }
+        else
+        {
+            delete[] iterator->second.imageData;
+        }
     }
 }

@@ -7,7 +7,7 @@ Player::Player()
 
 void Player::RenderUnits(ModelManager& modelManager, vmath::mat4& projectionMatrix)
 {
-    for (int i = 0; i < units.size(); i++)
+    for (unsigned int i = 0; i < units.size(); i++)
     {
         units[i].Render(modelManager, projectionMatrix);
     }
