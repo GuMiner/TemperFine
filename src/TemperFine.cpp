@@ -354,7 +354,6 @@ Constants::Status TemperFine::Run()
         return firstTimeSetup;
     }
 
-    UpdatePerspective(window.getSize().x, window.getSize().y);
     Logger::Log("Graphics Initialized!");
 
     sf::Clock clock;
@@ -372,7 +371,11 @@ Constants::Status TemperFine::Run()
         if (!paused)
         {
             Render(desktop, window, guiClock);
+
+            glViewport( 0, 0, window.getSize().x, window.getSize().y);
             sfgui.Display(window);
+
+            UpdatePerspective(window.getSize().x, window.getSize().y);
             window.display();
         }
 

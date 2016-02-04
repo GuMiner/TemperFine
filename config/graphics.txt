@@ -22,7 +22,7 @@ ScreenHeight 720
 TextImageSize 1024
 
 # Voxel types there are in total
-VoxelTypes 1
+VoxelTypes 2
 
 # Number of texture rectangles before the voxels are wrapped to the next row
 VoxelsPerRow 4
