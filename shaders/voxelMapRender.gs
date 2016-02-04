@@ -8,7 +8,6 @@ in VS_OUT
 {
     vec2 uvPos;
     uint voxelId;
-    uint currentId;
 } colorUV [];
 
 out GS_OUT
@@ -16,10 +15,12 @@ out GS_OUT
     vec2 uvPos;
 } colorUVOut;
 
+uniform uint currentVoxelId;
+
 void main(void)
 {
     // Only draw the current voxel ID.
-    if (colorUV[0].voxelId != 0)// colorUV[0].currentId)
+    if (colorUV[0].voxelId == currentVoxelId)
     {
         for (int i = 0; i < gl_in.length(); i++)
         {

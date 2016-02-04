@@ -3,39 +3,74 @@
 layout (location = 0) in vec3 position;
 layout (location = 3) in vec2 uvPosition;
 
-uniform usampler1D voxelTopTexture;
+uniform sampler1D voxelTopTexture;
 
 out VS_OUT
 {
     vec2 uvPos;
     uint voxelId;
-    uint currentId;
+    vec3 data;
 } vs_out;
 
 uniform mat4 projMatrix;
 
 uniform ivec2 xyLengths;
-uniform uint currentVoxelId;
 
-// Perform our position and projection transformations, and pass-through the color / texture data
-void main(void)
+// Performs rotation from 0 deg to 270 for 0-3, and the same for 4-7, but inverted.
+mat4 calculateRotationMatrix(in float rotationAmount)
 {
-    uvec4 voxelInfo = texelFetch(voxelTopTexture, gl_InstanceID, 0);
-    vs_out.voxelId = voxelInfo.x;
-    vs_out.currentId = currentVoxelId;
+    float rotation = (3.14159265358f / 2.0f) * rotationAmount;
 
+    // Z-axis rotation
+    float c = cos(rotation);
+    float s = sin(rotation);
+
+    mat4 rotMatrix = mat4(
+		c,  s, 0.0f, 0.0f,
+		-s, c, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
+    if (rotation > 5.0f) // > 270 deg, < 360 deg.
+    {
+        // Rotate around the Y axis to flip, with a 180 deg flip, cos(180) = 0, sin(180) = -1
+        return mat4(
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+           -1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f) * rotMatrix;
+    }
+
+    return rotMatrix;
+}
+
+mat4 calculateTranslationMatrix()
+{
+    // Offset based on the voxel index.
     float spacing = 2.0f;
     int xyLength = (xyLengths.x * xyLengths.y);
     int zIndex = (gl_InstanceID / xyLength);
     int yIndex = (gl_InstanceID - zIndex * xyLength) / xyLengths.x;
     int xIndex = gl_InstanceID - (zIndex * xyLength + yIndex * xyLengths.x);
 
-    float zPos = spacing * float(zIndex);
-    float yPos = spacing * float(yIndex);
-    float xPos = spacing * float(xIndex);
+    return mat4(
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        spacing * float(xIndex), spacing * float(yIndex), spacing * float(zIndex), 1.0f);
+}
 
+// Perform our position and projection transformations, and pass-through the color / texture data
+void main(void)
+{
+    vec4 voxelInfo = texelFetch(voxelTopTexture, gl_InstanceID, 0);
+    vs_out.voxelId = uint(voxelInfo.x * 255.0f);
     vs_out.uvPos = uvPosition;
 
-    // Adding vertex position plus the position of the instance itself.
-    gl_Position = projMatrix  * (vec4(position, 1) + vec4(xPos, yPos, zPos, 0.0f));
+    // Rotation is stored in voxelInfo.y, in quarters.
+    mat4 viewRotationMatrix = calculateRotationMatrix(voxelInfo.y * 255.0f);
+    mat4 viewTranslationMatrix = calculateTranslationMatrix();
+
+    // Add the vertex position to all our transformations to get the final result.
+    gl_Position = projMatrix  * viewTranslationMatrix * viewRotationMatrix * vec4(position, 1);
 }
