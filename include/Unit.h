@@ -17,6 +17,9 @@ class Unit
 
         // Renders the unit.
         void Render(ModelManager& modelManager, vmath::mat4& projectionMatrix);
+
+        // Moves the unit to the specified position.
+        void Move(vmath::vec3 pos);
     protected:
     private:
         // The physical location of the unit.

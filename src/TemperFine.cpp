@@ -7,6 +7,7 @@
 #include "Logger.h"
 #include "TemperFine.h"
 #include "../version.h"
+#include <iostream>
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
@@ -291,13 +292,31 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
                 techTreeWindow.ToggleDisplay();
             }
         }
+        else if (event.type == sf::Event::MouseButtonPressed)
+        {
+            if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                // The user clicked something.
+                // TODO vec3 clickRay = vmath::
+
+            }
+        }
+        else if (event.type == sf::Event::MouseMoved)
+        {
+            vmath::vec2 mousePos = vmath::vec2((float)event.mouseMove.x, (float)event.mouseMove.y);
+            vmath::vec2 screenSize = vmath::vec2((float)window.getSize().x, (float)window.getSize().y);
+
+            vmath::mat4 viewRotationMatrix = viewer.viewOrientation.asMatrix();
+            worldRay = vmath::screenRay(mousePos, screenSize, perspectiveMatrix, viewRotationMatrix);
+
+            players[0].CollisionCheck(viewer.viewPosition, worldRay);
+        }
     }
 }
 
-void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock)
+void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vmath::mat4& viewMatrix)
 {
-    vmath::mat4 lookAtMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
-    vmath::mat4 projectionMatrix = perspectiveMatrix * lookAtMatrix;
+    vmath::mat4 projectionMatrix = perspectiveMatrix * viewMatrix;
 
     // Clear the screen (and depth buffer) before any rendering begins.
     const GLfloat color[] = { 0, 0, 0, 1 };
@@ -361,18 +380,21 @@ Constants::Status TemperFine::Run()
     sf::Time clockStartTime;
     bool alive = true;
     bool paused = false;
+    vmath::mat4 viewMatrix;
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
+        viewMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
+
         HandleEvents(desktop, window, alive, paused);
         PerformGuiThreadUpdates(clock.getElapsedTime().asSeconds());
 
         // Render, only if non-paused.
         if (!paused)
         {
-            Render(desktop, window, guiClock);
+            Render(desktop, window, guiClock, viewMatrix);
 
-            glViewport( 0, 0, window.getSize().x, window.getSize().y);
+            glViewport(0, 0, window.getSize().x, window.getSize().y);
             sfgui.Display(window);
 
             UpdatePerspective(window.getSize().x, window.getSize().y);

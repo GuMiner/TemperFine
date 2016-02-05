@@ -31,3 +31,4 @@ Licenses for dependencies are within the *licenses* folder.
 * [GLEW 1.12] (http://glew.sourceforge.net/)
 * [STB latest] (https://github.com/nothings/stb)
 * [GCC-TDM 4.7.1] (http://tdm-gcc.tdragon.net/)
+* [MESA 11.1.1] (http://www.mesa3d.org)

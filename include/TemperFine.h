@@ -58,6 +58,9 @@ class TemperFine
     std::vector<Player> players;
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
 
+    // TODO test data
+    vmath::vec3 worldRay;
+
     // Non-graphics threads
     sf::Thread physicsThread;
 
@@ -75,7 +78,7 @@ class TemperFine
     void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
 
     // Renders the scene.
-    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock);
+    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vmath::mat4& viewMatrix);
 
 public:
     static Constants Constant;

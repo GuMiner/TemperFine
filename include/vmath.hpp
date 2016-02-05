@@ -1,6 +1,7 @@
 #pragma once
 #define _USE_MATH_DEFINES  1 // Include constants defined in math.h
 #include <math.h>
+#include <iostream>
 
 // From the OpenGL Superbible, 6th Ed, 'free to use in your application' as per the website.
 // Modified so that quaternions can actually be used and removing dead code.
@@ -554,6 +555,144 @@ namespace vmath
         return rotate(angle, v[0], v[1], v[2]);
     }
 
+    // Pulled from 'The Mesa 3-D graphics library', gluInvertMatrix, refactored to integrate here.
+    // Computes the inverse of the provided 4x4 matrix. *Assumes the matrix is invertable*
+    static inline void inverse(mat4& matrix, mat4& result)
+    {
+        // Reading directly from the matrix.
+        float* m = &matrix[0][0];
+        float inv[16];
+
+        inv[0] = m[5]  * m[10] * m[15] -
+                 m[5]  * m[11] * m[14] -
+                 m[9]  * m[6]  * m[15] +
+                 m[9]  * m[7]  * m[14] +
+                 m[13] * m[6]  * m[11] -
+                 m[13] * m[7]  * m[10];
+
+        inv[4] = -m[4]  * m[10] * m[15] +
+                  m[4]  * m[11] * m[14] +
+                  m[8]  * m[6]  * m[15] -
+                  m[8]  * m[7]  * m[14] -
+                  m[12] * m[6]  * m[11] +
+                  m[12] * m[7]  * m[10];
+
+        inv[8] = m[4]  * m[9] * m[15] -
+                 m[4]  * m[11] * m[13] -
+                 m[8]  * m[5] * m[15] +
+                 m[8]  * m[7] * m[13] +
+                 m[12] * m[5] * m[11] -
+                 m[12] * m[7] * m[9];
+
+        inv[12] = -m[4]  * m[9] * m[14] +
+                   m[4]  * m[10] * m[13] +
+                   m[8]  * m[5] * m[14] -
+                   m[8]  * m[6] * m[13] -
+                   m[12] * m[5] * m[10] +
+                   m[12] * m[6] * m[9];
+
+        inv[1] = -m[1]  * m[10] * m[15] +
+                  m[1]  * m[11] * m[14] +
+                  m[9]  * m[2] * m[15] -
+                  m[9]  * m[3] * m[14] -
+                  m[13] * m[2] * m[11] +
+                  m[13] * m[3] * m[10];
+
+        inv[5] = m[0]  * m[10] * m[15] -
+                 m[0]  * m[11] * m[14] -
+                 m[8]  * m[2] * m[15] +
+                 m[8]  * m[3] * m[14] +
+                 m[12] * m[2] * m[11] -
+                 m[12] * m[3] * m[10];
+
+        inv[9] = -m[0]  * m[9] * m[15] +
+                  m[0]  * m[11] * m[13] +
+                  m[8]  * m[1] * m[15] -
+                  m[8]  * m[3] * m[13] -
+                  m[12] * m[1] * m[11] +
+                  m[12] * m[3] * m[9];
+
+        inv[13] = m[0]  * m[9] * m[14] -
+                  m[0]  * m[10] * m[13] -
+                  m[8]  * m[1] * m[14] +
+                  m[8]  * m[2] * m[13] +
+                  m[12] * m[1] * m[10] -
+                  m[12] * m[2] * m[9];
+
+        inv[2] = m[1]  * m[6] * m[15] -
+                 m[1]  * m[7] * m[14] -
+                 m[5]  * m[2] * m[15] +
+                 m[5]  * m[3] * m[14] +
+                 m[13] * m[2] * m[7] -
+                 m[13] * m[3] * m[6];
+
+        inv[6] = -m[0]  * m[6] * m[15] +
+                  m[0]  * m[7] * m[14] +
+                  m[4]  * m[2] * m[15] -
+                  m[4]  * m[3] * m[14] -
+                  m[12] * m[2] * m[7] +
+                  m[12] * m[3] * m[6];
+
+        inv[10] = m[0]  * m[5] * m[15] -
+                  m[0]  * m[7] * m[13] -
+                  m[4]  * m[1] * m[15] +
+                  m[4]  * m[3] * m[13] +
+                  m[12] * m[1] * m[7] -
+                  m[12] * m[3] * m[5];
+
+        inv[14] = -m[0]  * m[5] * m[14] +
+                   m[0]  * m[6] * m[13] +
+                   m[4]  * m[1] * m[14] -
+                   m[4]  * m[2] * m[13] -
+                   m[12] * m[1] * m[6] +
+                   m[12] * m[2] * m[5];
+
+        inv[3] = -m[1] * m[6] * m[11] +
+                  m[1] * m[7] * m[10] +
+                  m[5] * m[2] * m[11] -
+                  m[5] * m[3] * m[10] -
+                  m[9] * m[2] * m[7] +
+                  m[9] * m[3] * m[6];
+
+        inv[7] = m[0] * m[6] * m[11] -
+                 m[0] * m[7] * m[10] -
+                 m[4] * m[2] * m[11] +
+                 m[4] * m[3] * m[10] +
+                 m[8] * m[2] * m[7] -
+                 m[8] * m[3] * m[6];
+
+        inv[11] = -m[0] * m[5] * m[11] +
+                   m[0] * m[7] * m[9] +
+                   m[4] * m[1] * m[11] -
+                   m[4] * m[3] * m[9] -
+                   m[8] * m[1] * m[7] +
+                   m[8] * m[3] * m[5];
+
+        inv[15] = m[0] * m[5] * m[10] -
+                  m[0] * m[6] * m[9] -
+                  m[4] * m[1] * m[10] +
+                  m[4] * m[2] * m[9] +
+                  m[8] * m[1] * m[6] -
+                  m[8] * m[2] * m[5];
+
+        float determinant = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+
+        if (determinant == 0)
+        {
+            // Yes, this introduces incorrect results. However, if we get into a situation
+            //  where the matrix isn't invertable, we've got a bigger problem.
+            determinant = 0.001f;
+        }
+
+        determinant = 1.0 / determinant;
+
+        // Convert our data directly back to a matrix.
+        for (unsigned int i = 0; i < 16; i++)
+        {
+            *(&result[0][0] + i) = inv[i] * determinant;
+        }
+    }
+
     const vec3 DEFAULT_FORWARD_VECTOR = vec3(0, 0, -1.0f);
     const vec3 DEFAULT_UP_VECTOR = vec3(0, -1.0f, 0);
     const float NORMALIZE_TOLERANCE = 0.00001f;
@@ -743,5 +882,28 @@ namespace vmath
         }
 
         return result;
+    }
+
+    // Computes a ray from the current mouse position into the scene.
+    static inline vec3 screenRay(vec2 mouse, vec2 screenSize, mat4& perspectiveMatrix, mat4& viewRotationMatrix)
+    {
+        // Scale from -1.0 to 1.0, and invert Y
+        vec2 deviceCoords = (mouse * 2.0f - screenSize) / screenSize;
+        deviceCoords[1] = -deviceCoords[1];
+
+        // Point the ray away from us.
+        vec4 clippedRay = vec4(deviceCoords[0], deviceCoords[1], -1.0f, 1.0f);
+
+        // Invert our projection and use the normal view matrix to end up with a world ray, which is exactly what we want.
+        mat4 invPerspectiveMatrix;
+        inverse(perspectiveMatrix, invPerspectiveMatrix);
+        vec4 eyeRay = clippedRay * invPerspectiveMatrix;
+        eyeRay[2] = -1.0f;
+        eyeRay[3] = 0.0f;
+
+        vec4 worldRay = eyeRay * viewRotationMatrix;
+
+        vec3 result = vec3(worldRay[0], worldRay[1], worldRay[2]);
+        return normalize(result);
     }
 };

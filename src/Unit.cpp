@@ -60,3 +60,8 @@ void Unit::Render(ModelManager& modelManager, vmath::mat4& projectionMatrix)
         modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix);
     }
 }
+
+void Unit::Move(vmath::vec3 pos)
+{
+    position = pos;
+}
