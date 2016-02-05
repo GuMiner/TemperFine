@@ -1,7 +1,6 @@
 #pragma once
 #define _USE_MATH_DEFINES  1 // Include constants defined in math.h
 #include <math.h>
-#include <iostream>
 
 // From the OpenGL Superbible, 6th Ed, 'free to use in your application' as per the website.
 // Modified so that quaternions can actually be used and removing dead code.

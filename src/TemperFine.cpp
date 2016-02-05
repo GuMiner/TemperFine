@@ -7,7 +7,6 @@
 #include "Logger.h"
 #include "TemperFine.h"
 #include "../version.h"
-#include <iostream>
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
@@ -302,16 +301,21 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
                 vmath::mat4 viewRotationMatrix = viewer.viewOrientation.asMatrix();
                 vmath::vec3 worldRay = vmath::screenRay(mousePos, screenSize, perspectiveMatrix, viewRotationMatrix);
 
+                // Check to see if we clicked a unit.
                 int collidedUnit = players[0].CollisionCheck(modelManager, viewer.viewPosition, worldRay);
                 if (collidedUnit != -1)
                 {
                     players[0].ToggleUnitSelection(collidedUnit);
                 }
+                else
+                {
+                    int x, y, z;
+                    if (voxelMap.HitByRay(viewer.viewPosition, worldRay, &x, &y, &z))
+                    {
+                        // TODO move the units -- nicely -- to the clicked voxel. Also don't crowd them.
+                    }
+                }
             }
-        }
-        else if (event.type == sf::Event::MouseMoved)
-        {
-
         }
     }
 }
