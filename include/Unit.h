@@ -16,10 +16,14 @@ class Unit
         void CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vmath::vec3 position, const vmath::quaternion rotation);
 
         // Renders the unit.
-        void Render(ModelManager& modelManager, vmath::mat4& projectionMatrix);
+        void Render(ModelManager& modelManager, bool isSelected, vmath::mat4& projectionMatrix);
+
+        // Returns true if the unit is currently in the path of the ray, false otherwise.
+        bool InRayPath(ModelManager& modelManager, const vmath::vec3& rayStart, const vmath::vec3& rayVector);
 
         // Moves the unit to the specified position.
         void Move(vmath::vec3 pos);
+
     protected:
     private:
         // The physical location of the unit.

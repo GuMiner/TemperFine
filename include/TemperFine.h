@@ -58,9 +58,6 @@ class TemperFine
     std::vector<Player> players;
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
 
-    // TODO test data
-    vmath::vec3 worldRay;
-
     // Non-graphics threads
     sf::Thread physicsThread;
 

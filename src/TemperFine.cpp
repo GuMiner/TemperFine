@@ -296,20 +296,22 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
         {
             if (event.mouseButton.button == sf::Mouse::Left)
             {
-                // The user clicked something.
-                // TODO vec3 clickRay = vmath::
+                vmath::vec2 mousePos = vmath::vec2((float)event.mouseButton.x, (float)event.mouseButton.y);
+                vmath::vec2 screenSize = vmath::vec2((float)window.getSize().x, (float)window.getSize().y);
 
+                vmath::mat4 viewRotationMatrix = viewer.viewOrientation.asMatrix();
+                vmath::vec3 worldRay = vmath::screenRay(mousePos, screenSize, perspectiveMatrix, viewRotationMatrix);
+
+                int collidedUnit = players[0].CollisionCheck(modelManager, viewer.viewPosition, worldRay);
+                if (collidedUnit != -1)
+                {
+                    players[0].ToggleUnitSelection(collidedUnit);
+                }
             }
         }
         else if (event.type == sf::Event::MouseMoved)
         {
-            vmath::vec2 mousePos = vmath::vec2((float)event.mouseMove.x, (float)event.mouseMove.y);
-            vmath::vec2 screenSize = vmath::vec2((float)window.getSize().x, (float)window.getSize().y);
 
-            vmath::mat4 viewRotationMatrix = viewer.viewOrientation.asMatrix();
-            worldRay = vmath::screenRay(mousePos, screenSize, perspectiveMatrix, viewRotationMatrix);
-
-            players[0].CollisionCheck(viewer.viewPosition, worldRay);
         }
     }
 }

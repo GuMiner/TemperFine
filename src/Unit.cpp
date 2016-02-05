@@ -36,14 +36,17 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
     }
 }
 
-void Unit::Render(ModelManager& modelManager, vmath::mat4& projectionMatrix)
+void Unit::Render(ModelManager& modelManager, bool isSelected, vmath::mat4& projectionMatrix)
 {
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
     vmath::mat4 unitOrientation = vmath::translate(position) * rotation.asMatrix();
 
     const BodyType& bodyType = BodyConfig::Bodies[bodyTypeId];
 
-    vmath::mat4 bodyMatrix = unitOrientation * vmath::scale(bodyType.scale, bodyType.scale, bodyType.scale);
+    // TODO remove.
+    float scaleFactor = (isSelected ? 1.5f : 1.0f) * bodyType.scale;
+
+    vmath::mat4 bodyMatrix = unitOrientation * vmath::scale(scaleFactor, scaleFactor, scaleFactor);
     modelManager.RenderModel(projectionMatrix, bodyType.bodyModelId, bodyMatrix);
 
     const ArmorType& armorType = ArmorConfig::Armors[armor.armorTypeId];
@@ -59,6 +62,27 @@ void Unit::Render(ModelManager& modelManager, vmath::mat4& projectionMatrix)
         vmath::mat4 turretMatrix = vmath::translate(turrets[i].currentTranslation) * turretDefaultMatrix * turrets[i].currentRotation.asMatrix();
         modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix);
     }
+}
+
+bool Unit::InRayPath(ModelManager& modelManager, const vmath::vec3& rayStart, const vmath::vec3& rayVector)
+{
+    // TODO improve this to do something *drastically* better. Also, this should probably move to the vmath library.
+
+    // Assume the unit is in the ray path if the body, represented as a sphere, is hit by the ray.
+    const TextureModel& modelData = modelManager.GetModel(BodyConfig::Bodies[bodyTypeId].bodyModelId);
+    float sphereRadius = BodyConfig::Bodies[bodyTypeId].scale * (vmath::length(modelData.maxBounds) + vmath::length(modelData.minBounds)) / 4.0f;
+
+    // Sphere equation => ((x - pos.x)^2 + (y - pos.y)^2 + (z - pos.z)^2 = sphereRadius^2
+    // Ray equation => (rayStart.x + t*rayVector.x, rs.y + t*v.y, rs.z + t*v.z), t >= 0
+    // We hit if we can find a value for t that satisfies the above equation.
+    // After some work on paper, you end up with just determining if the discriminant of a polynomial is positive
+    vmath::vec3 rayOffset = rayStart - position;
+    float polyC = vmath::length(rayOffset * rayOffset) - pow(sphereRadius, 2);
+
+    vmath::vec3 polyBComp = rayVector * rayOffset;
+    float polyB = polyBComp[0] + polyBComp[1] + polyBComp[2];
+
+    return (polyB*polyB - polyC) > 0;
 }
 
 void Unit::Move(vmath::vec3 pos)
