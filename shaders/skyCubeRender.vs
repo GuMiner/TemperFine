@@ -16,6 +16,6 @@ void main(void)
         vec3(-1.0, 1.0, 1.0),
         vec3(1.0, 1.0, 1.0));
 
-    vs_out.uvwPos = transpose(mat3(viewMatrix)) * vertices[gl_VertexID];
+    vs_out.uvwPos = inverse(mat3(viewMatrix)) * vec3(-vertices[gl_VertexID].xy, vertices[gl_VertexID].z);
     gl_Position = vec4(vertices[gl_VertexID], 1.0);
 }
