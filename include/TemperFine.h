@@ -15,6 +15,7 @@
 #include "Physics.h"
 #include "PhysicsConfig.h"
 #include "Player.h"
+#include "Scenery.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
 #include "TechConfig.h"
@@ -53,6 +54,7 @@ class TemperFine
     Statistics statistics;
     Viewer viewer;
     VoxelMap voxelMap;
+    Scenery scenery;
     vmath::mat4 perspectiveMatrix;
 
     std::vector<Player> players;

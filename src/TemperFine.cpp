@@ -12,7 +12,7 @@ TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
       imageManager(), modelManager(&imageManager), techConfig("config/technologies.txt"),
       armorConfig(&modelManager, "config/armors.txt"), bodyConfig(&modelManager, "config/bodies.txt"), turretConfig(&modelManager, "config/turrets.txt"),
-      physics(), physicsThread(&Physics::Run, &physics)
+      physics(), scenery(&modelManager), physicsThread(&Physics::Run, &physics)
 {
 }
 
@@ -169,6 +169,16 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
         return Constants::Status::BAD_CONFIG;
     }
 
+    // Scenery
+    Logger::Log("Scenery loading...");
+    if (!scenery.Initialize(shaderManager))
+    {
+        Logger::Log("Bad scenery");
+        return Constants::Status::BAD_SCENERY;
+    }
+
+    Logger::Log("Scenery loading done!");
+
     // Fonts
     Logger::Log("Font loading...");
     if (!fontManager.LoadFont(&shaderManager, "fonts/DejaVuSans.ttf"))
@@ -222,6 +232,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     players.push_back(currentPlayer);
 
     // Now that *all* the models have loaded, prepare for rendering models by initializing OpenGL and sending the model data to OpenGL
+    Logger::Log("Sending model VAO to OpenGL...");
     if (!modelManager.InitializeOpenGlResources(shaderManager))
     {
         return Constants::Status::BAD_SHADERS;
@@ -329,6 +340,9 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     const GLfloat one = 1.0f;
     glClearBufferfv(GL_COLOR, 0, color);
     glClearBufferfv(GL_DEPTH, 0, &one);
+
+    // Render the scenery
+    scenery.Render(viewMatrix, projectionMatrix);
 
     // Renders each players' units.
     for (unsigned int i = 0; i < players.size(); i++)
