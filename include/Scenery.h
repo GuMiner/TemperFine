@@ -17,6 +17,7 @@ class Scenery
 
     protected:
     private:
+        unsigned char* rawImage;
         bool GetRawImage(const char* filename, unsigned char** data, int* width, int* height);
         void FreeRawImage(unsigned char* imageData);
 

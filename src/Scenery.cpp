@@ -34,10 +34,9 @@ bool Scenery::Initialize(ShaderManager& shaderManager)
     skyCubeMapLocation = glGetUniformLocation(skyCubeProgram, "skyCubeMap");
 
     // Sky Image
-    unsigned char* imageData;
     int width;
     int height;
-    if (!GetRawImage("images/scenery/sky.png", &imageData, &width, &height))
+    if (!GetRawImage("images/scenery/sky.png", &rawImage, &width, &height))
     {
         return false;
     }
@@ -61,11 +60,8 @@ bool Scenery::Initialize(ShaderManager& shaderManager)
     for (int i = 0; i < 6; i++)
     {
         glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, width, width, GL_RGBA, GL_UNSIGNED_BYTE,
-            imageData + i * (width * width * 4));
+            rawImage + i * (width * width * 4));
     }
-
-    FreeRawImage(imageData);
-
 
     return true;
 }
@@ -114,4 +110,6 @@ Scenery::~Scenery()
 {
     glDeleteVertexArrays(1, &skyCubeVao);
     glDeleteTextures(1, &skyCubeTexture);
+
+    FreeRawImage(rawImage);
 }
