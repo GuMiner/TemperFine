@@ -350,21 +350,6 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
         players[i].RenderUnits(modelManager, projectionMatrix);
     }
 
-    // TODO test code remove
-
-    float offset = 5.0f;
-    float scale = 4.0f;
-    for (unsigned int i = 0; i < modelManager.GetCurrentModelCount(); i++)
-    {
-        // Find a matrix scale factor so that the model isn't enormous
-        const TextureModel& model = modelManager.GetModel(i);
-        vmath::vec3 maxSizes = model.maxBounds - model.minBounds;
-        float maxSize = vmath::max(maxSizes[0], vmath::max(maxSizes[1], maxSizes[2]));
-
-        vmath::mat4 matrix = vmath::translate(10.0f + offset * i, 0.0f, 0.0f) * vmath::scale(scale / maxSize, scale / maxSize, scale / maxSize);
-        modelManager.RenderModel(projectionMatrix, i, matrix);
-    }
-
     // Renders the voxel map
     voxelMap.Render(projectionMatrix);
 
