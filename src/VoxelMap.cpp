@@ -208,11 +208,6 @@ void VoxelMap::SetupFromMap(MapInfo* mapInfo)
 	delete[] interlacedData;
 }
 
-void VoxelMap::Update()
-{
-    // TODO update the item we're rendering.
-}
-
 void VoxelMap::Render(vmath::mat4& projectionMatrix)
 {
     glUseProgram(voxelMapRenderProgram);

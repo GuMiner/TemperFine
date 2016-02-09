@@ -251,7 +251,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&viewer, &voxelMap);
+    physics.Initialize(&viewer, &testMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");

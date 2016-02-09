@@ -4,6 +4,13 @@
 // Holds map information
 struct MapInfo
 {
+    enum BlockTypes
+    {
+        AIR = 0,
+        CUBE = 1,
+        SLANT = 2
+    };
+
     std::string name;
     unsigned int mapConfigVersion;
 

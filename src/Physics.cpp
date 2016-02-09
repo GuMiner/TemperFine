@@ -8,10 +8,10 @@ Physics::Physics()
     isPaused = false;
 }
 
-void Physics::Initialize(Viewer* viewer, VoxelMap* voxelMap)
+void Physics::Initialize(Viewer* viewer, MapInfo* mapInfo)
 {
     this->viewer = viewer;
-    this->voxelMap = voxelMap;
+    this->mapInfo = mapInfo;
 }
 
 void Physics::Run()
@@ -25,8 +25,10 @@ void Physics::Run()
 			// Update the viewer's position
             viewer->InputUpdate();
 
-            // Updates the voxel map.
-            voxelMap->Update();
+            if (mapSections.NeedsRecomputation())
+            {
+                mapSections.RecomputeMapSections(mapInfo);
+            }
         }
 
         // The physics thread runs at a configurable delay, which we abide by here.

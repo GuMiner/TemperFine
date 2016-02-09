@@ -2,17 +2,15 @@
 #include "Statistics.h"
 #include "Viewer.h"
 #include "VoxelMap.h"
+#include "MapSections.h"
 
 class Physics
 {
-    Viewer* viewer;
-    VoxelMap* voxelMap;
-
     public:
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(Viewer* viewer, VoxelMap* voxelMap);
+        void Initialize(Viewer* viewer, MapInfo* mapInfo);
 
         // Runs actions on the physics thread.
         void Run();
@@ -25,8 +23,14 @@ class Physics
 
         // Stops the physics thread updates.
         void Stop();
-    protected:
+
     private:
+        Viewer* viewer;
+
+        MapInfo* mapInfo;
+
+        MapSections mapSections;
+
         bool isAlive;
         bool isPaused;
 };

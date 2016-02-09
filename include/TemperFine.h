@@ -69,7 +69,6 @@ class TemperFine
     // Updates the camera perspective when the screen width / height has changed.
     void UpdatePerspective(unsigned int width, unsigned int height);
 
-
     // Performs updates that must be performed on the OpenGL thread. Needs to coordinate with the physics thread.
     void PerformGuiThreadUpdates(float currentGameTime);
 

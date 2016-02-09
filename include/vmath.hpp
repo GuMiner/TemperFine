@@ -218,6 +218,51 @@ namespace vmath
         }
     };
 
+    // Same with this tiny guy.
+    class vec2i
+    {
+    public:
+        int x;
+        int y;
+    };
+
+    // This little guy exists until I get around to refactoring the math library correctly.
+    class vec3i
+    {
+    public:
+
+        vec3i()
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+        }
+
+        vec3i(int x, int y, int z)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+
+        int x;
+        int y;
+        int z;
+    };
+
+    class vec3iComparer
+    {
+    public:
+        // Compares two vec3i objects for storage comparisons.
+        // If this returns false for comp(a, b) and comp(b, a), the objects are equal.
+        bool operator()(vec3i const& lhs, vec3i const& rhs) const
+        {
+            // TODO this is really wrong (assuming max voxel size), but also right (anything that big wouldn't run.
+            const int maxVoxelSize = 10000;
+            return (lhs.x + lhs.y * maxVoxelSize + lhs.z * maxVoxelSize * maxVoxelSize) > (rhs.x + rhs.y * maxVoxelSize + rhs.z * maxVoxelSize * maxVoxelSize);
+        }
+    };
+
     class vec4 : public vecN<4>
     {
     public:

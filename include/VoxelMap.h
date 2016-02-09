@@ -20,9 +20,6 @@ class VoxelMap
         // Sets up the VoxelMap from the provided map info.
         void SetupFromMap(MapInfo* mapInfo);
 
-        // Updates the voxel map
-        void Update();
-
         // Renders the voxel map, using the current viewer position matrix.
         void Render(vmath::mat4& projectionMatrix);
 
@@ -43,7 +40,7 @@ class VoxelMap
         std::vector<int> LoadModels(ModelManager& modelManager);
 
         // The map for which the voxel data is currently created from.
-        MapInfo *mapInfo;
+        MapInfo* mapInfo;
 
         // The textures for all of the voxels in a single nicely-packed image.
         GLuint voxelTextureId;
