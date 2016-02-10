@@ -34,11 +34,11 @@ mat4 calculateRotationMatrix(in float rotationAmount)
     if (rotation > 5.0f) // > 270 deg, < 360 deg.
     {
         // Rotate around the Y axis to flip, with a 180 deg flip, cos(180) = 0, sin(180) = -1
-        return mat4(
-            0.0f, 0.0f, 1.0f, 0.0f,
+        return rotMatrix * mat4(
+            1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
-           -1.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f) * rotMatrix;
+            0.0f, 0.0f, -1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     return rotMatrix;
