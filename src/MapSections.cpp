@@ -15,7 +15,7 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
         {
             for (unsigned int x = 0; x < mapInfo->xSize; x++)
             {
-                if (mapInfo->blockType[mapInfo->GetIndex(x, y, z)] == MapInfo::BlockTypes::AIR)
+                if (mapInfo->blockType[mapInfo->GetIndex(x, y, z)] == MapInfo::VoxelTypes::AIR)
                 {
                     // Air voxels cannot be traveled on top of.
                     continue;
@@ -28,7 +28,7 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                 else
                 {
                     // This is a new voxel that isn't in a route. First, verify it can be in a route
-                    if (z != mapInfo->zSize - 1 && mapInfo->blockType[mapInfo->GetIndex(x, y, z + 1)] != MapInfo::BlockTypes::AIR)
+                    if (z != mapInfo->zSize - 1 && mapInfo->blockType[mapInfo->GetIndex(x, y, z + 1)] != MapInfo::VoxelTypes::AIR)
                     {
                         // The voxel doesn't have air above it, so you cannot travel on top of this voxel.
                         continue;
@@ -64,6 +64,11 @@ bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i dest
 
     // TODO, at this point a search from the start to the end is guaranteed to find a route.
     return true;
+}
+
+const voxelSubsectionsMap& MapSections::GetSubsections() const
+{
+    return subsections;
 }
 
 // True if the map needs to be recomputed, false otherwise.

@@ -4,12 +4,15 @@
 // Holds map information
 struct MapInfo
 {
-    enum BlockTypes
+    enum VoxelTypes
     {
         AIR = 0,
         CUBE = 1,
         SLANT = 2
     };
+
+    // Size of each voxel. MUST match that in the voxel shader.
+    const float SPACING = 2.0f;
 
     std::string name;
     unsigned int mapConfigVersion;
@@ -37,5 +40,9 @@ struct MapInfo
     static int GetIndex(unsigned int x, unsigned int y, unsigned int z, unsigned int xSize, unsigned int ySize)
     {
         return z*xSize*ySize + y*xSize + x;
+    }
+
+    MapInfo()
+    {
     }
 };

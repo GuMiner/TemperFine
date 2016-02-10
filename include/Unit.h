@@ -26,6 +26,9 @@ class Unit
 
     protected:
     private:
+        // The current voxel the unit is above.
+        vmath::vec3i voxelPosition;
+
         // The physical location of the unit.
         vmath::vec3 position;
         vmath::quaternion rotation;

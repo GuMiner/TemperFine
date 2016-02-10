@@ -98,6 +98,7 @@
 		<Unit filename="include/MapManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="include/MapSections.h" />
 		<Unit filename="include/Model.h" />
 		<Unit filename="include/ModelManager.h">
 			<Option virtualFolder="Managers/" />
@@ -109,6 +110,7 @@
 		<Unit filename="include/Player.h" />
 		<Unit filename="include/Projectile.h" />
 		<Unit filename="include/RenderableSentence.h" />
+		<Unit filename="include/Scenery.h" />
 		<Unit filename="include/ShaderManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -142,6 +144,10 @@
 		</Unit>
 		<Unit filename="shaders/fontRender.fs" />
 		<Unit filename="shaders/fontRender.vs" />
+		<Unit filename="shaders/modelRender.fs" />
+		<Unit filename="shaders/modelRender.vs" />
+		<Unit filename="shaders/skyCubeRender.fs" />
+		<Unit filename="shaders/skyCubeRender.vs" />
 		<Unit filename="shaders/voxelMapRender.fs" />
 		<Unit filename="shaders/voxelMapRender.gs" />
 		<Unit filename="shaders/voxelMapRender.vs" />
@@ -181,6 +187,7 @@
 		<Unit filename="src/MapManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="src/MapSections.cpp" />
 		<Unit filename="src/ModelManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
@@ -190,6 +197,7 @@
 		</Unit>
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Projectile.cpp" />
+		<Unit filename="src/Scenery.cpp" />
 		<Unit filename="src/ShaderManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>

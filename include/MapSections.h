@@ -1,20 +1,6 @@
 #pragma once
-#include <map>
-#include <vector>
 #include "MapInfo.h"
-#include "vmath.hpp"
-
-// Represents the possible routes traversable from a given voxel.
-struct VoxelRoute
-{
-    vmath::vec3i voxelId;
-
-    // Voxels that can be traveled to from this voxel.
-    std::vector<vmath::vec3i> neighbors;
-
-    // Which subsection this voxel is within.
-    int subsectionId;
-};
+#include "VoxelRoute.h"
 
 // Represents the sections of the map that units can travel in.
 class MapSections
@@ -30,7 +16,11 @@ class MapSections
 
         // True if the map needs to be recomputed, false otherwise.
         bool NeedsRecomputation() const;
+
+        // Accessor for the subsections.
+        const voxelSubsectionsMap& GetSubsections() const;
+
     private:
         bool needsRecomputation;
-        std::map<vmath::vec3i, VoxelRoute, vmath::vec3iComparer> subsections;
+        voxelSubsectionsMap subsections;
 };
