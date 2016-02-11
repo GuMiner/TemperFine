@@ -109,7 +109,7 @@ Constants::Status TemperFine::LoadGraphics(sfg::Desktop* desktop)
     GLenum err = glewInit();
     if (err != GLEW_OK)
     {
-        Logger::LogErrorCode("GLEW startup failure", err);
+        Logger::LogError("GLEW startup failure: ", err, ".");
         return Constants::Status::BAD_GLEW;
     }
 

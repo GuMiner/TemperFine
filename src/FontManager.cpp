@@ -145,7 +145,7 @@ universalVertices FontManager::AllocateSentenceVertices(const std::string& sente
     float lastZPos = 0.0f;
     float lastXPos = 0.0f;
 
-    float vertScale;
+    float vertScale = 1.0f;
 
     // Scale the vertical scale according to the tallest character.
     int maxHeight;

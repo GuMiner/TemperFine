@@ -20,27 +20,27 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
     // 4-7: Acts as a flat.
     // Additionally, slants can travel to slants on the immediate sides (same inclination), but not flats (different inclination)
 
+    vmath::vec3i xMinus = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z);
+    vmath::vec3i xPlus = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z);
+    vmath::vec3i yMinus = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z);
+    vmath::vec3i yPlus = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z);
+
+    vmath::vec3i xMinusPlusZ = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z + 1);
+    vmath::vec3i xPlusPlusZ = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z + 1);
+    vmath::vec3i yMinusPlusZ = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z + 1);
+    vmath::vec3i yPlusPlusZ = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z + 1);
+
     int type = voxelMap->GetType(voxelId);
     bool cubeType = (type == MapInfo::VoxelTypes::CUBE) || (type == MapInfo::VoxelTypes::SLANT && voxelMap->GetOrientation(voxelId) > 3);
     if (cubeType)
     {
         // Check voxels on the same level as the cube.
-        vmath::vec3i xMinus = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z);
-        vmath::vec3i xPlus = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z);
-        vmath::vec3i yMinus = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z);
-        vmath::vec3i yPlus = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z);
-
         AddNeighborIfValidFromFlatVoxel(voxelMap, xMinus, 2, neighbors);
         AddNeighborIfValidFromFlatVoxel(voxelMap, xPlus, 0, neighbors);
         AddNeighborIfValidFromFlatVoxel(voxelMap, yMinus, 3, neighbors);
         AddNeighborIfValidFromFlatVoxel(voxelMap, yPlus, 1, neighbors);
 
         // Check voxels up one level, which can only be slants atm.
-        vmath::vec3i xMinusPlusZ = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z + 1);
-        vmath::vec3i xPlusPlusZ = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z + 1);
-        vmath::vec3i yMinusPlusZ = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z + 1);
-        vmath::vec3i yPlusPlusZ = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z + 1);
-
         AddNeighborIfValidSlant(voxelMap, xMinusPlusZ, 0, neighbors);
         AddNeighborIfValidSlant(voxelMap, xPlusPlusZ, 2, neighbors);
         AddNeighborIfValidSlant(voxelMap, yMinusPlusZ, 1, neighbors);
@@ -50,8 +50,46 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
     {
         // The slant isn't a cube-type slant, so check the side voxels based on the slant orientation.
         int slantOrientation = voxelMap->GetOrientation(voxelId);
+        if (slantOrientation == 0 || slantOrientation == 2)
+        {
+            // X direction, same level checks
+            AddNeighborIfValidSlant(voxelMap, yMinus, slantOrientation, neighbors);
+            AddNeighborIfValidSlant(voxelMap, yPlus, slantOrientation, neighbors);
+        }
+        else
+        {
+            // Y direction, same level checks
+            AddNeighborIfValidSlant(voxelMap, xMinus, slantOrientation, neighbors);
+            AddNeighborIfValidSlant(voxelMap, xPlus, slantOrientation, neighbors);
+        }
 
-        // TODO
+        // Check the voxel above and voxel below. Note that valid slants must be the same orientation for continual travel.
+        vmath::vec3i xMinusMinusZ = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z - 1);
+        vmath::vec3i xPlusMinusZ = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z - 1);
+        vmath::vec3i yMinusMinusZ = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z - 1);
+        vmath::vec3i yPlusMinusZ = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z - 1);
+
+        switch (slantOrientation)
+        {
+        case 0:
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xMinusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xMinusMinusZ, slantOrientation, neighbors);
+            break;
+        case 1:
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yMinusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yMinusMinusZ, slantOrientation, neighbors);
+            break;
+        case 2:
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xPlusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xPlusMinusZ, slantOrientation, neighbors);
+            break;
+        case 3:
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yPlusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yPlusMinusZ, slantOrientation, neighbors);
+            break;
+        default:
+            break;
+        }
     }
 }
 

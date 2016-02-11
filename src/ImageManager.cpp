@@ -40,7 +40,7 @@ GLuint ImageManager::AddImage(const char* filename)
 GLuint ImageManager::LoadEmpty(int width, int height)
 {
     unsigned char* data = new unsigned char[width * height * 4];
-    for (unsigned int i = 0; i < width * height; i++)
+    for (unsigned int i = 0; i < (unsigned int)(width * height); i++)
     {
         unsigned char redFactor = (i % 3 == 0) ? 255 : 0;
         unsigned char greenFactor = (i % 3 == 1) ? 255 : 0;

@@ -7,8 +7,6 @@
 // Represents the possible routes traversable from a given voxel.
 struct VoxelRoute
 {
-    vmath::vec3i voxelId;
-
     // Voxels that can be traveled to from this voxel.
     std::vector<vmath::vec3i> neighbors;
 
@@ -29,9 +27,10 @@ public:
     // Given a voxel, finds all valid voxel neighbors for travel.
     static void FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& voxelId, std::vector<vmath::vec3i>& neighbors);
 
-private:
     // Returns true if a voxel is minimally accessible, which means it is within bounds and has air above it.
     static bool IsVoxelMinimallyAccessible(MapInfo* voxelMap, const vmath::vec3i& voxelId);
+
+private:
 
     // Adds the neighbor if it is a valid slant. Intended for travel-up slants from flat areas.
     static void AddNeighborIfValidSlant(MapInfo* voxelMap, const vmath::vec3i& neighborVoxelId, int validSlantOrientation, std::vector<vmath::vec3i>& neighbors);

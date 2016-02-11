@@ -1,3 +1,4 @@
+#include "Logger.h"
 #include "MapSections.h"
 
 MapSections::MapSections()
@@ -8,6 +9,9 @@ MapSections::MapSections()
 // Recomputes the map sections to use for routing.
 void MapSections::RecomputeMapSections(MapInfo* mapInfo)
 {
+    Logger::Log("Recomputing map sections...");
+    int nextSubsectionId = 0;
+
     subsections.clear();
     for (unsigned int z = 0; z < mapInfo->zSize; z++)
     {
@@ -28,13 +32,48 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                 else
                 {
                     // This is a new voxel that isn't in a route. First, verify it can be in a route
-                    if (z != mapInfo->zSize - 1 && mapInfo->blockType[mapInfo->GetIndex(x, y, z + 1)] != MapInfo::VoxelTypes::AIR)
+                    vmath::vec3i voxelId = vmath::vec3i(x, y, z);
+                    if (VoxelRouteRules::IsVoxelMinimallyAccessible(mapInfo, voxelId))
                     {
-                        // The voxel doesn't have air above it, so you cannot travel on top of this voxel.
-                        continue;
-                    }
+                        std::vector<vmath::vec3i> neighborsToSearch;
+                        neighborsToSearch.push_back(voxelId);
 
-                    // TODO perform a BFS of the nearby voxels, using the block type and orientation to determine neighbors.
+                        Logger::Log("Adding new voxel section!");
+                        unsigned int voxelsAddedInSection = 0;
+
+                        // Performs a BFS search of the space
+                        while (neighborsToSearch.size() != 0)
+                        {
+                            vmath::vec3i currentVoxelId = neighborsToSearch[0];
+                            neighborsToSearch.erase(neighborsToSearch.begin());
+
+                            if (subsections.count(currentVoxelId) != 0)
+                            {
+                                // Skip voxels that have already been processed.
+                                continue;
+                            }
+
+                            // Find all neighbors for a voxel and store it.
+                            VoxelRoute route;
+                            route.subsectionId = nextSubsectionId;
+                            VoxelRouteRules::FindVoxelNeighbors(mapInfo, currentVoxelId, route.neighbors);
+
+                            subsections[currentVoxelId] = route;
+                            ++voxelsAddedInSection;
+
+                            // Add all found neighbors, if not already processed, into the neighbors list
+                            for (unsigned int i = 0; i < route.neighbors.size(); i++)
+                            {
+                                if (subsections.count(route.neighbors[i]) == 0)
+                                {
+                                    neighborsToSearch.push_back(route.neighbors[i]);
+                                }
+                            }
+                        }
+
+                        Logger::Log("Added ", voxelsAddedInSection, "voxels to voxel subsection ", nextSubsectionId, ".");
+                        ++nextSubsectionId;
+                    }
                 }
             }
         }
