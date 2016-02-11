@@ -3,8 +3,49 @@
 // Determines the height of a given voxel at the provided position.
 float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vmath::vec3i& voxelId, const vmath::vec3& position)
 {
-    // TODO
-    return 0.0f;
+    if (voxelMap->InBounds(voxelId))
+    {
+        vmath::vec3 voxelMinPosition = MapInfo::SPACING * vmath::vec3(voxelId.x, voxelId.y, voxelId.z);
+        vmath::vec3 difference = position - voxelMinPosition;
+
+        if (difference[0] >= 0 && difference[1] >= 0 && difference[2] >= 0 &&
+            difference[0] <= MapInfo::SPACING && difference[1] <= MapInfo::SPACING && difference[2] <= MapInfo::SPACING)
+        {
+            // In-bounds of given voxel, perform height calculation.
+            int type = voxelMap->GetType(voxelId);
+            bool cubeType = (type == MapInfo::VoxelTypes::CUBE) || (type == MapInfo::VoxelTypes::SLANT && voxelMap->GetOrientation(voxelId) > 3);
+            if (cubeType)
+            {
+                // Flat plane.
+                return voxelMinPosition[2] + MapInfo::SPACING;
+            }
+            else if (type == MapInfo::SLANT)
+            {
+                // We know the orientation can only be 0-3 now.
+                int orientation = voxelMap->GetOrientation(voxelId);
+                switch (orientation)
+                {
+                case 0:
+                    // Moving along X+ lowers height.
+                    return voxelMinPosition[2] + MapInfo::SPACING - difference[0];
+                case 1:
+                    // Moving along Y+ lowers height.
+                    return voxelMinPosition[2] + MapInfo::SPACING - difference[1];
+                case 2:
+                    // Reverse of 0
+                    return voxelMinPosition[2] + difference[0];
+                case 3:
+                    // Reverse of 2
+                    return voxelMinPosition[2] + difference[1];
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    // If out-of-bounds, return a really invalid height for debugging purposes.
+    return MapInfo::SPACING * (voxelMap->zSize + 2);
 }
 
 // Given a voxel, finds all valid voxel neighbors for travel. Returns true if neighbors were found, false otherwise.
@@ -93,6 +134,7 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
     }
 }
 
+// Returns true if a voxel is minimally accessible, which means it is within bounds and has air above it.
 bool VoxelRouteRules::IsVoxelMinimallyAccessible(MapInfo* voxelMap, const vmath::vec3i& voxelId)
 {
     if (voxelMap->InBounds(voxelId))

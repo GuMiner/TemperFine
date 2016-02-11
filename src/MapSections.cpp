@@ -1,3 +1,4 @@
+#include <set>
 #include "Logger.h"
 #include "MapSections.h"
 
@@ -35,8 +36,8 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                     vmath::vec3i voxelId = vmath::vec3i(x, y, z);
                     if (VoxelRouteRules::IsVoxelMinimallyAccessible(mapInfo, voxelId))
                     {
-                        std::vector<vmath::vec3i> neighborsToSearch;
-                        neighborsToSearch.push_back(voxelId);
+                        std::set<vmath::vec3i, vmath::vec3iComparer> neighborsToSearch;
+                        neighborsToSearch.insert(voxelId);
 
                         Logger::Log("Adding new voxel section!");
                         unsigned int voxelsAddedInSection = 0;
@@ -44,7 +45,7 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                         // Performs a BFS search of the space
                         while (neighborsToSearch.size() != 0)
                         {
-                            vmath::vec3i currentVoxelId = neighborsToSearch[0];
+                            vmath::vec3i currentVoxelId = *neighborsToSearch.begin();
                             neighborsToSearch.erase(neighborsToSearch.begin());
 
                             if (subsections.count(currentVoxelId) != 0)
@@ -66,7 +67,7 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                             {
                                 if (subsections.count(route.neighbors[i]) == 0)
                                 {
-                                    neighborsToSearch.push_back(route.neighbors[i]);
+                                    neighborsToSearch.insert(route.neighbors[i]);
                                 }
                             }
                         }
@@ -92,6 +93,7 @@ bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i dest
         return false;
     }
 
+    Logger::Log("Routing from (", start.x, ", ", start.y, ", ", start.x, ") to (", destination.x, ", ", destination.y, ", ", destination.z, ")...");
     const VoxelRoute& startVoxel = subsections[start];
     const VoxelRoute& endVoxel = subsections[destination];
 
@@ -101,7 +103,48 @@ bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i dest
         return false;
     }
 
-    // TODO, at this point a search from the start to the end is guaranteed to find a route.
+    // At this point, a search is guaranteed to find the ending voxel. So, perform the search.
+
+    // Voxels already found in the search, not to be reconsidered.
+    std::set<vmath::vec3i, vmath::vec3iComparer> foundVoxels;
+
+    // Voxels on the edge of search radius, to use for future searches.
+    std::set<vmath::vec3i, vmath::vec3iComparer> edgeVoxels;
+
+    // The current route, from start to end, for each voxel.
+    std::map<vmath::vec3i, std::vector<vmath::vec3i>, vmath::vec3iComparer> voxelRoutes;
+    voxelRoutes[start] = std::vector<vmath::vec3i>();
+    voxelRoutes[start].push_back(start);
+
+    edgeVoxels.insert(start);
+    foundVoxels.insert(start);
+
+    while (edgeVoxels.find(destination) == edgeVoxels.end())
+    {
+        vmath::vec3i voxelId = *edgeVoxels.begin();
+        const VoxelRoute& voxelInfo = subsections[voxelId];
+        edgeVoxels.erase(edgeVoxels.begin());
+
+        // Add all the neighbors, if not already present, with added route, to the voxel route.
+        for (unsigned int i = 0; i < voxelInfo.neighbors.size(); i++)
+        {
+            const vmath::vec3i& neighborVoxelId = voxelInfo.neighbors[i];
+            if (foundVoxels.find(neighborVoxelId) == foundVoxels.end())
+            {
+                // New voxel. This neighbor is added to the active edge, found voxels, and has its route updated.
+                foundVoxels.insert(neighborVoxelId);
+                edgeVoxels.insert(neighborVoxelId);
+
+                std::vector<vmath::vec3i> voxelRoute = voxelRoutes[voxelId];
+                voxelRoute.push_back(neighborVoxelId);
+                voxelRoutes[neighborVoxelId] = voxelRoute;
+            }
+        }
+    }
+
+    // Search complete. Directly output the search data.
+    path = voxelRoutes[destination];
+    Logger::Log("Routing completed, with ", path.size(), " total steps from start to destination.");
     return true;
 }
 
