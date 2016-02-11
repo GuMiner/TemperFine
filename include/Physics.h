@@ -1,8 +1,10 @@
 #pragma once
-#include "Statistics.h"
+#include <vector>
 #include "Viewer.h"
 #include "VoxelMap.h"
 #include "MapSections.h"
+#include "UnitRouter.h"
+#include "Player.h"
 
 class Physics
 {
@@ -10,7 +12,7 @@ class Physics
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(Viewer* viewer, MapInfo* mapInfo);
+        void Initialize(std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, MapInfo* mapInfo);
 
         // Runs actions on the physics thread.
         void Run();
@@ -25,8 +27,9 @@ class Physics
         void Stop();
 
     private:
+        std::vector<Player>* players;
+        UnitRouter* unitRouter;
         Viewer* viewer;
-
         MapInfo* mapInfo;
 
         MapSections mapSections;

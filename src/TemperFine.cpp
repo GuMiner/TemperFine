@@ -169,6 +169,16 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     Logger::Log("Scenery loading done!");
 
+    // Unit router and  visualization
+    Logger::Log("Unit router and visualizer loading...");
+    if (!unitRouter.Initialize(shaderManager))
+    {
+        Logger::Log("Bad unit router!");
+        return Constants::Status::BAD_ROUTER;
+    }
+
+    Logger::Log("Unit router and visualizer loaded!");
+
     // Fonts
     Logger::Log("Font loading...");
     if (!fontManager.LoadFont(&shaderManager, "fonts/DejaVuSans.ttf"))
@@ -196,30 +206,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     voxelMap.SetupFromMap(&testMap);
 
     // Load the current player, who is always the first element in the players list.
-    Player currentPlayer;
-
-    // TODO test code, the player shouldn't start with units.
-    Unit testUnit;
-    std::vector<unsigned int> turrets;
-    turrets.push_back(0); // TurretConfig::Turrets, first item.
-
-    // The zeros are the indexes into ArmorConfig::Armors and BodyConfig::Bodies
-    float step = 5.0f;
-    unsigned int maxSize = 2;
-    float rotation = 0.20;
-    for (unsigned int i = 0; i < maxSize; i++)
-    {
-        for (unsigned int j = 0; j < maxSize; j++)
-        {
-            testUnit.CreateNew(0, 0, turrets, vmath::vec3(step * i, step * j, 0),
-               vmath::quaternion::fromAxisAngle(rotation, vmath::vec3(0.0f, 1.0f, 0.0f)) * vmath::quaternion::fromAxisAngle(vmath::radians(-90.0f), vmath::vec3(1.0f, 0.0f, 0.0f)));
-            currentPlayer.AddUnit(testUnit);
-            rotation += 0.20;
-        }
-    }
-
-
-    players.push_back(currentPlayer);
+    players.push_back(Player());
 
     // Now that *all* the models have loaded, prepare for rendering models by initializing OpenGL and sending the model data to OpenGL
     Logger::Log("Sending model VAO to OpenGL...");
@@ -241,7 +228,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&viewer, &testMap);
+    physics.Initialize(&players, &unitRouter, &viewer, &testMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -337,7 +324,7 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     // Renders each players' units.
     for (unsigned int i = 0; i < players.size(); i++)
     {
-        players[i].RenderUnits(modelManager, projectionMatrix);
+        players[i].RenderUnits(modelManager, unitRouter, projectionMatrix);
     }
 
     // Renders the voxel map

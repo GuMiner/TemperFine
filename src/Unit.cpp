@@ -5,7 +5,8 @@
 
 Unit::Unit()
 {
-    //ctor
+    routeVisualId = -1;
+    routeNeedsVisualUpdate = false;
 }
 
 // Creates a new unit, with full armor.
@@ -36,14 +37,31 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
     }
 }
 
-void Unit::Render(ModelManager& modelManager, bool isSelected, vmath::mat4& projectionMatrix)
+void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSelected, vmath::mat4& projectionMatrix)
 {
+    // Update the route visual if the physics system has recomputed it.
+    if (routeNeedsVisualUpdate)
+    {
+        if (routeVisualId != -1)
+        {
+            unitRouter.DeleteRouteVisual(routeVisualId);
+        }
+
+        routeVisualId = unitRouter.CreateRouteVisual(assignedRoute);
+    }
+
+    if (routeVisualId != -1)
+    {
+        // We have an active route, so render it.
+        unitRouter.Render(projectionMatrix, routeVisualId, isSelected);
+    }
+
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
     vmath::mat4 unitOrientation = vmath::translate(position) * rotation.asMatrix();
 
     const BodyType& bodyType = BodyConfig::Bodies[bodyTypeId];
 
-    // TODO remove.
+    // TODO remove, used for click selection. MOVE TO SHADER.
     float scaleFactor = (isSelected ? 1.5f : 1.0f) * bodyType.scale;
 
     vmath::mat4 bodyMatrix = unitOrientation * vmath::scale(scaleFactor, scaleFactor, scaleFactor);
@@ -83,6 +101,12 @@ bool Unit::InRayPath(ModelManager& modelManager, const vmath::vec3& rayStart, co
     float polyB = polyBComp[0] + polyBComp[1] + polyBComp[2];
 
     return (polyB*polyB - polyC) > 0;
+}
+
+void Unit::UpdateAssignedRoute(std::vector<vmath::vec3> newAssignedRoute)
+{
+    assignedRoute = newAssignedRoute;
+    routeNeedsVisualUpdate = true;
 }
 
 void Unit::Move(vmath::vec3 pos)

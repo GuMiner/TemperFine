@@ -57,7 +57,7 @@ mat4 calculateTranslationMatrix()
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
-        spacing * float(xIndex), spacing * float(yIndex), spacing * float(zIndex), 1.0f);
+        spacing * float(xIndex) + spacing / 2.0f, spacing * float(yIndex) + spacing / 2.0f, spacing * float(zIndex) + spacing / 2.0f, 1.0f);
 }
 
 // Perform our position and projection transformations, and pass-through the color / texture data
@@ -72,5 +72,5 @@ void main(void)
     mat4 viewTranslationMatrix = calculateTranslationMatrix();
 
     // Add the vertex position to all our transformations to get the final result.
-    gl_Position = projMatrix  * viewTranslationMatrix * viewRotationMatrix * vec4(position, 1);
+    gl_Position = projMatrix * viewTranslationMatrix * viewRotationMatrix * vec4(position, 1);
 }

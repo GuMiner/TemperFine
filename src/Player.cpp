@@ -5,11 +5,11 @@ Player::Player()
     name = std::string("Default Player");
 }
 
-void Player::RenderUnits(ModelManager& modelManager, vmath::mat4& projectionMatrix)
+void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vmath::mat4& projectionMatrix)
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
-        units[i].Render(modelManager, selectedUnits.find(i) != selectedUnits.end(), projectionMatrix);
+        units[i].Render(modelManager, unitRouter, selectedUnits.find(i) != selectedUnits.end(), projectionMatrix);
     }
 }
 
@@ -25,6 +25,11 @@ int Player::CollisionCheck(ModelManager& modelManager, vmath::vec3 cameraPos, vm
     }
 
     return -1;
+}
+
+void Player::UpdateUnitRoute(int unitId, const std::vector<vmath::vec3>& route)
+{
+    units[unitId].UpdateAssignedRoute(route);
 }
 
 void Player::ToggleUnitSelection(int unitId)

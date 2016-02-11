@@ -21,6 +21,7 @@
 #include "TechConfig.h"
 #include "TechTreeWindow.h"
 #include "TurretConfig.h"
+#include "UnitRouter.h"
 #include "Viewer.h"
 #include "VoxelMap.h"
 
@@ -54,6 +55,7 @@ class TemperFine
     Statistics statistics;
     Viewer viewer;
     VoxelMap voxelMap;
+    UnitRouter unitRouter;
     Scenery scenery;
     vmath::mat4 perspectiveMatrix;
 

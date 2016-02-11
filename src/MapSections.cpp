@@ -72,7 +72,7 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
                             }
                         }
 
-                        Logger::Log("Added ", voxelsAddedInSection, "voxels to voxel subsection ", nextSubsectionId, ".");
+                        Logger::Log("Added ", voxelsAddedInSection, " voxels to voxel subsection ", nextSubsectionId, ".");
                         ++nextSubsectionId;
                     }
                 }
@@ -86,20 +86,22 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
 // Computes a route between two points using the map sections. Returns true (and fills in the path) if a path was found, false otherwise.
 bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i destination, std::vector<vmath::vec3i>& path)
 {
+    Logger::Log("Routing from (", start.x, ", ", start.y, ", ", start.x, ") to (", destination.x, ", ", destination.y, ", ", destination.z, ")...");
     if (subsections.count(start) == 0 || subsections.count(destination) == 0)
     {
         // Voxels not found in the range of travellable voxels.
         // [Usually this occurs if a player clicks the *side* of the map or a structure.
+        Logger::Log("Routing failed, non-navigatable!");
         return false;
     }
 
-    Logger::Log("Routing from (", start.x, ", ", start.y, ", ", start.x, ") to (", destination.x, ", ", destination.y, ", ", destination.z, ")...");
     const VoxelRoute& startVoxel = subsections[start];
     const VoxelRoute& endVoxel = subsections[destination];
 
     if (startVoxel.subsectionId != endVoxel.subsectionId)
     {
         // The subsections these voxels are in differ, so there is no route from the two voxels.
+        Logger::Log("Routing failed, subsection difference!");
         return false;
     }
 

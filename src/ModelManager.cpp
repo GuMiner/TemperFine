@@ -314,6 +314,8 @@ bool ModelManager::InitializeOpenGlResources(ShaderManager& shaderManager)
 // Sends in the model data to OpenGL.
 void ModelManager::ResetOpenGlModelData()
 {
+    glBindVertexArray(vao);
+
     universalVertices temporaryCopyVertices;
 
     unsigned int indexPositionReferralOffset = 0;

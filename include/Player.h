@@ -4,6 +4,7 @@
 #include <vector>
 #include "ModelManager.h"
 #include "Unit.h"
+#include "UnitRouter.h"
 #include "vmath.hpp"
 
 // Represents an in-game player.
@@ -13,7 +14,7 @@ class Player
         Player();
 
         // Renders the player's units.
-        void RenderUnits(ModelManager& modelManager, vmath::mat4& projectionMatrix);
+        void RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vmath::mat4& projectionMatrix);
 
         // Checks if the given world ray intersects with a unit.
         // Returns the index of the unit if true, -1 if false.
@@ -24,6 +25,9 @@ class Player
 
         // Adds the unit to the units the player has under control.
         void AddUnit(const Unit unit);
+
+        // Updates a unit's route to the new given route.
+        void UpdateUnitRoute(int unitId, const std::vector<vmath::vec3>& route);
 
     protected:
     private:
