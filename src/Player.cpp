@@ -5,7 +5,7 @@ Player::Player()
     name = std::string("Default Player");
 }
 
-void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vmath::mat4& projectionMatrix)
+void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vec::mat4& projectionMatrix)
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
@@ -14,7 +14,7 @@ void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vma
 }
 
 // TODO
-int Player::CollisionCheck(ModelManager& modelManager, vmath::vec3 cameraPos, vmath::vec3 worldRay)
+int Player::CollisionCheck(ModelManager& modelManager, vec::vec3 cameraPos, vec::vec3 worldRay)
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
@@ -27,7 +27,7 @@ int Player::CollisionCheck(ModelManager& modelManager, vmath::vec3 cameraPos, vm
     return -1;
 }
 
-void Player::UpdateUnitRoute(int unitId, const std::vector<vmath::vec3>& route)
+void Player::UpdateUnitRoute(int unitId, const std::vector<vec::vec3>& route)
 {
     units[unitId].UpdateAssignedRoute(route);
 }

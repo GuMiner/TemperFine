@@ -1,9 +1,9 @@
 #pragma once
-#include "vmath.hpp"
+#include "Vec.h"
 
 struct RenderableSentence
 {
     int sentenceId;
-    vmath::mat4 posRotMatrix;
-    vmath::vec3 color;
+    vec::mat4 posRotMatrix;
+    vec::vec3 color;
 };

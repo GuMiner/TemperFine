@@ -1,26 +1,17 @@
 #include "Constants.h"
 
-std::mt19937 Constants::mersenneTwiser;
-uint32_t Constants::seedValue;
-std::uniform_real_distribution<float> Constants::uniformDistribution;
-
 float Constants::FOV_Y;
 float Constants::ASPECT;
 float Constants::NEAR_PLANE;
 float Constants::FAR_PLANE;
-vmath::mat4 Constants::PerspectiveMatrix;
+vec::mat4 Constants::PerspectiveMatrix;
 
-float Constants::Rand()
+Constants::Constants()
 {
-    return uniformDistribution(mersenneTwiser);
-}
+    FOV_Y = 50.0f;
+    ASPECT = 1.77778f; // 16:9
+    NEAR_PLANE = 0.10f;
+    FAR_PLANE = 1000.0f;
 
-int Constants::Rand(int min, int max)
-{
-    return std::uniform_int_distribution<int>{min, max - 1}(mersenneTwiser);
-}
-
-float Constants::Rand(float range)
-{
-    return range*Rand() - range*0.5f;
+    PerspectiveMatrix = MatrixOps::Perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
 }

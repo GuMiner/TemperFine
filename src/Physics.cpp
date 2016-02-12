@@ -37,11 +37,11 @@ void Physics::QueueLeftMouseClick(int x, int y, int xSize, int ySize)
 // Handles left mouse clicks from the physics thread.
 void Physics::HandleLeftMouseClicked()
 {
-    vmath::vec2 mousePos = vmath::vec2((float)leftMouseClickData.x, (float)leftMouseClickData.y);
-    vmath::vec2 screenSize = vmath::vec2((float)leftMouseClickData.xSize, (float)leftMouseClickData.ySize);
+    vec::vec2 mousePos = vec::vec2((float)leftMouseClickData.x, (float)leftMouseClickData.y);
+    vec::vec2 screenSize = vec::vec2((float)leftMouseClickData.xSize, (float)leftMouseClickData.ySize);
 
-    vmath::mat4 viewRotationMatrix = viewer->viewOrientation.asMatrix();
-    vmath::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
+    vec::mat4 viewRotationMatrix = viewer->viewOrientation.asMatrix();
+    vec::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
 
     // Check to see if we clicked a unit. You can only select your own units.
     int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer->viewPosition, worldRay);
@@ -51,7 +51,7 @@ void Physics::HandleLeftMouseClicked()
     }
     else
     {
-        vmath::vec3i hitVoxel;
+        vec::vec3i hitVoxel;
         if (mapSections.HitByRay(mapInfo, viewer->viewPosition, worldRay, &hitVoxel))
         {
 
@@ -96,25 +96,25 @@ void Physics::Run()
                 {
                     for (unsigned int j = 0; j < maxSize; j++)
                     {
-                        testUnit.CreateNew(0, 0, turrets, vmath::vec3(step * i, step * j, 4.0f),
-                           vmath::quaternion::fromAxisAngle(rotation, vmath::vec3(0.0f, 1.0f, 0.0f)) * vmath::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vmath::vec3(1.0f, 0.0f, 0.0f)));
+                        testUnit.CreateNew(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
+                           vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
                         (*players)[0].AddUnit(testUnit);
                         rotation += 0.20;
                     }
                 }
 
                 // TODO test routing code until click-selection is working.
-                vmath::vec3i start = vmath::vec3i(0, 0, 0);
-                vmath::vec3i end = vmath::vec3i(18, 18, 1);
-                std::vector<vmath::vec3i> route;
+                vec::vec3i start = vec::vec3i(0, 0, 0);
+                vec::vec3i end = vec::vec3i(18, 18, 1);
+                std::vector<vec::vec3i> route;
                 if (!mapSections.ComputeRoute(start, end, route))
                 {
                     Logger::Log("Route computation failed!");
                 }
                 else
                 {
-                    std::vector<vmath::vec3i> betterRoute;
-                    std::vector<vmath::vec3> graphicalRoute;
+                    std::vector<vec::vec3i> betterRoute;
+                    std::vector<vec::vec3> graphicalRoute;
                     unitRouter->RefineRoute(mapSections.GetSubsections(), start, end, route, betterRoute, graphicalRoute);
 
                     Logger::Log("Updating player 0, unit 0, with graphical route with ", graphicalRoute.size(), " segments.");

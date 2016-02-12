@@ -1,17 +1,17 @@
 #pragma once
-#include "vmath.hpp"
+#include "Vec.h"
 
 class Projectile
 {
     public:
         Projectile();
-        void Render(vmath::mat4& projectionMatrix);
+        void Render(vec::mat4& projectionMatrix);
         ~Projectile();
     protected:
     private:
-        vmath::vec3 position;
-        vmath::vec3 currentEulerRotation;
-        vmath::quaternion rotation;
+        vec::vec3 position;
+        vec::vec3 currentEulerRotation;
+        vec::quaternion rotation;
 
         unsigned int modelId;
 };

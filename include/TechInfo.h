@@ -3,7 +3,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Represents a technology
 struct Tech

@@ -37,7 +37,7 @@ void universalVertices::Reset()
 	indices.clear();
 }
 
-void universalVertices::AddColorTextureVertex(vmath::vec3 position, vmath::vec3 color, vmath::vec2 uv)
+void universalVertices::AddColorTextureVertex(vec::vec3 position, vec::vec3 color, vec::vec2 uv)
 {
     positions.push_back(position);
     colors.push_back(color);
@@ -74,7 +74,7 @@ void universalVertices::TransferIndicesToOpenGl(GLuint indiciesBuffer)
 	universalVertices::SendIndicesToOpenGl(indiciesBuffer, indices);
 }
 
-void universalVertices::TransferDirectToOpenGl(const std::vector<vmath::vec4>& positions, GLuint positionBuffer, const std::vector<vmath::vec3>& colors, GLuint colorBuffer)
+void universalVertices::TransferDirectToOpenGl(const std::vector<vec::vec4>& positions, GLuint positionBuffer, const std::vector<vec::vec3>& colors, GLuint colorBuffer)
 {
 	universalVertices::SendToOpenGl(positionBuffer, 0, 4, positions);
 	universalVertices::SendToOpenGl(colorBuffer, 1, 3, colors);

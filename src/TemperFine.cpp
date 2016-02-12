@@ -287,9 +287,9 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
     }
 }
 
-void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vmath::mat4& viewMatrix)
+void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
 {
-    vmath::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
+    vec::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
 
     // Clear the screen (and depth buffer) before any rendering begins.
     const GLfloat color[] = { 0, 0, 0, 1 };
@@ -341,7 +341,7 @@ Constants::Status TemperFine::Run()
     sf::Time clockStartTime;
     bool alive = true;
     bool paused = false;
-    vmath::mat4 viewMatrix;
+    vec::mat4 viewMatrix;
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
@@ -389,6 +389,7 @@ int main(int argc, char* argv[])
 {
     // Startup 'static' stuff
     TemperFine::Constant = Constants();
+    TemperFine::MathOp = MathOps();
 
     Logger::Setup();
 

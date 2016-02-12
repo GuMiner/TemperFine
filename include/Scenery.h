@@ -2,7 +2,7 @@
 #include <GL\glew.h>
 #include "ModelManager.h"
 #include "ShaderManager.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Holds static scenery objects that are rendered.
 class Scenery
@@ -11,7 +11,7 @@ class Scenery
         Scenery(ModelManager* modelManager);
 
         bool Initialize(ShaderManager& shaderManager);
-        void Render(vmath::mat4& viewMatrix, vmath::mat4& projectionMatrix);
+        void Render(vec::mat4& viewMatrix, vec::mat4& projectionMatrix);
 
         ~Scenery();
 
@@ -22,7 +22,7 @@ class Scenery
         void FreeRawImage(unsigned char* imageData);
 
         // Ground plane
-        vmath::mat4 groundOrientation;
+        vec::mat4 groundOrientation;
         unsigned int groundModelId;
 
         // Sky cube

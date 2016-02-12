@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Represents a type of armor with graphical settings.
 struct ArmorType
@@ -21,8 +21,8 @@ struct ArmorType
     float maxCannonPenalty;
 
     // Physical offsets of the armor from the center of the unit for display.
-    vmath::vec3 translationOffset;
-    vmath::quaternion rotationOffset;
+    vec::vec3 translationOffset;
+    vec::quaternion rotationOffset;
 
     // Display name of the armor.
     std::string name;

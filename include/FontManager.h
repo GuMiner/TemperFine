@@ -8,7 +8,7 @@
 #include "ShaderManager.h"
 #include "TextInfo.h"
 #include "Vertex.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Manages the in-game font. *Note that this only supports a single font.*
 class FontManager
@@ -43,15 +43,15 @@ class FontManager
     std::map<int, SentenceInfo> sentences;
 
     int GetSentenceVertexCount(const std::string& sentence);
-    universalVertices AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vmath::vec3 textColor);
+    universalVertices AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vec::vec3 textColor);
 
 public:
     FontManager();
     bool LoadFont(ShaderManager* shaderManager, const char *fontName);
 
     int CreateNewSentence();
-    void UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vmath::vec3 textColor);
-    void RenderSentence(int sentenceId, vmath::mat4& perpective, vmath::mat4& mvMatrix);
+    void UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vec::vec3 textColor);
+    void RenderSentence(int sentenceId, vec::mat4& perpective, vec::mat4& mvMatrix);
 
     ~FontManager();
 };

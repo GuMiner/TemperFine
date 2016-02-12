@@ -11,6 +11,7 @@
 #include "ImageManager.h"
 #include "KeyBindingConfig.h"
 #include "MapManager.h"
+#include "MathOps.h"
 #include "ModelManager.h"
 #include "Physics.h"
 #include "PhysicsConfig.h"
@@ -77,10 +78,12 @@ class TemperFine
     void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
 
     // Renders the scene.
-    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vmath::mat4& viewMatrix);
+    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
 
 public:
+    // Used just for data storage.
     static Constants Constant;
+    static MathOps MathOp;
 
     // Initializes TemperFine and any construction-time setup (such as threads).
     TemperFine();

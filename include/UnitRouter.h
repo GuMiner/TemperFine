@@ -22,10 +22,10 @@ class UnitRouter
         bool Initialize(ShaderManager& shaderManager);
 
         // Renders the specified route.
-        void Render(vmath::mat4& projectionMatrix, int routeId, bool selected);
+        void Render(vec::mat4& projectionMatrix, int routeId, bool selected);
 
         // Creates a visual for the specified route.
-        int CreateRouteVisual(const std::vector<vmath::vec3>& route);
+        int CreateRouteVisual(const std::vector<vec::vec3>& route);
 
         // Deletes the visual for the specified route.
         void DeleteRouteVisual(int routeId);
@@ -33,8 +33,8 @@ class UnitRouter
         ~UnitRouter();
 
         // Refines a route among the voxels to minimize 'zig zags' and travel in a nice, constant path (or rotary path) to the final destination.
-        void RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vmath::vec3i start, const vmath::vec3i destination,
-            const std::vector<vmath::vec3i>& givenPath, std::vector<vmath::vec3i>& refinedPath, std::vector<vmath::vec3>& visualPath);
+        void RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
+            const std::vector<vec::vec3i>& givenPath, std::vector<vec::vec3i>& refinedPath, std::vector<vec::vec3>& visualPath);
 
     private:
         // Sends route data to OpenGL.

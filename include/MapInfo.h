@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Holds map information
 struct MapInfo
@@ -37,22 +37,22 @@ struct MapInfo
         return z*xSize*ySize + y*xSize + x;
     }
 
-    inline int GetIndex(const vmath::vec3i& voxelId) const
+    inline int GetIndex(const vec::vec3i& voxelId) const
     {
         return GetIndex(voxelId.x, voxelId.y, voxelId.z);
     }
 
-    inline bool InBounds(const vmath::vec3i& voxelId) const
+    inline bool InBounds(const vec::vec3i& voxelId) const
     {
         return (voxelId.x >= 0 && voxelId.y >= 0 && voxelId.z >= 0 && voxelId.x < (int)xSize && voxelId.y < (int)ySize && voxelId.z < (int)zSize);
     }
 
-    inline int GetType(const vmath::vec3i& voxelId) const
+    inline int GetType(const vec::vec3i& voxelId) const
     {
         return blockType[GetIndex(voxelId)];
     }
 
-    inline int GetOrientation(const vmath::vec3i& voxelId) const
+    inline int GetOrientation(const vec::vec3i& voxelId) const
     {
         return blockOrientation[GetIndex(voxelId)];
     }

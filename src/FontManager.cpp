@@ -85,7 +85,7 @@ void FontManager::AddToFontTexture(CharInfo& charInfo)
     charInfo.textureY = usedHeight;
 
     usedWidth += charInfo.width + 1; // 1 px buffer space
-    lastMaxHeight = (int)vmath::max((float)lastMaxHeight, (float)(charInfo.height + 1));
+    lastMaxHeight = (int)std::max((float)lastMaxHeight, (float)(charInfo.height + 1));
 }
 
 // Returns the character info pertaining to the specified font pixel height and character
@@ -140,7 +140,7 @@ int FontManager::GetSentenceVertexCount(const std::string& sentence)
 
 // Given a sentence, allocates the vertexes corresponding to the sentence.
 // The vertexes start at (0, 0, 0) and go in the X-direction, with 1 unit == pixelHeight.
-universalVertices FontManager::AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vmath::vec3 textColor)
+universalVertices FontManager::AllocateSentenceVertices(const std::string& sentence, int pixelHeight, vec::vec3 textColor)
 {
     float lastZPos = 0.0f;
     float lastXPos = 0.0f;
@@ -188,10 +188,10 @@ universalVertices FontManager::AllocateSentenceVertices(const std::string& sente
         float textureYEnd = (float)(charInfo.textureY + charInfo.height) / (float)height;
 
         // Triangle fan. First position is at start, then +x, +x+y, +y
-        vertices.AddColorTextureVertex(vmath::vec3(xStart, -yStart, lastZPos), vmath::vec3(textColor[0], textColor[1], textColor[2]), vmath::vec2(textureX, textureY));
-        vertices.AddColorTextureVertex(vmath::vec3(xStart, -yDepth, lastZPos), vmath::vec3(textColor[0], textColor[1], textColor[2]), vmath::vec2(textureX, textureYEnd));
-        vertices.AddColorTextureVertex(vmath::vec3(xDepth, -yDepth, lastZPos), vmath::vec3(textColor[0], textColor[1], textColor[2]), vmath::vec2(textureXEnd, textureYEnd));
-        vertices.AddColorTextureVertex(vmath::vec3(xDepth, -yStart, lastZPos), vmath::vec3(textColor[0], textColor[1], textColor[2]), vmath::vec2(textureXEnd, textureY));
+        vertices.AddColorTextureVertex(vec::vec3(xStart, -yStart, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureX, textureY));
+        vertices.AddColorTextureVertex(vec::vec3(xStart, -yDepth, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureX, textureYEnd));
+        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yDepth, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureXEnd, textureYEnd));
+        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yStart, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureXEnd, textureY));
 
         lastXPos += advanceWidth;
     }
@@ -221,7 +221,7 @@ int FontManager::CreateNewSentence()
 }
 
 // Updates the graphical components of a sentence so it can be drawn.
-void FontManager::UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vmath::vec3 textColor)
+void FontManager::UpdateSentence(int sentenceId, const std::string& sentence, int pixelHeight, vec::vec3 textColor)
 {
     SentenceInfo& sentenceInfo = sentences[sentenceId];
 
@@ -259,7 +259,7 @@ void FontManager::UpdateSentence(int sentenceId, const std::string& sentence, in
 }
 
 // Renders the specified sentence.
-void FontManager::RenderSentence(int sentenceId, vmath::mat4& perpective, vmath::mat4& mvMatrix)
+void FontManager::RenderSentence(int sentenceId, vec::mat4& perpective, vec::mat4& mvMatrix)
 {
     const SentenceInfo sentenceInfo = sentences[sentenceId];
     if (sentenceInfo.characterStartIndices == nullptr)

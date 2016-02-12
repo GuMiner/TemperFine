@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Represents a unit turret type
 struct TurretType
@@ -9,8 +9,8 @@ struct TurretType
     unsigned int turretModelId;
 
     // The physical offset of the turret on the body.
-    vmath::vec3 translationOffset;
-    vmath::quaternion rotationOffset;
+    vec::vec3 translationOffset;
+    vec::quaternion rotationOffset;
 
     // Display name of the turret.
     std::string name;
@@ -23,6 +23,6 @@ struct Turret
     unsigned int turretTypeId;
 
     // The current translation and rotation of the turret, w. r. t. the default location.
-    vmath::vec3 currentTranslation;
-    vmath::quaternion currentRotation;
+    vec::vec3 currentTranslation;
+    vec::quaternion currentRotation;
 };

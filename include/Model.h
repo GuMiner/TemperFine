@@ -1,7 +1,7 @@
 #pragma once
 #include <GL\glew.h>
 #include "Vertex.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Holds data from a loaded, indexed UV textured model.
 struct TextureModel
@@ -16,6 +16,6 @@ struct TextureModel
     GLuint indexOffset;
 
     // Model bounding box.
-    vmath::vec3 minBounds;
-    vmath::vec3 maxBounds;
+    vec::vec3 minBounds;
+    vec::vec3 maxBounds;
 };

@@ -36,7 +36,7 @@ bool ConversionUtils::LoadKey(const std::string& line, sf::Keyboard::Key& key)
 }
 
 // Loads in a 3-valued floating point vector.
-bool ConversionUtils::LoadVector(const std::string& line, vmath::vec3& vector)
+bool ConversionUtils::LoadVector(const std::string& line, vec::vec3& vector)
 {
 	std::vector<std::string> stringParts;
 	StringUtils::Split(line, StringUtils::Space, true, stringParts);

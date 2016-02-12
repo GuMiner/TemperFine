@@ -4,16 +4,16 @@
 
 Viewer::Viewer()
 {
-    viewPosition = vmath::vec3(0, 0, 10);
-	viewOrientation = vmath::quaternion(0, 0, 0, 1);
+    viewPosition = vec::vec3(0, 0, 10);
+	viewOrientation = vec::quaternion(0, 0, 0, 1);
 
 	lastMousePos = sf::Vector2i(-1, -1);
 }
 
 void Viewer::InputUpdate()
 {
-    vmath::vec3 forwardsVector = viewOrientation.forwardVector();
-    vmath::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), forwardsVector);
+    vec::vec3 forwardsVector = viewOrientation.forwardVector();
+    vec::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), forwardsVector);
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveLeft))
     {
         viewPosition -= sidewaysVector * PhysicsConfig::ViewSidewaysSpeed;
@@ -30,7 +30,7 @@ void Viewer::InputUpdate()
         forwardsVector[0] = 0.01f; // Tiny nudge to avoid div/zero issues.
     }
 
-    forwardsVector = vmath::normalize(forwardsVector);
+    forwardsVector = vec::normalize(forwardsVector);
 
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveUp))
     {
@@ -59,11 +59,11 @@ void Viewer::InputUpdate()
             float yAmount = PhysicsConfig::ViewRotateUpFactor * (float)deltaPos.y;
 
             // Rotate around
-            viewOrientation = vmath::quaternion::fromAxisAngle(xAmount, vmath::vec3(0, 0, 1)) * viewOrientation;
+            viewOrientation = vec::quaternion::fromAxisAngle(xAmount, vec::vec3(0, 0, 1)) * viewOrientation;
 
             // Rotate up
-            vmath::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), viewOrientation.forwardVector());
-            viewOrientation = vmath::quaternion::fromAxisAngle(yAmount, sidewaysVector) * viewOrientation;
+            vec::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), viewOrientation.forwardVector());
+            viewOrientation = vec::quaternion::fromAxisAngle(yAmount, sidewaysVector) * viewOrientation;
 
             viewOrientation.normalize();
         }

@@ -2,13 +2,13 @@
 #include <SFML\System.hpp>
 #include <SFML\Window.hpp>
 #include "KeyBindingConfig.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 class Viewer
 {
     public:
-        vmath::vec3 viewPosition;
-        vmath::quaternion viewOrientation;
+        vec::vec3 viewPosition;
+        vec::quaternion viewOrientation;
 
         Viewer();
         void InputUpdate();

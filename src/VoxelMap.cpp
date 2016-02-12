@@ -121,16 +121,16 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ModelManager& modelManager
     voxelTextureId = voxelTexture.textureId;
 
     // Store the UV offsets so we can modify them later below for proper texture mapping.
-    std::vector<vmath::vec2> newUvMin;
-    std::vector<vmath::vec2> newUvMax;
+    std::vector<vec::vec2> newUvMin;
+    std::vector<vec::vec2> newUvMax;
 
     int xP = 0;
     int yP = 0;
     for (unsigned int i = 0; i < voxelTextureIds.size(); i++)
     {
         imageManager.CopyToImage(voxelTextureIds[i], voxelTexture.textureId, xP * edgeLength, yP * edgeLength);
-        newUvMin.push_back(vmath::vec2((float)(xP * edgeLength) / (float)width, (float)(yP * edgeLength) / (float) height));
-        newUvMax.push_back(vmath::vec2((float)((xP + 1) * edgeLength) / (float)width, (float)((yP + 1) * edgeLength) / (float) height));
+        newUvMin.push_back(vec::vec2((float)(xP * edgeLength) / (float)width, (float)(yP * edgeLength) / (float) height));
+        newUvMax.push_back(vec::vec2((float)((xP + 1) * edgeLength) / (float)width, (float)((yP + 1) * edgeLength) / (float) height));
 
         xP++;
         if (xP == GraphicsConfig::VoxelsPerRow)
@@ -154,7 +154,7 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ModelManager& modelManager
         // Update the UVs appropriately, with a minor bit of vector math.
         for (unsigned int j = 0; j < model.vertices.uvs.size(); j++)
         {
-            vmath::vec2 newUv = newUvMin[i] + model.vertices.uvs[j] * (newUvMax[i] - newUvMin[i]);
+            vec::vec2 newUv = newUvMin[i] + model.vertices.uvs[j] * (newUvMax[i] - newUvMin[i]);
             voxelVertices.uvs.push_back(newUv);
         }
 
@@ -208,7 +208,7 @@ void VoxelMap::SetupFromMap(MapInfo* mapInfo)
 	delete[] interlacedData;
 }
 
-void VoxelMap::Render(vmath::mat4& projectionMatrix)
+void VoxelMap::Render(vec::mat4& projectionMatrix)
 {
     glUseProgram(voxelMapRenderProgram);
 

@@ -6,7 +6,7 @@
 #include "ImageManager.h"
 #include "ShaderManager.h"
 #include "Model.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 struct PosUvPair
 {
@@ -30,7 +30,7 @@ class ModelManager
         unsigned int GetCurrentModelCount() const;
 
         // Renders the specified model given by the ID.
-        void RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix);
+        void RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix);
 
         // Initializes the OpenGL resources
         bool InitializeOpenGlResources(ShaderManager& shaderManager);
@@ -59,7 +59,7 @@ class ModelManager
         std::map<unsigned int, TextureModel> models;
 
         // Temporary loading structures.
-        std::vector<vmath::vec2> rawUvs;
+        std::vector<vec::vec2> rawUvs;
         std::vector<PosUvPair> rawIndices;
         std::map<unsigned int, std::vector<PosUvPair>> uvVertexRemapping;
 
@@ -71,5 +71,5 @@ class ModelManager
 
         // Loads an OBJ model into the specified vertices, returning true on success.
         // Note that the OBJ model must fully specify all positions / UVs *before* any indices.
-        bool LoadModel(const char* objFilename, universalVertices& vertices, vmath::vec3* minBounds, vmath::vec3* maxBounds);
+        bool LoadModel(const char* objFilename, universalVertices& vertices, vec::vec3* minBounds, vec::vec3* maxBounds);
 };

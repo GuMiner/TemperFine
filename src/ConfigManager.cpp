@@ -52,7 +52,7 @@ bool ConfigManager::ReadKey(std::vector<std::string>& configFileLines, sf::Keybo
     return true;
 }
 
-bool ConfigManager::ReadVector(std::vector<std::string>& configFileLines, vmath::vec3& vector, const char* errorMessage)
+bool ConfigManager::ReadVector(std::vector<std::string>& configFileLines, vec::vec3& vector, const char* errorMessage)
 {
 	if (!ConversionUtils::LoadVector(configFileLines[++lineCounter], vector))
 	{
@@ -93,7 +93,7 @@ void ConfigManager::WriteKey(const char* itemName, sf::Keyboard::Key& key)
     outputLines.push_back(tempOutput.str());
 }
 
-void ConfigManager::WriteVector(const char* itemName, vmath::vec3& vector)
+void ConfigManager::WriteVector(const char* itemName, vec::vec3& vector)
 {
 	double x = vector[0];
 	double y = vector[1];

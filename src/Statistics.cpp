@@ -10,15 +10,15 @@ Statistics::Statistics()
     textScale = MatrixOps::Scale(0.02f, 0.02f, 0.02f);
 
     runTime.posRotMatrix = MatrixOps::Translate(-0.821f, -0.221f, -1.0f) * MatrixOps::Scale(0.015f, 0.015f, 0.015f);
-    runTime.color = vmath::vec3(0.8f, 0.8f, 0.8f);
+    runTime.color = vec::vec3(0.8f, 0.8f, 0.8f);
 
     xPosition.posRotMatrix = MatrixOps::Translate(-0.821f, -0.321f, -1.0f) * textScale;
     yPosition.posRotMatrix = MatrixOps::Translate(-0.659f, -0.321f, -1.0f) * textScale;
     zPosition.posRotMatrix = MatrixOps::Translate(-0.508f, -0.321f, -1.0f) * textScale;
 
-    xPosition.color = vmath::vec3(1.0f, 0.0f, 0.0f);
-    yPosition.color = vmath::vec3(0.0f, 1.0f, 0.0f);
-    zPosition.color = vmath::vec3(0.0f, 0.0f, 1.0f);
+    xPosition.color = vec::vec3(1.0f, 0.0f, 0.0f);
+    yPosition.color = vec::vec3(0.0f, 1.0f, 0.0f);
+    zPosition.color = vec::vec3(0.0f, 0.0f, 1.0f);
 }
 
 bool Statistics::Initialize(FontManager* fontManager)
@@ -67,7 +67,7 @@ void Statistics::UpdatePlayerDetails(std::string& playerName)
     // TODO
 }
 
-void Statistics::UpdateViewPos(vmath::vec3& position)
+void Statistics::UpdateViewPos(vec::vec3& position)
 {
     std::stringstream textStream;
     textStream.precision(2);
@@ -85,7 +85,7 @@ void Statistics::UpdateViewPos(vmath::vec3& position)
     fontManager->UpdateSentence(zPosition.sentenceId, textStream.str(), textPixelHeight, zPosition.color);
 }
 
-void Statistics::RenderStats(vmath::mat4& perspectiveMatrix)
+void Statistics::RenderStats(vec::mat4& perspectiveMatrix)
 {
     fontManager->RenderSentence(playerCount.sentenceId, perspectiveMatrix, playerCount.posRotMatrix);
     fontManager->RenderSentence(runTime.sentenceId, perspectiveMatrix, runTime.posRotMatrix);

@@ -6,7 +6,7 @@
 #include "ModelManager.h"
 #include "ShaderManager.h"
 #include "Vertex.h"
-#include "vmath.hpp"
+#include "Vec.h"
 
 // The game map of voxels.
 class VoxelMap
@@ -21,7 +21,7 @@ class VoxelMap
         void SetupFromMap(MapInfo* mapInfo);
 
         // Renders the voxel map, using the current viewer position matrix.
-        void Render(vmath::mat4& projectionMatrix);
+        void Render(vec::mat4& projectionMatrix);
 
         // Deletes any OpenGL voxel resources that have been consumed.
         ~VoxelMap();

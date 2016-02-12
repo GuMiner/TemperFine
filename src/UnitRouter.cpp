@@ -27,7 +27,7 @@ bool UnitRouter::Initialize(ShaderManager& shaderManager)
 }
 
 // Renders the specified route.
-void UnitRouter::Render(vmath::mat4& projectionMatrix, int routeId, bool selected)
+void UnitRouter::Render(vec::mat4& projectionMatrix, int routeId, bool selected)
 {
     glUseProgram(routeVisualProgram);
     glBindVertexArray(vao);
@@ -39,7 +39,7 @@ void UnitRouter::Render(vmath::mat4& projectionMatrix, int routeId, bool selecte
 }
 
 // Creates a visual for the specified route.
-int UnitRouter::CreateRouteVisual(const std::vector<vmath::vec3>& route)
+int UnitRouter::CreateRouteVisual(const std::vector<vec::vec3>& route)
 {
     RouteVisualData routeVisualData;
     routeVisualData.offset = routeVerties.positions.size();
@@ -75,8 +75,8 @@ void UnitRouter::SendRoutesToOpenGl()
     routeVerties.TransferPositionToOpenGl(positionBuffer);
 }
 
-void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vmath::vec3i start, const vmath::vec3i destination,
-    const std::vector<vmath::vec3i>& givenPath, std::vector<vmath::vec3i>& refinedPath, std::vector<vmath::vec3>& visualPath)
+void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
+    const std::vector<vec::vec3i>& givenPath, std::vector<vec::vec3i>& refinedPath, std::vector<vec::vec3>& visualPath)
 {
     // TODO do some real refinement.
     refinedPath = givenPath;
@@ -84,8 +84,8 @@ void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const 
     // Scales and moves a refined path so it's visible.
     for (unsigned int i = 0; i < refinedPath.size(); i++)
     {
-        const vmath::vec3 offsetSpacing = vmath::vec3(MapInfo::SPACING / 2.0f, MapInfo::SPACING / 2.0f, MapInfo::SPACING * 1.10f);
-        visualPath.push_back(vmath::vec3(refinedPath[i].x * MapInfo::SPACING, refinedPath[i].y * MapInfo::SPACING, refinedPath[i].z * MapInfo::SPACING) + offsetSpacing);
+        const vec::vec3 offsetSpacing = vec::vec3(MapInfo::SPACING / 2.0f, MapInfo::SPACING / 2.0f, MapInfo::SPACING * 1.10f);
+        visualPath.push_back(vec::vec3(refinedPath[i].x * MapInfo::SPACING, refinedPath[i].y * MapInfo::SPACING, refinedPath[i].z * MapInfo::SPACING) + offsetSpacing);
     }
 }
 

@@ -8,7 +8,7 @@ Scenery::Scenery(ModelManager* modelManager)
 {
     this->modelManager = modelManager;
 
-    groundOrientation = vmath::mat4::identity();
+    groundOrientation = vec::mat4::identity();
 }
 
 bool Scenery::Initialize(ShaderManager& shaderManager)
@@ -66,7 +66,7 @@ bool Scenery::Initialize(ShaderManager& shaderManager)
     return true;
 }
 
-void Scenery::Render(vmath::mat4& viewMatrix, vmath::mat4& projectionMatrix)
+void Scenery::Render(vec::mat4& viewMatrix, vec::mat4& projectionMatrix)
 {
     // Render the ground plane
     modelManager->RenderModel(projectionMatrix, groundModelId, groundOrientation);

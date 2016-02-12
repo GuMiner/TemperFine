@@ -1,12 +1,12 @@
 #include "VoxelRoute.h"
 
 // Determines the height of a given voxel at the provided position.
-float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vmath::vec3i& voxelId, const vmath::vec3& position)
+float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& voxelId, const vec::vec3& position)
 {
     if (voxelMap->InBounds(voxelId))
     {
-        vmath::vec3 voxelMinPosition = MapInfo::SPACING * vmath::vec3(voxelId.x, voxelId.y, voxelId.z);
-        vmath::vec3 difference = position - voxelMinPosition;
+        vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
+        vec::vec3 difference = position - voxelMinPosition;
 
         if (difference[0] >= 0 && difference[1] >= 0 && difference[2] >= 0 &&
             difference[0] <= MapInfo::SPACING && difference[1] <= MapInfo::SPACING && difference[2] <= MapInfo::SPACING)
@@ -49,7 +49,7 @@ float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vmath::vec3i& 
 }
 
 // Given a voxel, finds all valid voxel neighbors for travel. Returns true if neighbors were found, false otherwise.
-void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& voxelId, std::vector<vmath::vec3i>& neighbors)
+void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vec::vec3i& voxelId, std::vector<vec::vec3i>& neighbors)
 {
     // Valid neighbors for a voxel are to the immediate sides (cube, slant, correctly oriented) and to the immediate sides + 1 height (correctly-oriented slants)
     // Valid neighbors must also not be covered with anything other than air above the voxel.
@@ -61,15 +61,15 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
     // 4-7: Acts as a flat.
     // Additionally, slants can travel to slants on the immediate sides (same inclination), but not flats (different inclination)
 
-    vmath::vec3i xMinus = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z);
-    vmath::vec3i xPlus = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z);
-    vmath::vec3i yMinus = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z);
-    vmath::vec3i yPlus = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z);
+    vec::vec3i xMinus = vec::vec3i(voxelId.x - 1, voxelId.y, voxelId.z);
+    vec::vec3i xPlus = vec::vec3i(voxelId.x + 1, voxelId.y, voxelId.z);
+    vec::vec3i yMinus = vec::vec3i(voxelId.x, voxelId.y - 1, voxelId.z);
+    vec::vec3i yPlus = vec::vec3i(voxelId.x, voxelId.y + 1, voxelId.z);
 
-    vmath::vec3i xMinusPlusZ = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z + 1);
-    vmath::vec3i xPlusPlusZ = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z + 1);
-    vmath::vec3i yMinusPlusZ = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z + 1);
-    vmath::vec3i yPlusPlusZ = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z + 1);
+    vec::vec3i xMinusPlusZ = vec::vec3i(voxelId.x - 1, voxelId.y, voxelId.z + 1);
+    vec::vec3i xPlusPlusZ = vec::vec3i(voxelId.x + 1, voxelId.y, voxelId.z + 1);
+    vec::vec3i yMinusPlusZ = vec::vec3i(voxelId.x, voxelId.y - 1, voxelId.z + 1);
+    vec::vec3i yPlusPlusZ = vec::vec3i(voxelId.x, voxelId.y + 1, voxelId.z + 1);
 
     int type = voxelMap->GetType(voxelId);
     bool cubeType = (type == MapInfo::VoxelTypes::CUBE) || (type == MapInfo::VoxelTypes::SLANT && voxelMap->GetOrientation(voxelId) > 3);
@@ -105,10 +105,10 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
         }
 
         // Check the voxel above and voxel below. Note that valid slants must be the same orientation for continual travel.
-        vmath::vec3i xMinusMinusZ = vmath::vec3i(voxelId.x - 1, voxelId.y, voxelId.z - 1);
-        vmath::vec3i xPlusMinusZ = vmath::vec3i(voxelId.x + 1, voxelId.y, voxelId.z - 1);
-        vmath::vec3i yMinusMinusZ = vmath::vec3i(voxelId.x, voxelId.y - 1, voxelId.z - 1);
-        vmath::vec3i yPlusMinusZ = vmath::vec3i(voxelId.x, voxelId.y + 1, voxelId.z - 1);
+        vec::vec3i xMinusMinusZ = vec::vec3i(voxelId.x - 1, voxelId.y, voxelId.z - 1);
+        vec::vec3i xPlusMinusZ = vec::vec3i(voxelId.x + 1, voxelId.y, voxelId.z - 1);
+        vec::vec3i yMinusMinusZ = vec::vec3i(voxelId.x, voxelId.y - 1, voxelId.z - 1);
+        vec::vec3i yPlusMinusZ = vec::vec3i(voxelId.x, voxelId.y + 1, voxelId.z - 1);
 
         switch (slantOrientation)
         {
@@ -135,12 +135,12 @@ void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vmath::vec3i& 
 }
 
 // Returns true if a voxel is minimally accessible, which means it is within bounds and has air above it.
-bool VoxelRouteRules::IsVoxelMinimallyAccessible(MapInfo* voxelMap, const vmath::vec3i& voxelId)
+bool VoxelRouteRules::IsVoxelMinimallyAccessible(MapInfo* voxelMap, const vec::vec3i& voxelId)
 {
     if (voxelMap->InBounds(voxelId))
     {
         // Is there air above the voxel?
-        vmath::vec3i aboveVoxel = vmath::vec3i(voxelId.x, voxelId.y, voxelId.z + 1);
+        vec::vec3i aboveVoxel = vec::vec3i(voxelId.x, voxelId.y, voxelId.z + 1);
         if (!voxelMap->InBounds(aboveVoxel) || voxelMap->GetType(aboveVoxel) == MapInfo::VoxelTypes::AIR)
         {
             return true;
@@ -151,7 +151,7 @@ bool VoxelRouteRules::IsVoxelMinimallyAccessible(MapInfo* voxelMap, const vmath:
 }
 
 // Adds the neighbor if it is a valid slant. Intended for travel-up slants from flat areas.
-void VoxelRouteRules::AddNeighborIfValidSlant(MapInfo* voxelMap, const vmath::vec3i& neighborVoxelId, int validSlantOrientation, std::vector<vmath::vec3i>& neighbors)
+void VoxelRouteRules::AddNeighborIfValidSlant(MapInfo* voxelMap, const vec::vec3i& neighborVoxelId, int validSlantOrientation, std::vector<vec::vec3i>& neighbors)
 {
     // Is the voxel valid to travel to?
     if (IsVoxelMinimallyAccessible(voxelMap, neighborVoxelId))
@@ -165,7 +165,7 @@ void VoxelRouteRules::AddNeighborIfValidSlant(MapInfo* voxelMap, const vmath::ve
 }
 
 // Determines if a given voxel is valid given a starting flat voxel. If so, adds it to the list of neighbors.
-void VoxelRouteRules::AddNeighborIfValidFromFlatVoxel(MapInfo* voxelMap, const vmath::vec3i& neighborVoxelId, int validSlantOrientation, std::vector<vmath::vec3i>& neighbors)
+void VoxelRouteRules::AddNeighborIfValidFromFlatVoxel(MapInfo* voxelMap, const vec::vec3i& neighborVoxelId, int validSlantOrientation, std::vector<vec::vec3i>& neighbors)
 {
     // Is the voxel valid to travel to?
     bool isValidNeighbor = false;

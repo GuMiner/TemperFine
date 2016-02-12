@@ -1,13 +1,13 @@
 #pragma once
-#include "vmath.hpp"
+#include "Vec.h"
 
 // Performs vector-specific mathematical operations.
 class VecOps
 {
     public:
         // Cross-product.
-        static vmath::vec3 Cross(const vmath::vec3& first, const vmath::vec3& second);
+        static vec::vec3 Cross(const vec::vec3& first, const vec::vec3& second);
 
         // Dot-product.
-        static float Dot(const vmath::vec3& first, const vmath::vec3& second);
+        static float Dot(const vec::vec3& first, const vec::vec3& second);
 };

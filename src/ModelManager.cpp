@@ -52,7 +52,7 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
             return false;
         }
 
-        vmath::vec3 vector;
+        vec::vec3 vector;
         if (!StringUtils::ParseFloatFromString(line[1], vector[0]) ||
             !StringUtils::ParseFloatFromString(line[2], vector[1]) ||
             !StringUtils::ParseFloatFromString(line[3], vector[2]))
@@ -72,7 +72,7 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
             return false;
         }
 
-        vmath::vec2 vector;
+        vec::vec2 vector;
         if (!StringUtils::ParseFloatFromString(line[1], vector[0]) ||
             !StringUtils::ParseFloatFromString(line[2], vector[1]))
         {
@@ -125,7 +125,7 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
     return true;
 }
 
-bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertices, vmath::vec3* minBounds, vmath::vec3* maxBounds)
+bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertices, vec::vec3* minBounds, vec::vec3* maxBounds)
 {
     std::string fileString;
     if (!StringUtils::LoadStringFromFile(objFilename, fileString))
@@ -271,7 +271,7 @@ unsigned int ModelManager::GetCurrentModelCount() const
     return nextModelId;
 }
 
-void ModelManager::RenderModel(vmath::mat4& projectionMatrix, unsigned int id, vmath::mat4& mvMatrix)
+void ModelManager::RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix)
 {
     // TEST CODE TODO REMOVE
     glUseProgram(modelRenderProgram);

@@ -1,9 +1,9 @@
 #pragma once
 #include <cmath>
 
-// From the OpenGL Superbible, 6th Ed, 'free to use in your application' as per the website.
-// Modified so that quaternions can actually be used and removing dead code.
-namespace vmath
+// Holds basic vector, matrix and quaternion operations.
+// For more complicated operations, see MathOps, MatrixOps, PhysicsOps, and VecOps.
+namespace vec
 {
     template <const int len>
     class vecN
@@ -292,6 +292,18 @@ namespace vmath
         return vec4(x / v[0], x / v[1], x / v[2], x / v[3]);
     }
 
+    template <const int N>
+    static inline vecN<N> operator/(const float s, const vecN<N>& v)
+    {
+        vecN<N> result;
+        for (int n = 0; n < N; n++)
+        {
+            result[n] = s / v[n];
+        }
+
+        return result;
+    }
+
     template <int len>
     static inline float length(const vecN<len>& v)
     {
@@ -352,7 +364,7 @@ namespace vmath
         {
             for (int n = 0; n < 4; n++)
             {
-                data[n] = vmath::vec4(f, f, f, f);
+                data[n] = vec::vec4(f, f, f, f);
             }
         }
 
@@ -630,24 +642,6 @@ namespace vmath
         float w;
     };
 
-#ifdef min
-#undef min
-#endif
-
-    static inline float min(float a, float b)
-    {
-        return a < b ? a : b;
-    }
-
-#ifdef max
-#undef max
-#endif
-
-    static inline float max(float a, float b)
-    {
-        return a >= b ? a : b;
-    }
-
     static inline vec4 operator*(const vec4& vec, const mat4& mat)
     {
         vec4 result = vec4(0.0f);
@@ -657,18 +651,6 @@ namespace vmath
             {
                 result[n] += vec[m] * mat[n][m];
             }
-        }
-
-        return result;
-    }
-
-    template <const int N>
-    static inline vecN<N> operator/(const float s, const vecN<N>& v)
-    {
-        vecN<N> result;
-        for (int n = 0; n < N; n++)
-        {
-            result[n] = s / v[n];
         }
 
         return result;
