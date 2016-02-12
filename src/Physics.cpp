@@ -57,7 +57,7 @@ void Physics::Run()
 
                 // TODO test routing code until click-selection is working.
                 vmath::vec3i start = vmath::vec3i(0, 0, 0);
-                vmath::vec3i end = vmath::vec3i(19, 18, 0);
+                vmath::vec3i end = vmath::vec3i(18, 18, 1);
                 std::vector<vmath::vec3i> route;
                 if (!mapSections.ComputeRoute(start, end, route))
                 {

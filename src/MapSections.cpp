@@ -1,4 +1,5 @@
 #include <set>
+#include <queue>
 #include "Logger.h"
 #include "MapSections.h"
 
@@ -111,21 +112,21 @@ bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i dest
     std::set<vmath::vec3i, vmath::vec3iComparer> foundVoxels;
 
     // Voxels on the edge of search radius, to use for future searches.
-    std::set<vmath::vec3i, vmath::vec3iComparer> edgeVoxels;
+    std::queue<vmath::vec3i> edgeVoxels;
 
     // The current route, from start to end, for each voxel.
     std::map<vmath::vec3i, std::vector<vmath::vec3i>, vmath::vec3iComparer> voxelRoutes;
     voxelRoutes[start] = std::vector<vmath::vec3i>();
     voxelRoutes[start].push_back(start);
 
-    edgeVoxels.insert(start);
+    edgeVoxels.push(start);
     foundVoxels.insert(start);
 
-    while (edgeVoxels.find(destination) == edgeVoxels.end())
+    while (edgeVoxels.size() != 0)
     {
-        vmath::vec3i voxelId = *edgeVoxels.begin();
+        vmath::vec3i voxelId = edgeVoxels.front();
+        edgeVoxels.pop();
         const VoxelRoute& voxelInfo = subsections[voxelId];
-        edgeVoxels.erase(edgeVoxels.begin());
 
         // Add all the neighbors, if not already present, with added route, to the voxel route.
         for (unsigned int i = 0; i < voxelInfo.neighbors.size(); i++)
@@ -135,11 +136,17 @@ bool MapSections::ComputeRoute(const vmath::vec3i start, const vmath::vec3i dest
             {
                 // New voxel. This neighbor is added to the active edge, found voxels, and has its route updated.
                 foundVoxels.insert(neighborVoxelId);
-                edgeVoxels.insert(neighborVoxelId);
+                edgeVoxels.push(neighborVoxelId);
 
                 std::vector<vmath::vec3i> voxelRoute = voxelRoutes[voxelId];
                 voxelRoute.push_back(neighborVoxelId);
                 voxelRoutes[neighborVoxelId] = voxelRoute;
+
+                if (neighborVoxelId.x == destination.x && neighborVoxelId.y == destination.y && neighborVoxelId.z == destination.z)
+                {
+                    // We found the destination!
+                    break;
+                }
             }
         }
     }
