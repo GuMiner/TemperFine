@@ -1,19 +1,20 @@
 #include <sstream>
 #include <string>
+#include "MatrixOps.h"
 #include "Statistics.h"
 
 Statistics::Statistics()
 {
     textPixelHeight = 20;
 
-    textScale = vmath::scale(0.02f, 0.02f, 0.02f);
+    textScale = MatrixOps::Scale(0.02f, 0.02f, 0.02f);
 
-    runTime.posRotMatrix = vmath::translate(-0.821f, -0.221f, -1.0f) * vmath::scale(0.015f, 0.015f, 0.015f);
+    runTime.posRotMatrix = MatrixOps::Translate(-0.821f, -0.221f, -1.0f) * MatrixOps::Scale(0.015f, 0.015f, 0.015f);
     runTime.color = vmath::vec3(0.8f, 0.8f, 0.8f);
 
-    xPosition.posRotMatrix = vmath::translate(-0.821f, -0.321f, -1.0f) * textScale;
-    yPosition.posRotMatrix = vmath::translate(-0.659f, -0.321f, -1.0f) * textScale;
-    zPosition.posRotMatrix = vmath::translate(-0.508f, -0.321f, -1.0f) * textScale;
+    xPosition.posRotMatrix = MatrixOps::Translate(-0.821f, -0.321f, -1.0f) * textScale;
+    yPosition.posRotMatrix = MatrixOps::Translate(-0.659f, -0.321f, -1.0f) * textScale;
+    zPosition.posRotMatrix = MatrixOps::Translate(-0.508f, -0.321f, -1.0f) * textScale;
 
     xPosition.color = vmath::vec3(1.0f, 0.0f, 0.0f);
     yPosition.color = vmath::vec3(0.0f, 1.0f, 0.0f);

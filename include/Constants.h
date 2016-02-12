@@ -1,6 +1,6 @@
 #pragma once
 #include <random>
-#include "vmath.hpp"
+#include "MatrixOps.h"
 
 // Holds data constant across the application.
 class Constants
@@ -18,7 +18,7 @@ public:
         NEAR_PLANE = 0.10f;
         FAR_PLANE = 1000.0f;
 
-        PerspectiveMatrix = vmath::perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
+        PerspectiveMatrix = MatrixOps::Perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
 
         seedValue = 3213258; // Numpad-bashing.
         mersenneTwiser.seed(seedValue);

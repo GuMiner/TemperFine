@@ -5,6 +5,7 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
 #include "Logger.h"
+#include "MatrixOps.h"
 #include "TemperFine.h"
 #include "../version.h"
 
@@ -344,7 +345,7 @@ Constants::Status TemperFine::Run()
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
-        viewMatrix = viewer.viewOrientation.asMatrix() * vmath::translate(-viewer.viewPosition);
+        viewMatrix = viewer.viewOrientation.asMatrix() * MatrixOps::Translate(-viewer.viewPosition);
 
         HandleEvents(desktop, window, alive, paused);
         PerformGuiThreadUpdates(clock.getElapsedTime().asSeconds());

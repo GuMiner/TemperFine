@@ -1,9 +1,11 @@
 #include <SFML\System.hpp>
 #include "Constants.h"
 #include "Logger.h"
-#include "Physics.h"
+#include "MathOps.h"
+#include "PhysicsOps.h"
 #include "PhysicsConfig.h"
 #include "Unit.h"
+#include "Physics.h"
 
 Physics::Physics()
 {
@@ -39,7 +41,7 @@ void Physics::HandleLeftMouseClicked()
     vmath::vec2 screenSize = vmath::vec2((float)leftMouseClickData.xSize, (float)leftMouseClickData.ySize);
 
     vmath::mat4 viewRotationMatrix = viewer->viewOrientation.asMatrix();
-    vmath::vec3 worldRay = vmath::screenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
+    vmath::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
 
     // Check to see if we clicked a unit. You can only select your own units.
     int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer->viewPosition, worldRay);
@@ -95,7 +97,7 @@ void Physics::Run()
                     for (unsigned int j = 0; j < maxSize; j++)
                     {
                         testUnit.CreateNew(0, 0, turrets, vmath::vec3(step * i, step * j, 4.0f),
-                           vmath::quaternion::fromAxisAngle(rotation, vmath::vec3(0.0f, 1.0f, 0.0f)) * vmath::quaternion::fromAxisAngle(vmath::radians(-90.0f), vmath::vec3(1.0f, 0.0f, 0.0f)));
+                           vmath::quaternion::fromAxisAngle(rotation, vmath::vec3(0.0f, 1.0f, 0.0f)) * vmath::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vmath::vec3(1.0f, 0.0f, 0.0f)));
                         (*players)[0].AddUnit(testUnit);
                         rotation += 0.20;
                     }

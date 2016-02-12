@@ -1,4 +1,5 @@
 #include "PhysicsConfig.h"
+#include "VecOps.h"
 #include "Viewer.h"
 
 Viewer::Viewer()
@@ -12,7 +13,7 @@ Viewer::Viewer()
 void Viewer::InputUpdate()
 {
     vmath::vec3 forwardsVector = viewOrientation.forwardVector();
-    vmath::vec3 sidewaysVector = vmath::cross(viewOrientation.upVector(), forwardsVector);
+    vmath::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), forwardsVector);
     if (sf::Keyboard::isKeyPressed(KeyBindingConfig::MoveLeft))
     {
         viewPosition -= sidewaysVector * PhysicsConfig::ViewSidewaysSpeed;
@@ -61,7 +62,7 @@ void Viewer::InputUpdate()
             viewOrientation = vmath::quaternion::fromAxisAngle(xAmount, vmath::vec3(0, 0, 1)) * viewOrientation;
 
             // Rotate up
-            vmath::vec3 sidewaysVector = vmath::cross(viewOrientation.upVector(), viewOrientation.forwardVector());
+            vmath::vec3 sidewaysVector = VecOps::Cross(viewOrientation.upVector(), viewOrientation.forwardVector());
             viewOrientation = vmath::quaternion::fromAxisAngle(yAmount, sidewaysVector) * viewOrientation;
 
             viewOrientation.normalize();

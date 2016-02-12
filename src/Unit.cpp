@@ -1,5 +1,6 @@
 #include "ArmorConfig.h"
 #include "BodyConfig.h"
+#include "MatrixOps.h"
 #include "TurretConfig.h"
 #include "Unit.h"
 
@@ -57,27 +58,27 @@ void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSel
     }
 
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
-    vmath::mat4 unitOrientation = vmath::translate(position) * rotation.asMatrix();
+    vmath::mat4 unitOrientation = MatrixOps::Translate(position) * rotation.asMatrix();
 
     const BodyType& bodyType = BodyConfig::Bodies[bodyTypeId];
 
     // TODO remove, used for click selection. MOVE TO SHADER.
     float scaleFactor = (isSelected ? 1.5f : 1.0f) * bodyType.scale;
 
-    vmath::mat4 bodyMatrix = unitOrientation * vmath::scale(scaleFactor, scaleFactor, scaleFactor);
+    vmath::mat4 bodyMatrix = unitOrientation * MatrixOps::Scale(scaleFactor, scaleFactor, scaleFactor);
     modelManager.RenderModel(projectionMatrix, bodyType.bodyModelId, bodyMatrix);
 
     const ArmorType& armorType = ArmorConfig::Armors[armor.armorTypeId];
 
-    vmath::mat4 armorMatrix = vmath::translate(armorType.translationOffset) * bodyMatrix * armorType.rotationOffset.asMatrix();
+    vmath::mat4 armorMatrix = MatrixOps::Translate(armorType.translationOffset) * bodyMatrix * armorType.rotationOffset.asMatrix();
     modelManager.RenderModel(projectionMatrix, armorType.armorModelId, armorMatrix);
 
     for (unsigned int i = 0; i < turrets.size(); i++)
     {
         const TurretType& turretType = TurretConfig::Turrets[turrets[i].turretTypeId];
 
-        vmath::mat4 turretDefaultMatrix = vmath::translate(turretType.translationOffset) * bodyMatrix * turretType.rotationOffset.asMatrix();
-        vmath::mat4 turretMatrix = vmath::translate(turrets[i].currentTranslation) * turretDefaultMatrix * turrets[i].currentRotation.asMatrix();
+        vmath::mat4 turretDefaultMatrix = MatrixOps::Translate(turretType.translationOffset) * bodyMatrix * turretType.rotationOffset.asMatrix();
+        vmath::mat4 turretMatrix = MatrixOps::Translate(turrets[i].currentTranslation) * turretDefaultMatrix * turrets[i].currentRotation.asMatrix();
         modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix);
     }
 }

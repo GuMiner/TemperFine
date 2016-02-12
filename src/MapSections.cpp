@@ -2,6 +2,7 @@
 #include <queue>
 #include "Logger.h"
 #include "MapSections.h"
+#include "MathOps.h"
 
 MapSections::MapSections()
 {
@@ -173,7 +174,7 @@ bool MapSections::HitByRay(MapInfo* mapInfo, const vmath::vec3& rayStart, const 
     // First, figure out if the ray will hit the voxel area.
     vmath::vec3 minVoxelArea = vmath::vec3(0.0f, 0.0f, 0.0f);
     vmath::vec3 maxVoxelArea = vmath::vec3(MapInfo::SPACING * mapInfo->xSize, MapInfo::SPACING * mapInfo->ySize, MapInfo::SPACING * mapInfo->zSize);
-    if (vmath::withinRange(rayStart, minVoxelArea, maxVoxelArea))
+    if (MathOps::WithinRange(rayStart, minVoxelArea, maxVoxelArea))
     {
         // Start position is within the voxel box, so it definitely intersects it.
     }
