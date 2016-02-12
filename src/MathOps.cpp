@@ -25,8 +25,8 @@ float MathOps::Radians(float angleInDegrees)
 // Determines if the given point is within the cube specified by the min and max point.
 bool MathOps::WithinRange(vec::vec3 point, vec::vec3 minPoint, vec::vec3 maxPoint)
 {
-    return (point[0] > minPoint[0] && point[1] > minPoint[1] && point[2] > minPoint[2] &&
-            point[0] < maxPoint[0] && point[1] < maxPoint[1] && point[2] < maxPoint[2]);
+    return (point.x > minPoint.x && point.y > minPoint.y && point.z > minPoint.z &&
+            point.x < maxPoint.x && point.y < maxPoint.y && point.z < maxPoint.z);
 }
 
 float MathOps::Rand()

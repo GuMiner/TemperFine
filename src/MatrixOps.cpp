@@ -19,14 +19,14 @@ vec::mat4 MatrixOps::Perspective(float fovy, float aspect, float n, float f)
 
 vec::mat4 MatrixOps::Lookat(const vec::vec3& eye, const vec::vec3& center, const vec::vec3& up)
 {
-    const vec::vec3 f = normalize(center - eye);
-    const vec::vec3 upN = normalize(up);
+    const vec::vec3 f = vec::normalize(center - eye);
+    const vec::vec3 upN = vec::normalize(up);
     const vec::vec3 s = VecOps::Cross(f, upN);
     const vec::vec3 u = VecOps::Cross(s, f);
     const vec::mat4 M = vec::mat4(
-        vec::vec4(s[0], u[0], -f[0], 0.0f),
-        vec::vec4(s[1], u[1], -f[1], 0.0f),
-        vec::vec4(s[2], u[2], -f[2], 0.0f),
+        vec::vec4(s.x, u.x, -f.x, 0.0f),
+        vec::vec4(s.y, u.y, -f.y, 0.0f),
+        vec::vec4(s.z, u.z, -f.z, 0.0f),
         vec::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
     return M * Translate(-eye);
@@ -43,7 +43,7 @@ vec::mat4 MatrixOps::Translate(float x, float y, float z)
 
 vec::mat4 MatrixOps::Translate(const vec::vec3& v)
 {
-    return Translate(v[0], v[1], v[2]);
+    return Translate(v.x, v.y, v.z);
 }
 
 vec::mat4 MatrixOps::Scale(float x, float y, float z)
@@ -57,7 +57,7 @@ vec::mat4 MatrixOps::Scale(float x, float y, float z)
 
 vec::mat4 MatrixOps::Scale(const vec::vec3& v)
 {
-    return Scale(v[0], v[1], v[2]);
+    return Scale(v.x, v.y, v.z);
 }
 
 vec::mat4 MatrixOps::Rotate(float angle, float x, float y, float z)
@@ -82,7 +82,7 @@ vec::mat4 MatrixOps::Rotate(float angle, float x, float y, float z)
 
 vec::mat4 MatrixOps::Rotate(float angle, const vec::vec3& v)
 {
-    return Rotate(angle, v[0], v[1], v[2]);
+    return Rotate(angle, v.x, v.y, v.z);
 }
 
 // Pulled from 'The Mesa 3-D graphics library', gluInvertMatrix, refactored to integrate here.

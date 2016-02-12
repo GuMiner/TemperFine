@@ -95,11 +95,8 @@ void ConfigManager::WriteKey(const char* itemName, sf::Keyboard::Key& key)
 
 void ConfigManager::WriteVector(const char* itemName, vec::vec3& vector)
 {
-	double x = vector[0];
-	double y = vector[1];
-	double z = vector[2];
 	std::stringstream tempOutput;
-	tempOutput << itemName << StringUtils::Space << x << StringUtils::Space << y << StringUtils::Space << z;
+	tempOutput << itemName << StringUtils::Space << vector.x << StringUtils::Space << vector.y << StringUtils::Space << vector.z;
 	outputLines.push_back(tempOutput.str());
 
 }

@@ -53,9 +53,9 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
         }
 
         vec::vec3 vector;
-        if (!StringUtils::ParseFloatFromString(line[1], vector[0]) ||
-            !StringUtils::ParseFloatFromString(line[2], vector[1]) ||
-            !StringUtils::ParseFloatFromString(line[3], vector[2]))
+        if (!StringUtils::ParseFloatFromString(line[1], vector.x) ||
+            !StringUtils::ParseFloatFromString(line[2], vector.y) ||
+            !StringUtils::ParseFloatFromString(line[3], vector.z))
         {
             Logger::Log("Line had an improper floating-point value.");
             return false;
@@ -155,12 +155,12 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     uvVertexRemapping.clear();
 
     // Also figure out the min-max bounding box while we're at it.
-    (*minBounds)[0] = 1e20;
-    (*minBounds)[1] = 1e20;
-    (*minBounds)[2] = 1e20;
-    (*maxBounds)[0] = -1e20;
-    (*maxBounds)[1] = -1e20;
-    (*maxBounds)[2] = -1e20;
+    minBounds->x = 1e20;
+    minBounds->y = 1e20;
+    minBounds->z = 1e20;
+    maxBounds->x = -1e20;
+    maxBounds->y = -1e20;
+    maxBounds->z = -1e20;
 
     // There's guaranteed to be a UV for each point. Find it, and set it.
     for (unsigned int i = 0; i < vertices.positions.size(); i++)
@@ -189,34 +189,34 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
         }
 
         // Perform min-max bounding check.
-        if (vertices.positions[i][0] < (*minBounds)[0])
+        if (vertices.positions[i].x < minBounds->x)
         {
-            (*minBounds)[0] = vertices.positions[i][0];
+            minBounds->x = vertices.positions[i].x;
         }
 
-        if (vertices.positions[i][1] < (*minBounds)[1])
+        if (vertices.positions[i].y < minBounds->y)
         {
-            (*minBounds)[1] = vertices.positions[i][1];
+            minBounds->y = vertices.positions[i].y;
         }
 
-        if (vertices.positions[i][2] < (*minBounds)[2])
+        if (vertices.positions[i].z < minBounds->z)
         {
-            (*minBounds)[2] = vertices.positions[i][2];
+            minBounds->z = vertices.positions[i].z;
         }
 
-        if (vertices.positions[i][0] > (*maxBounds)[0])
+        if (vertices.positions[i].x > maxBounds->x)
         {
-            (*maxBounds)[0] = vertices.positions[i][0];
+            maxBounds->x = vertices.positions[i].x;
         }
 
-        if (vertices.positions[i][1] > (*maxBounds)[1])
+        if (vertices.positions[i].y > maxBounds->y)
         {
-            (*maxBounds)[1] = vertices.positions[i][1];
+            maxBounds->y = vertices.positions[i].y;
         }
 
-        if (vertices.positions[i][2] > (*maxBounds)[2])
+        if (vertices.positions[i].z > maxBounds->z)
         {
-            (*maxBounds)[2] = vertices.positions[i][2];
+            maxBounds->z = vertices.positions[i].z;
         }
     }
 

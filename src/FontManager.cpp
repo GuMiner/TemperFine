@@ -188,10 +188,10 @@ universalVertices FontManager::AllocateSentenceVertices(const std::string& sente
         float textureYEnd = (float)(charInfo.textureY + charInfo.height) / (float)height;
 
         // Triangle fan. First position is at start, then +x, +x+y, +y
-        vertices.AddColorTextureVertex(vec::vec3(xStart, -yStart, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureX, textureY));
-        vertices.AddColorTextureVertex(vec::vec3(xStart, -yDepth, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureX, textureYEnd));
-        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yDepth, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureXEnd, textureYEnd));
-        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yStart, lastZPos), vec::vec3(textColor[0], textColor[1], textColor[2]), vec::vec2(textureXEnd, textureY));
+        vertices.AddColorTextureVertex(vec::vec3(xStart, -yStart, lastZPos), vec::vec3(textColor.x, textColor.y, textColor.z), vec::vec2(textureX, textureY));
+        vertices.AddColorTextureVertex(vec::vec3(xStart, -yDepth, lastZPos), vec::vec3(textColor.x, textColor.y, textColor.z), vec::vec2(textureX, textureYEnd));
+        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yDepth, lastZPos), vec::vec3(textColor.x, textColor.y, textColor.z), vec::vec2(textureXEnd, textureYEnd));
+        vertices.AddColorTextureVertex(vec::vec3(xDepth, -yStart, lastZPos), vec::vec3(textColor.x, textColor.y, textColor.z), vec::vec2(textureXEnd, textureY));
 
         lastXPos += advanceWidth;
     }

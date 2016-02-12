@@ -8,8 +8,8 @@ float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& vo
         vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
         vec::vec3 difference = position - voxelMinPosition;
 
-        if (difference[0] >= 0 && difference[1] >= 0 && difference[2] >= 0 &&
-            difference[0] <= MapInfo::SPACING && difference[1] <= MapInfo::SPACING && difference[2] <= MapInfo::SPACING)
+        if (difference.x >= 0 && difference.y >= 0 && difference.z >= 0 &&
+            difference.x <= MapInfo::SPACING && difference.y <= MapInfo::SPACING && difference.z <= MapInfo::SPACING)
         {
             // In-bounds of given voxel, perform height calculation.
             int type = voxelMap->GetType(voxelId);
@@ -17,7 +17,7 @@ float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& vo
             if (cubeType)
             {
                 // Flat plane.
-                return voxelMinPosition[2] + MapInfo::SPACING;
+                return voxelMinPosition.z + MapInfo::SPACING;
             }
             else if (type == MapInfo::SLANT)
             {
@@ -27,16 +27,16 @@ float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& vo
                 {
                 case 0:
                     // Moving along X+ lowers height.
-                    return voxelMinPosition[2] + MapInfo::SPACING - difference[0];
+                    return voxelMinPosition.z + MapInfo::SPACING - difference.x;
                 case 1:
                     // Moving along Y+ lowers height.
-                    return voxelMinPosition[2] + MapInfo::SPACING - difference[1];
+                    return voxelMinPosition.z + MapInfo::SPACING - difference.y;
                 case 2:
                     // Reverse of 0
-                    return voxelMinPosition[2] + difference[0];
+                    return voxelMinPosition.z + difference.x;
                 case 3:
                     // Reverse of 2
-                    return voxelMinPosition[2] + difference[1];
+                    return voxelMinPosition.z + difference.y;
                 default:
                     break;
                 }

@@ -219,56 +219,64 @@ namespace vec
     typedef vec2T<float> vec2;
     typedef vec2T<int> vec2i;
 
-    class vec3 : public vecN<3>
+    template <typename T>
+    class vec3T
     {
     public:
-        typedef vecN<3> base;
+        float x;
+        float y;
+        float z;
 
-        // Uninitialized variable
-        inline vec3() {}
+        // Uninitialized
+        vec3T() { }
 
         // Copy constructor
-        inline vec3(const base& v) : base(v) {}
+        vec3T(const vec3T& other);
 
-        // vec3(x, y, z);
-        inline vec3(float x, float y, float z)
-        {
-            base::data[0] = x;
-            base::data[1] = y;
-            base::data[2] = z;
-        }
+        // Assignment operator
+        vec3T& operator=(const vec3T& other);
+
+        // Triple-value construction.
+        vec3T(T x, T y, T z);
+
+        // Single-value construction.
+        vec3T(T value);
+
+        // Overridden +-= operators
+        vec3T& operator+=(const vec3T& other);
+        vec3T& operator-=(const vec3T& other);
+
+        // Overridden +- operators
+        vec3T operator+(const vec3T& other) const;
+        vec3T operator-() const;
+        vec3T operator-(const vec3T& other) const;
+
+        // Overridden * operators
+        vec3T operator*(const vec3T& other) const;
+        vec3T operator*(const T& other) const;
+
+        // Overridden *= operators
+        vec3T& operator*=(const vec3T& other);
+        vec3T& operator*=(const T& other);
+
+        // Overridden / operators.
+        vec3T operator/(const vec3T& other) const;
+        vec3T operator/(const T& other) const;
+
+        // Overridden /= operators.
+        vec3T& operator/=(const vec3T& other);
+        vec3T& operator/=(const T& other);
     };
 
-    // This little guy exists until I get around to refactoring the math library correctly.
-    class vec3i
-    {
-    public:
-
-        vec3i()
-        {
-            x = 0;
-            y = 0;
-            z = 0;
-        }
-
-        vec3i(int x, int y, int z)
-        {
-            this->x = x;
-            this->y = y;
-            this->z = z;
-        }
-
-        int x;
-        int y;
-        int z;
-    };
+    typedef vec3T<float> vec3;
+    typedef vec3T<int> vec3i;
 
     class vec3iComparer
     {
     public:
         // Compares two vec3i objects for storage comparisons.
         // If this returns false for comp(a, b) and comp(b, a), the objects are equal.
-        bool operator()(vec3i const& lhs, vec3i const& rhs) const
+        bool operator()(const vec3i& lhs, const vec3i& rhs) const
         {
             // TODO this is really wrong (assuming max voxel size), but also right (anything that big wouldn't run.
             const int maxVoxelSize = 10000;
@@ -308,9 +316,15 @@ namespace vec
         return v * x;
     }
 
+    template <typename T>
+    static const vec3T<T> operator * (T x, const vec3T<T>& v)
+    {
+        return v * x;
+    }
+
     static inline const vec3 operator / (float x, const vec3& v)
     {
-        return vec3(x / v[0], x / v[1], x / v[2]);
+        return vec3(x / v.x, x / v.y, x / v.z);
     }
 
     static inline const vec4 operator / (float x, const vec4& v)
@@ -344,6 +358,18 @@ namespace vec
 
     template <int len>
     static inline vecN<len> normalize(const vecN<len>& v)
+    {
+        return v / length(v);
+    }
+
+    template <typename T>
+    static inline T length(const vec3T<T>& vector)
+    {
+        return sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);
+    }
+
+    template <typename T>
+    static inline vec3T<T> normalize(const vec3T<T>& v)
     {
         return v / length(v);
     }
@@ -596,9 +622,9 @@ namespace vec
             float halfAngle = angle * 0.5f;
             float sinAngle = sinf(halfAngle);
 
-            float x = (axis[0] * sinAngle);
-            float y = (axis[1] * sinAngle);
-            float z = (axis[2] * sinAngle);
+            float x = (axis.x * sinAngle);
+            float y = (axis.y * sinAngle);
+            float z = (axis.z * sinAngle);
             float w = cosf(halfAngle);
 
             return quaternion(x, y, z, w);
@@ -606,13 +632,13 @@ namespace vec
 
         inline vec3 upVector() const
         {
-            quaternion resultingVector = *this * (quaternion(DEFAULT_UP_VECTOR[0], DEFAULT_UP_VECTOR[1], DEFAULT_UP_VECTOR[2], 0) * this->conjugate());
+            quaternion resultingVector = *this * (quaternion(DEFAULT_UP_VECTOR.x, DEFAULT_UP_VECTOR.y, DEFAULT_UP_VECTOR.z, 0) * this->conjugate());
             return vec3(resultingVector.x, resultingVector.y, resultingVector.z);
         }
 
         inline vec3 forwardVector() const
         {
-            quaternion resultingVector = *this * (quaternion(DEFAULT_FORWARD_VECTOR[0], DEFAULT_FORWARD_VECTOR[1], DEFAULT_FORWARD_VECTOR[2], 0) * this->conjugate());
+            quaternion resultingVector = *this * (quaternion(DEFAULT_FORWARD_VECTOR.x, DEFAULT_FORWARD_VECTOR.y, DEFAULT_FORWARD_VECTOR.z, 0) * this->conjugate());
             return vec3(resultingVector.x, resultingVector.y, resultingVector.z);
         }
 

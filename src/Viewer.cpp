@@ -24,10 +24,10 @@ void Viewer::InputUpdate()
         viewPosition += sidewaysVector * PhysicsConfig::ViewSidewaysSpeed;
     }
 
-    forwardsVector[2] = 0; // Moving forwards doesn't move you down in the Z-direction.
-    if (forwardsVector[0] < 0.01f && forwardsVector[0] > -0.01f)
+    forwardsVector.z = 0; // Moving forwards doesn't move you down in the Z-direction.
+    if (forwardsVector.x < 0.01f && forwardsVector.x > -0.01f)
     {
-        forwardsVector[0] = 0.01f; // Tiny nudge to avoid div/zero issues.
+        forwardsVector.x = 0.01f; // Tiny nudge to avoid div/zero issues.
     }
 
     forwardsVector = vec::normalize(forwardsVector);

@@ -99,7 +99,7 @@ bool Unit::InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, cons
     float polyC = vec::length(rayOffset * rayOffset) - pow(sphereRadius, 2);
 
     vec::vec3 polyBComp = rayVector * rayOffset;
-    float polyB = polyBComp[0] + polyBComp[1] + polyBComp[2];
+    float polyB = polyBComp.x + polyBComp.y + polyBComp.z;
 
     return (polyB*polyB - polyC) > 0;
 }

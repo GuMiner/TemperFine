@@ -47,9 +47,9 @@ bool ArmorConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
             return false;
         }
 
-        if (!StringUtils::ParseFloatFromString(modelLines[1], armorType.translationOffset[0]) ||
-            !StringUtils::ParseFloatFromString(modelLines[2], armorType.translationOffset[1]) ||
-            !StringUtils::ParseFloatFromString(modelLines[3], armorType.translationOffset[2]) ||
+        if (!StringUtils::ParseFloatFromString(modelLines[1], armorType.translationOffset.x) ||
+            !StringUtils::ParseFloatFromString(modelLines[2], armorType.translationOffset.y) ||
+            !StringUtils::ParseFloatFromString(modelLines[3], armorType.translationOffset.z) ||
             !StringUtils::ParseFloatFromString(modelLines[4], armorType.rotationOffset.x) ||
             !StringUtils::ParseFloatFromString(modelLines[5], armorType.rotationOffset.y) ||
             !StringUtils::ParseFloatFromString(modelLines[6], armorType.rotationOffset.z) ||

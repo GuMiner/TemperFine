@@ -73,15 +73,15 @@ void Statistics::UpdateViewPos(vec::vec3& position)
     textStream.precision(2);
     textStream << std::fixed;
 
-    textStream << "X: " << position[0];
+    textStream << "X: " << position.x;
     fontManager->UpdateSentence(xPosition.sentenceId, textStream.str(), textPixelHeight, xPosition.color);
 
     textStream.str("");
-    textStream << "Y: " << position[1];
+    textStream << "Y: " << position.y;
     fontManager->UpdateSentence(yPosition.sentenceId, textStream.str(), textPixelHeight, yPosition.color);
 
     textStream.str("");
-    textStream << "Z: " << position[2];
+    textStream << "Z: " << position.z;
     fontManager->UpdateSentence(zPosition.sentenceId, textStream.str(), textPixelHeight, zPosition.color);
 }
 

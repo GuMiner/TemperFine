@@ -46,9 +46,9 @@ bool ConversionUtils::LoadVector(const std::string& line, vec::vec3& vector)
 		return false;
 	}
 
-	if (!StringUtils::ParseFloatFromString(stringParts[1], vector[0]) ||
-		!StringUtils::ParseFloatFromString(stringParts[2], vector[1]) ||
-		!StringUtils::ParseFloatFromString(stringParts[3], vector[2]))
+	if (!StringUtils::ParseFloatFromString(stringParts[1], vector.x) ||
+		!StringUtils::ParseFloatFromString(stringParts[2], vector.y) ||
+		!StringUtils::ParseFloatFromString(stringParts[3], vector.z))
 	{
 		return false;
 	}

@@ -31,9 +31,9 @@ bool TurretConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
             return false;
         }
 
-        if (!StringUtils::ParseFloatFromString(modelLines[1], turretType.translationOffset[0]) ||
-            !StringUtils::ParseFloatFromString(modelLines[2], turretType.translationOffset[1]) ||
-            !StringUtils::ParseFloatFromString(modelLines[3], turretType.translationOffset[2]) ||
+        if (!StringUtils::ParseFloatFromString(modelLines[1], turretType.translationOffset.x) ||
+            !StringUtils::ParseFloatFromString(modelLines[2], turretType.translationOffset.y) ||
+            !StringUtils::ParseFloatFromString(modelLines[3], turretType.translationOffset.z) ||
             !StringUtils::ParseFloatFromString(modelLines[4], turretType.rotationOffset.x) ||
             !StringUtils::ParseFloatFromString(modelLines[5], turretType.rotationOffset.y) ||
             !StringUtils::ParseFloatFromString(modelLines[6], turretType.rotationOffset.z) ||
