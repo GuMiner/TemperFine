@@ -5,175 +5,13 @@
 // For more complicated operations, see MathOps, MatrixOps, PhysicsOps, and VecOps.
 namespace vec
 {
-    template <const int len>
-    class vecN
-    {
-    public:
-        typedef class vecN<len> my_type;
-        typedef float element_type;
-
-        // Default constructor does nothing, just like built-in types
-        inline vecN()
-        {
-            // Uninitialized variable
-        }
-
-        // Copy constructor
-        inline vecN(const vecN& that)
-        {
-            assign(that);
-        }
-
-        // Construction from scalar
-        inline vecN(float s)
-        {
-            int n;
-            for (n = 0; n < len; n++)
-            {
-                data[n] = s;
-            }
-        }
-
-        // Assignment operator
-        inline vecN& operator=(const vecN& that)
-        {
-            assign(that);
-            return *this;
-        }
-
-        inline vecN& operator=(const float& that)
-        {
-            int n;
-            for (n = 0; n < len; n++)
-                data[n] = that;
-
-            return *this;
-        }
-
-        inline vecN operator+(const vecN& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] + that.data[n];
-            return result;
-        }
-
-        inline vecN& operator+=(const vecN& that)
-        {
-            return (*this = *this + that);
-        }
-
-        inline vecN operator-() const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = -data[n];
-            return result;
-        }
-
-        inline vecN operator-(const vecN& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] - that.data[n];
-            return result;
-        }
-
-        inline vecN& operator-=(const vecN& that)
-        {
-            return (*this = *this - that);
-        }
-
-        inline vecN operator*(const vecN& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] * that.data[n];
-            return result;
-        }
-
-        inline vecN& operator*=(const vecN& that)
-        {
-            return (*this = *this * that);
-        }
-
-        inline vecN operator*(const float& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] * that;
-            return result;
-        }
-
-        inline vecN& operator*=(const float& that)
-        {
-            assign(*this * that);
-
-            return *this;
-        }
-
-        inline vecN operator/(const vecN& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] / that.data[n];
-            return result;
-        }
-
-        inline vecN& operator/=(const vecN& that)
-        {
-            assign(*this / that);
-
-            return *this;
-        }
-
-        inline vecN operator/(const float& that) const
-        {
-            my_type result;
-            int n;
-            for (n = 0; n < len; n++)
-                result.data[n] = data[n] / that;
-            return result;
-        }
-
-        inline vecN& operator/=(const float& that)
-        {
-            assign(*this / that);
-            return *this;
-        }
-
-        inline float& operator[](int n) { return data[n]; }
-        inline const float& operator[](int n) const { return data[n]; }
-
-        inline static int size(void) { return len; }
-
-        inline operator const float* () const { return &data[0]; }
-
-    protected:
-        float data[len];
-
-        inline void assign(const vecN& that)
-        {
-            int n;
-            for (n = 0; n < len; n++)
-                data[n] = that.data[n];
-        }
-    };
-
-    // 2-element floating-point vector.
-    // Supports float and int data types, using strong-template binding in the CPP.
+    // 2-element vector. Supports float and int data types, using strong-template binding in the CPP.
     template <typename T>
     class vec2T
     {
     public:
-        float x;
-        float y;
+        T x;
+        T y;
 
         // Uninitialized
         vec2T() { }
@@ -219,13 +57,14 @@ namespace vec
     typedef vec2T<float> vec2;
     typedef vec2T<int> vec2i;
 
+    // 3-element vector. Supports float and int data types, using strong-template binding in the CPP.
     template <typename T>
     class vec3T
     {
     public:
-        float x;
-        float y;
-        float z;
+        T x;
+        T y;
+        T z;
 
         // Uninitialized
         vec3T() { }
@@ -271,6 +110,7 @@ namespace vec
     typedef vec3T<float> vec3;
     typedef vec3T<int> vec3i;
 
+    // Comparer for the integer variant of vec3T, to support adding in std sets and maps.
     class vec3iComparer
     {
     public:
@@ -284,84 +124,93 @@ namespace vec
         }
     };
 
-    class vec4 : public vecN<4>
+    // 4-element vector. Supports float and int data types, using strong-template binding in the CPP.
+    template <typename T>
+    class vec4T
     {
     public:
-        typedef vecN<4> base;
+    public:
+        T x;
+        T y;
+        T z;
+        T w;
 
-        // Uninitialized variable
-        inline vec4() {}
+        // Uninitialized
+        vec4T() { }
 
         // Copy constructor
-        inline vec4(const base& v) : base(v) {}
+        vec4T(const vec4T& other);
 
-        inline vec4(float scale)
-            : vec4(scale, scale, scale, scale)
-        {
-        }
+        // Assignment operator
+        vec4T& operator=(const vec4T& other);
 
-        // vec4(x, y, z, w);
-        inline vec4(float x, float y, float z, float w)
-        {
-            base::data[0] = x;
-            base::data[1] = y;
-            base::data[2] = z;
-            base::data[3] = w;
-        }
+        // Quad-value construction.
+        vec4T(T x, T y, T z, T w);
+
+        // Single-value construction.
+        vec4T(T value);
+
+        // Direct-access operators. Dangerous, but useful for high-speed operations.
+        // Not stored in the C++ file as this is specific to vec4T items.
+        inline T& operator[](int n) { return *(&x + n); }
+        inline const T& operator[](int n) const { return *(&x + n); }
+
+        // Overridden +-= operators
+        vec4T& operator+=(const vec4T& other);
+        vec4T& operator-=(const vec4T& other);
+
+        // Overridden +- operators
+        vec4T operator+(const vec4T& other) const;
+        vec4T operator-() const;
+        vec4T operator-(const vec4T& other) const;
+
+        // Overridden * operators
+        vec4T operator*(const vec4T& other) const;
+        vec4T operator*(const T& other) const;
+
+        // Overridden *= operators
+        vec4T& operator*=(const vec4T& other);
+        vec4T& operator*=(const T& other);
+
+        // Overridden / operators.
+        vec4T operator/(const vec4T& other) const;
+        vec4T operator/(const T& other) const;
+
+        // Overridden /= operators.
+        vec4T& operator/=(const vec4T& other);
+        vec4T& operator/=(const T& other);
     };
 
-    template <int n>
-    static inline const vecN<n> operator * (float x, const vecN<n>& v)
+    typedef vec4T<float> vec4;
+    typedef vec4T<int> vec4i;
+
+    // Multiplication of T * vector.
+    template <typename T>
+    static inline const vec4T<T> operator*(T x, const vec4T<T>& v)
     {
         return v * x;
     }
 
     template <typename T>
-    static const vec3T<T> operator * (T x, const vec3T<T>& v)
+    static inline const vec3T<T> operator*(T x, const vec3T<T>& v)
     {
         return v * x;
     }
 
-    static inline const vec3 operator / (float x, const vec3& v)
+    // Division of T / vector.
+    template <typename T>
+    static inline const vec3T<T> operator / (T x, const vec3T<T>& v)
     {
-        return vec3(x / v.x, x / v.y, x / v.z);
+        return vec3T<T>(x / v.x, x / v.y, x / v.z);
     }
 
-    static inline const vec4 operator / (float x, const vec4& v)
+    template <typename T>
+    static inline const vec4T<T>  operator / (T x, const vec4T<T>& v)
     {
-        return vec4(x / v[0], x / v[1], x / v[2], x / v[3]);
+        return vec4T<T>(x / v.x, x / v.y, x / v.z, x / v.w);
     }
 
-    template <const int N>
-    static inline vecN<N> operator/(const float s, const vecN<N>& v)
-    {
-        vecN<N> result;
-        for (int n = 0; n < N; n++)
-        {
-            result[n] = s / v[n];
-        }
-
-        return result;
-    }
-
-    template <int len>
-    static inline float length(const vecN<len>& v)
-    {
-        float result = 0.0f;
-        for (int i = 0; i < v.size(); ++i)
-        {
-            result += v[i] * v[i];
-        }
-
-        return sqrt(result);
-    }
-
-    template <int len>
-    static inline vecN<len> normalize(const vecN<len>& v)
-    {
-        return v / length(v);
-    }
-
+    // Length and normalization, only really useful for 3-element vectors.
     template <typename T>
     static inline T length(const vec3T<T>& vector)
     {
@@ -374,326 +223,60 @@ namespace vec
         return v / length(v);
     }
 
-    template <int len>
-    static inline float distance(const vecN<len>& a, const vecN<len>& b)
-    {
-        return length(b - a);
-    }
-
-    template <int len>
-    static inline float angle(const vecN<len>& a, const vecN<len>& b)
-    {
-        return arccos(dot(a, b));
-    }
-
+    // 4x4 matrix. Uses 4 vec4 vectors.
     class mat4
     {
     public:
-        inline mat4()
+        mat4()
         {
         }
 
         // Copy constructor
-        inline mat4(const mat4& that)
-        {
-            assign(that);
-        }
+        mat4(const mat4& other);
 
-        inline mat4(const vec4& v0,
-            const vec4& v1,
-            const vec4& v2,
-            const vec4& v3)
-        {
-            data[0] = v0;
-            data[1] = v1;
-            data[2] = v2;
-            data[3] = v3;
-        }
-
-        // Construction from element type
-        // explicit to prevent assignment from float
-        explicit inline mat4(float f)
-        {
-            for (int n = 0; n < 4; n++)
-            {
-                data[n] = vec::vec4(f, f, f, f);
-            }
-        }
+        mat4(const vec4& v0,
+             const vec4& v1,
+             const vec4& v2,
+             const vec4& v3);
 
         // Construction from vector
-        inline mat4(const vec4& v)
-        {
-            for (int n = 0; n < 4; n++)
-            {
-                data[n] = v;
-            }
-        }
+        mat4(const vec4& v);
 
         // Assignment operator
-        inline mat4& operator=(const mat4& that)
-        {
-            assign(that);
-            return *this;
-        }
+        mat4& operator=(const mat4& other);
 
-        inline mat4 operator+(const mat4& that) const
-        {
-            mat4 result;
-            for (int n = 0; n < 4; n++)
-                result.data[n] = data[n] + that.data[n];
-            return result;
-        }
+        // Addition and substraction with other matrixes.
+        mat4 operator+(const mat4& other) const;
+        mat4& operator+=(const mat4& other);
+        mat4 operator-(const mat4& other) const;
+        mat4& operator-=(const mat4& other);
 
-        inline mat4& operator+=(const mat4& that)
-        {
-            return (*this = *this + that);
-        }
+        // Multiplication of the matrix by a value
+        mat4 operator*(const float& other) const;
+        mat4& operator*=(const float& other);
 
-        inline mat4 operator-(const mat4& that) const
-        {
-            mat4 result;
-            for (int n = 0; n < 4; n++)
-                result.data[n] = data[n] - that.data[n];
-            return result;
-        }
+        // Matrix multiplication.
+        mat4 operator*(const mat4& other) const;
+        mat4& operator*=(const mat4& other);
 
-        inline mat4& operator-=(const mat4& that)
-        {
-            return (*this = *this - that);
-        }
-
-        inline mat4 operator*(const float& that) const
-        {
-            mat4 result;
-            for (int n = 0; n < 4; n++)
-                result.data[n] = data[n] * that;
-            return result;
-        }
-
-        inline mat4& operator*=(const float& that)
-        {
-            for (int n = 0; n < 4; n++)
-                data[n] = data[n] * that;
-            return *this;
-        }
-
-        // Matrix multiply.
-        inline mat4 operator*(const mat4& that) const
-        {
-            mat4 result(0);
-
-            for (int j = 0; j < 4; j++)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    float sum = 0.0f;
-                    for (int n = 0; n < 4; n++)
-                    {
-                        sum += data[n][i] * that[j][n];
-                    }
-
-                    result[j][i] = sum;
-                }
-            }
-
-            return result;
-        }
-
-        inline mat4& operator*=(const mat4& that)
-        {
-            return (*this = *this * that);
-        }
-
+        // Direct data access operators.
         inline vec4& operator[](int n) { return data[n]; }
         inline const vec4& operator[](int n) const { return data[n]; }
         inline operator float*() { return &data[0][0]; }
         inline operator const float*() const { return &data[0][0]; }
 
-        inline mat4 transpose(void) const
-        {
-            mat4 result;
-            for (int y = 0; y < 4; y++)
-            {
-                for (int x = 0; x < 4; x++)
-                {
-                    result[x][y] = data[y][x];
-                }
-            }
+        // Returns the transpose of this matrix.
+        mat4 transpose(void) const;
 
-            return result;
-        }
+        // Returns the identity matrix.
+        static mat4 identity();
 
-        static inline mat4 identity()
-        {
-            mat4 result(0);
-
-            for (int i = 0; i < 4; i++)
-            {
-                result[i][i] = 1;
-            }
-
-            return result;
-        }
-
-    protected:
+    private:
         // Column primary data (essentially, array of vectors)
         vec4 data[4];
-
-        // Assignment function - called from assignment operator and copy constructor.
-        inline void assign(const mat4& that)
-        {
-            for (int n = 0; n < 4; n++)
-                data[n] = that.data[n];
-        }
     };
 
-    const vec3 DEFAULT_FORWARD_VECTOR = vec3(0, 0, -1.0f);
-    const vec3 DEFAULT_UP_VECTOR = vec3(0, -1.0f, 0);
-    const float NORMALIZE_TOLERANCE = 0.00001f;
-
-    class quaternion
-    {
-    public:
-        inline quaternion()
-        {
-        }
-
-        // Assignment operator
-        inline quaternion& operator=(const quaternion& that)
-        {
-            x = that.x;
-            y = that.y;
-            z = that.z;
-            w = that.w;
-            return *this;
-        }
-
-        inline quaternion(const quaternion& that)
-        {
-            x = that.x;
-            y = that.y;
-            z = that.z;
-            w = that.w;
-        }
-
-        inline quaternion(float _x, float _y, float _z, float _w)
-        {
-            x = _x;
-            y = _y;
-            z = _z;
-            w = _w;
-        }
-
-        inline quaternion operator*(const quaternion& q) const
-        {
-            const float x2 = q.x;
-            const float y2 = q.y;
-            const float z2 = q.z;
-            const float w2 = q.w;
-
-            return quaternion(
-                w * x2 + x * w2 + y * z2 - z * y2,
-                w * y2 + y * w2 + z * x2 - x * z2,
-                w * z2 + z * w2 + x * y2 - y * x2,
-                w * w2 - x * x2 - y * y2 - z * z2);
-        }
-
-        inline void normalize()
-        {
-            float magnitude = x*x + y*y + z*z + w*w;
-            if (fabsf(magnitude - 1) < NORMALIZE_TOLERANCE)
-            {
-                float magnitudeReal = sqrtf(magnitude);
-                x /= magnitudeReal;
-                y /= magnitudeReal;
-                z /= magnitudeReal;
-                w /= magnitudeReal;
-            }
-        }
-
-        inline quaternion conjugate() const
-        {
-            return quaternion(-x, -y, -z, w);
-        }
-
-        // Given an axis (unit vector) and an angle (in radians), returns a unit quaternion.
-        static inline quaternion fromAxisAngle(float angle, vec3 axis)
-        {
-            float halfAngle = angle * 0.5f;
-            float sinAngle = sinf(halfAngle);
-
-            float x = (axis.x * sinAngle);
-            float y = (axis.y * sinAngle);
-            float z = (axis.z * sinAngle);
-            float w = cosf(halfAngle);
-
-            return quaternion(x, y, z, w);
-        }
-
-        inline vec3 upVector() const
-        {
-            quaternion resultingVector = *this * (quaternion(DEFAULT_UP_VECTOR.x, DEFAULT_UP_VECTOR.y, DEFAULT_UP_VECTOR.z, 0) * this->conjugate());
-            return vec3(resultingVector.x, resultingVector.y, resultingVector.z);
-        }
-
-        inline vec3 forwardVector() const
-        {
-            quaternion resultingVector = *this * (quaternion(DEFAULT_FORWARD_VECTOR.x, DEFAULT_FORWARD_VECTOR.y, DEFAULT_FORWARD_VECTOR.z, 0) * this->conjugate());
-            return vec3(resultingVector.x, resultingVector.y, resultingVector.z);
-        }
-
-        // Returns the Yaw-then-Pitch-then-Roll XYZ Euler Angles from the quaternion, in radians.
-        inline vec3 asEulerAngles() const
-        {
-            return vec3(
-                atan2f(2 * (w*x + y*z), 1 - 2 * (x*x + y*y)),
-                asinf(2 * (w*y - z*x)),
-                atan2f(2 * (w*z + x*y), 1 - 2 * (y*y + z*z)));
-        }
-
-        inline mat4 asMatrix() const
-        {
-            mat4 m;
-
-            const float xx = x * x;
-            const float yy = y * y;
-            const float zz = z * z;
-            const float xy = x * y;
-            const float xz = x * z;
-            const float xw = x * w;
-            const float yz = y * z;
-            const float yw = y * w;
-            const float zw = z * w;
-
-            m[0][0] = 1.0f - 2.0f * (yy + zz);
-            m[0][1] = 2.0f * (xy - zw);
-            m[0][2] = 2.0f * (xz + yw);
-            m[0][3] = 0.0f;
-
-            m[1][0] = 2.0f * (xy + zw);
-            m[1][1] = 1.0f - 2.0f * (xx + zz);
-            m[1][2] = 2.0f * (yz - xw);
-            m[1][3] = 0.0f;
-
-            m[2][0] = 2.0f * (xz - yw);
-            m[2][1] = 2.0f * (yz + xw);
-            m[2][2] = 1.0f - 2.0f * (xx + yy);
-            m[2][3] = 0.0f;
-
-            m[3][0] = 0.0f;
-            m[3][1] = 0.0f;
-            m[3][2] = 0.0f;
-            m[3][3] = 1.0f;
-
-            return m;
-        }
-
-        float x;
-        float y;
-        float z;
-        float w;
-    };
-
+    // Matrix-Vector multiplication. Results in a vector.
     static inline vec4 operator*(const vec4& vec, const mat4& mat)
     {
         vec4 result = vec4(0.0f);
@@ -707,4 +290,55 @@ namespace vec
 
         return result;
     }
+
+    const vec3 DEFAULT_FORWARD_VECTOR = vec3(0, 0, -1.0f);
+    const vec3 DEFAULT_UP_VECTOR = vec3(0, -1.0f, 0);
+    const float NORMALIZE_TOLERANCE = 0.00001f;
+
+    // Quaternion. Effectively a vec4, but with different manipulation and interaction syntax.
+    class quaternion
+    {
+    public:
+        float x;
+        float y;
+        float z;
+        float w;
+
+        quaternion()
+        {
+        }
+
+        // Assignment operator
+        quaternion& operator=(const quaternion& other);
+
+        // Copy operator
+        quaternion(const quaternion& other);
+
+        // Quad-assignment setup.
+        quaternion(float x, float y, float z, float w);
+
+        // Performs special quaternion multiplication.
+        quaternion operator*(const quaternion& q) const;
+
+        // Normalizes this vector
+        void normalize();
+
+        // Returns the quaternion conjugate.
+        quaternion conjugate() const;
+
+        // Given an axis (unit vector) and an angle (in radians), returns a unit quaternion.
+        static quaternion fromAxisAngle(float angle, vec3 axis);
+
+        // Returns the up vector, given the current quaternion rotation.
+        vec3 upVector() const;
+
+        // Returns the forward vector, given the current quaternion rotation.
+        vec3 forwardVector() const;
+
+        // Returns the Yaw-then-Pitch-then-Roll XYZ Euler Angles from the quaternion, in radians.
+        vec3 asEulerAngles() const;
+
+        // Returns the quaternion as a rotation matrix.
+        mat4 asMatrix() const;
+    };
 };

@@ -10,4 +10,10 @@ class VecOps
 
         // Dot-product.
         static float Dot(const vec::vec3& first, const vec::vec3& second);
+
+        // Distance between two vectors
+        static float Distance(const vec::vec3& first, const vec::vec3& second);
+
+        // Angle between two vectors.
+        static float Angle(const vec::vec3& first, const vec::vec3& second);
 };
