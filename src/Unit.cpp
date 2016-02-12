@@ -8,6 +8,16 @@ Unit::Unit()
 {
     routeVisualId = -1;
     routeNeedsVisualUpdate = false;
+
+    testKnownRouteCount = 0;
+}
+
+void Unit::TestAddRayPath(vec::vec3 start, vec::vec3 end)
+{
+    std::vector<vec::vec3> testRoute;
+    testRoute.push_back(start);
+    testRoute.push_back(end);
+    testRoutes.push_back(testRoute);
 }
 
 // Creates a new unit, with full armor.
@@ -57,6 +67,19 @@ void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSel
         unitRouter.Render(projectionMatrix, routeVisualId, isSelected);
     }
 
+    // TODO test remove
+    if (testRoutes.size() != testKnownRouteCount)
+    {
+        testKnownRouteCount = testRoutes.size();
+        testRouteIds.push_back(unitRouter.CreateRouteVisual(testRoutes[testRoutes.size() - 1]));
+    }
+
+    // TODO test remove.
+    for (int routeId : testRouteIds)
+    {
+        unitRouter.Render(projectionMatrix, routeId, isSelected);
+    }
+
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
     vec::mat4 unitOrientation = MatrixOps::Translate(position) * rotation.asMatrix();
 
@@ -89,7 +112,7 @@ bool Unit::InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, cons
 
     // Assume the unit is in the ray path if the body, represented as a sphere, is hit by the ray.
     const TextureModel& modelData = modelManager.GetModel(BodyConfig::Bodies[bodyTypeId].bodyModelId);
-    float sphereRadius = BodyConfig::Bodies[bodyTypeId].scale * (vec::length(modelData.maxBounds) + vec::length(modelData.minBounds)) / 4.0f;
+    float sphereRadius = 1.0f;//BodyConfig::Bodies[bodyTypeId].scale * (vec::length(modelData.maxBounds) + vec::length(modelData.minBounds)) / 4.0f;
 
     // Sphere equation => ((x - pos.x)^2 + (y - pos.y)^2 + (z - pos.z)^2 = sphereRadius^2
     // Ray equation => (rayStart.x + t*rayVector.x, rs.y + t*v.y, rs.z + t*v.z), t >= 0

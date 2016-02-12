@@ -13,11 +13,16 @@ void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vec
     }
 }
 
-// TODO
 int Player::CollisionCheck(ModelManager& modelManager, vec::vec3 cameraPos, vec::vec3 worldRay)
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
+        // TODO test code remove
+        if (i == 0)
+        {
+            units[i].TestAddRayPath(cameraPos, cameraPos + 80.0f * worldRay);
+        }
+
         if (units[i].InRayPath(modelManager, cameraPos, worldRay))
         {
             return i;
