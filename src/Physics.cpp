@@ -1,4 +1,5 @@
 #include <SFML\System.hpp>
+#include "Constants.h"
 #include "Logger.h"
 #include "Physics.h"
 #include "PhysicsConfig.h"
@@ -8,14 +9,53 @@ Physics::Physics()
 {
     isAlive = true;
     isPaused = false;
+
+    isLeftMouseClicked = true;
 }
 
-void Physics::Initialize(std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, MapInfo* mapInfo)
+void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, MapInfo* mapInfo)
 {
+    this->modelManager = modelManager;
     this->players = players;
     this->unitRouter = unitRouter;
     this->viewer = viewer;
     this->mapInfo = mapInfo;
+}
+
+// Queues a mouse click for manipulation with the physics thread.
+void Physics::QueueLeftMouseClick(int x, int y, int xSize, int ySize)
+{
+    leftMouseClickData.x = x;
+    leftMouseClickData.y = y;
+    leftMouseClickData.xSize = xSize;
+    leftMouseClickData.ySize = ySize;
+    isLeftMouseClicked = true;
+}
+
+// Handles left mouse clicks from the physics thread.
+void Physics::HandleLeftMouseClicked()
+{
+    vmath::vec2 mousePos = vmath::vec2((float)leftMouseClickData.x, (float)leftMouseClickData.y);
+    vmath::vec2 screenSize = vmath::vec2((float)leftMouseClickData.xSize, (float)leftMouseClickData.ySize);
+
+    vmath::mat4 viewRotationMatrix = viewer->viewOrientation.asMatrix();
+    vmath::vec3 worldRay = vmath::screenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
+
+    // Check to see if we clicked a unit. You can only select your own units.
+    int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer->viewPosition, worldRay);
+    if (collidedUnit != -1)
+    {
+        (*players)[0].ToggleUnitSelection(collidedUnit);
+    }
+    else
+    {
+        vmath::vec3i hitVoxel;
+        if (mapSections.HitByRay(mapInfo, viewer->viewPosition, worldRay, &hitVoxel))
+        {
+
+            // TODO move the units -- nicely -- to the clicked voxel. Also don't crowd them.
+        }
+    }
 }
 
 void Physics::Run()
@@ -28,6 +68,12 @@ void Physics::Run()
         {
 			// Update the viewer's position
             viewer->InputUpdate();
+
+            if (isLeftMouseClicked)
+            {
+                HandleLeftMouseClicked();
+                isLeftMouseClicked = false;
+            }
 
             if (mapSections.NeedsRecomputation())
             {

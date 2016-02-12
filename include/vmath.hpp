@@ -928,6 +928,13 @@ namespace vmath
         return result;
     }
 
+    // Determines if the given ray is within the cube defined by minVector and maxVector.
+    static bool withinRange(vec3 ray, vec3 minVector, vec3 maxVector)
+    {
+        return (ray[0] > minVector[0] && ray[1] > minVector[1] && ray[2] > minVector[2] &&
+                ray[0] < maxVector[0] && ray[1] < maxVector[1] && ray[2] < maxVector[2]);
+    }
+
     // Computes a ray from the current mouse position into the scene.
     static inline vec3 screenRay(vec2 mouse, vec2 screenSize, mat4& perspectiveMatrix, mat4& viewRotationMatrix)
     {

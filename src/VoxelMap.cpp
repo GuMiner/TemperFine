@@ -234,12 +234,6 @@ void VoxelMap::Render(vmath::mat4& projectionMatrix)
     }
 }
 
-bool VoxelMap::HitByRay(const vmath::vec3& rayStart, const vmath::vec3& rayVector, int* x, int* y, int* z)
-{
-    // TODO
-    return false;
-}
-
 VoxelMap::~VoxelMap()
 {
     glDeleteVertexArrays(1, &vao);

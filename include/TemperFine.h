@@ -57,7 +57,6 @@ class TemperFine
     VoxelMap voxelMap;
     UnitRouter unitRouter;
     Scenery scenery;
-    vmath::mat4 perspectiveMatrix;
 
     std::vector<Player> players;
     MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.

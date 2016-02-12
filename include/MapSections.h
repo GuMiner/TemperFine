@@ -20,6 +20,9 @@ class MapSections
         // Accessor for the subsections.
         const voxelSubsectionsMap& GetSubsections() const;
 
+        // Returns true if a voxel has been hit by the ray (and fills in the voxelId), false otherwise.
+        bool HitByRay(MapInfo* mapInfo, const vmath::vec3& rayStart, const vmath::vec3& rayVector, vmath::vec3i* voxelId);
+
     private:
         bool needsRecomputation;
         voxelSubsectionsMap subsections;

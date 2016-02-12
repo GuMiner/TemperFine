@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include "vmath.hpp"
 
 // Holds data constant across the application.
 class Constants
@@ -16,6 +17,9 @@ public:
         ASPECT = 1.77778f; // 16:9
         NEAR_PLANE = 0.10f;
         FAR_PLANE = 1000.0f;
+
+        PerspectiveMatrix = vmath::perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
+
         seedValue = 3213258; // Numpad-bashing.
         mersenneTwiser.seed(seedValue);
     }
@@ -31,6 +35,7 @@ public:
     static float ASPECT;
     static float NEAR_PLANE;
     static float FAR_PLANE;
+    static vmath::mat4 PerspectiveMatrix;
 
     // To support 144 Hz monitors.
     const static int MAX_FRAMERATE = 150;

@@ -167,3 +167,16 @@ bool MapSections::NeedsRecomputation() const
 {
     return needsRecomputation;
 }
+
+bool MapSections::HitByRay(MapInfo* mapInfo, const vmath::vec3& rayStart, const vmath::vec3& rayVector, vmath::vec3i* voxelId)
+{
+    // First, figure out if the ray will hit the voxel area.
+    vmath::vec3 minVoxelArea = vmath::vec3(0.0f, 0.0f, 0.0f);
+    vmath::vec3 maxVoxelArea = vmath::vec3(MapInfo::SPACING * mapInfo->xSize, MapInfo::SPACING * mapInfo->ySize, MapInfo::SPACING * mapInfo->zSize);
+    if (vmath::withinRange(rayStart, minVoxelArea, maxVoxelArea))
+    {
+        // Start position is within the voxel box, so it definitely intersects it.
+    }
+
+    return false;
+}

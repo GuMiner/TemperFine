@@ -128,9 +128,6 @@ Constants::Status TemperFine::LoadGraphics(sfg::Desktop* desktop)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    // Perspective display
-    perspectiveMatrix = vmath::perspective(Constants::FOV_Y, Constants::ASPECT, Constants::NEAR_PLANE, Constants::FAR_PLANE);
-
     // Assets
     return LoadAssets(desktop);
 }
@@ -228,7 +225,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&players, &unitRouter, &viewer, &testMap);
+    physics.Initialize(&modelManager, &players, &unitRouter, &viewer, &testMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -283,26 +280,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
         {
             if (event.mouseButton.button == sf::Mouse::Left)
             {
-                vmath::vec2 mousePos = vmath::vec2((float)event.mouseButton.x, (float)event.mouseButton.y);
-                vmath::vec2 screenSize = vmath::vec2((float)window.getSize().x, (float)window.getSize().y);
-
-                vmath::mat4 viewRotationMatrix = viewer.viewOrientation.asMatrix();
-                vmath::vec3 worldRay = vmath::screenRay(mousePos, screenSize, perspectiveMatrix, viewRotationMatrix);
-
-                // Check to see if we clicked a unit.
-                int collidedUnit = players[0].CollisionCheck(modelManager, viewer.viewPosition, worldRay);
-                if (collidedUnit != -1)
-                {
-                    players[0].ToggleUnitSelection(collidedUnit);
-                }
-                else
-                {
-                    int x, y, z;
-                    if (voxelMap.HitByRay(viewer.viewPosition, worldRay, &x, &y, &z))
-                    {
-                        // TODO move the units -- nicely -- to the clicked voxel. Also don't crowd them.
-                    }
-                }
+                physics.QueueLeftMouseClick(event.mouseButton.x, event.mouseButton.y, window.getSize().x, window.getSize().y);
             }
         }
     }
@@ -310,7 +288,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
 
 void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vmath::mat4& viewMatrix)
 {
-    vmath::mat4 projectionMatrix = perspectiveMatrix * viewMatrix;
+    vmath::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
 
     // Clear the screen (and depth buffer) before any rendering begins.
     const GLfloat color[] = { 0, 0, 0, 1 };
@@ -331,7 +309,7 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     voxelMap.Render(projectionMatrix);
 
     // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
-    statistics.RenderStats(perspectiveMatrix);
+    statistics.RenderStats(Constants::PerspectiveMatrix);
 
     // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
     // window.resetGLStates(); // This crashes on my AMD card.

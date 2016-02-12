@@ -23,9 +23,6 @@ class VoxelMap
         // Renders the voxel map, using the current viewer position matrix.
         void Render(vmath::mat4& projectionMatrix);
 
-        // Returns true if a voxel has been hit by the ray (and fills in x/y/z), false otherwise.
-        bool HitByRay(const vmath::vec3& rayStart, const vmath::vec3& rayVector, int* x, int* y, int* z);
-
         // Deletes any OpenGL voxel resources that have been consumed.
         ~VoxelMap();
 
