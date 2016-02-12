@@ -73,8 +73,8 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
         }
 
         vec::vec2 vector;
-        if (!StringUtils::ParseFloatFromString(line[1], vector[0]) ||
-            !StringUtils::ParseFloatFromString(line[2], vector[1]))
+        if (!StringUtils::ParseFloatFromString(line[1], vector.x) ||
+            !StringUtils::ParseFloatFromString(line[2], vector.y))
         {
             Logger::Log("Line had an improper floating-point value.");
             return false;

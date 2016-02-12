@@ -166,24 +166,58 @@ namespace vec
         }
     };
 
-    class vec2 : public vecN<2>
+    // 2-element floating-point vector.
+    // Supports float and int data types, using strong-template binding in the CPP.
+    template <typename T>
+    class vec2T
     {
     public:
-        typedef vecN<2> base;
+        float x;
+        float y;
 
-        // Uninitialized variable
-        inline vec2() {}
+        // Uninitialized
+        vec2T() { }
 
         // Copy constructor
-        inline vec2(const base& v) : base(v) {}
+        vec2T(const vec2T& other);
 
-        // vec2(x, y);
-        inline vec2(float x, float y)
-        {
-            base::data[0] = x;
-            base::data[1] = y;
-        }
+        // Assignment operator
+        vec2T& operator=(const vec2T& other);
+
+        // Dual-value construction.
+        vec2T(T x, T y);
+
+        // Single-value construction.
+        vec2T(T value);
+
+        // Overridden +-= operators
+        vec2T& operator+=(const vec2T& other);
+        vec2T& operator-=(const vec2T& other);
+
+        // Overridden +- operators
+        vec2T operator+(const vec2T& other) const;
+        vec2T operator-() const;
+        vec2T operator-(const vec2T& other) const;
+
+        // Overridden * operators
+        vec2T operator*(const vec2T& other) const;
+        vec2T operator*(const T& other) const;
+
+        // Overridden *= operators
+        vec2T& operator*=(const vec2T& other);
+        vec2T& operator*=(const T& other);
+
+        // Overridden / operators.
+        vec2T operator/(const vec2T& other) const;
+        vec2T operator/(const T& other) const;
+
+        // Overridden /= operators.
+        vec2T& operator/=(const vec2T& other);
+        vec2T& operator/=(const T& other);
     };
+
+    typedef vec2T<float> vec2;
+    typedef vec2T<int> vec2i;
 
     class vec3 : public vecN<3>
     {
@@ -203,14 +237,6 @@ namespace vec
             base::data[1] = y;
             base::data[2] = z;
         }
-    };
-
-    // Same with this tiny guy.
-    class vec2i
-    {
-    public:
-        int x;
-        int y;
     };
 
     // This little guy exists until I get around to refactoring the math library correctly.
