@@ -30,7 +30,7 @@ class ModelManager
         unsigned int GetCurrentModelCount() const;
 
         // Renders the specified model given by the ID.
-        void RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix);
+        void RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix, bool selected);
 
         // Initializes the OpenGL resources
         bool InitializeOpenGlResources(ShaderManager& shaderManager);
@@ -49,10 +49,13 @@ class ModelManager
         GLuint uvBuffer;
         GLuint positionBuffer;
         GLuint indexBuffer;
+
         GLuint modelRenderProgram;
+
         GLuint textureLocation;
         GLuint mvLocation;
         GLuint projLocation;
+        GLuint selectionFactorLocation;
 
         // Model data
         unsigned int nextModelId;

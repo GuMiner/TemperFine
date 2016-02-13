@@ -271,9 +271,8 @@ unsigned int ModelManager::GetCurrentModelCount() const
     return nextModelId;
 }
 
-void ModelManager::RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix)
+void ModelManager::RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec::mat4& mvMatrix, bool selected)
 {
-    // TEST CODE TODO REMOVE
     glUseProgram(modelRenderProgram);
 
     GLuint unit = 0;
@@ -283,6 +282,7 @@ void ModelManager::RenderModel(vec::mat4& projectionMatrix, unsigned int id, vec
 
     glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
     glUniformMatrix4fv(mvLocation, 1, GL_FALSE, mvMatrix);
+    glUniform1f(selectionFactorLocation, selected ? 0.40f : 0.0f);
 
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, models[id].vertices.indices.size(), GL_UNSIGNED_INT, (const void*)(models[id].indexOffset * sizeof(GL_UNSIGNED_INT)));
@@ -300,6 +300,7 @@ bool ModelManager::InitializeOpenGlResources(ShaderManager& shaderManager)
     textureLocation = glGetUniformLocation(modelRenderProgram, "modelTexture");
     mvLocation = glGetUniformLocation(modelRenderProgram, "mvMatrix");
     projLocation = glGetUniformLocation(modelRenderProgram, "projMatrix");
+    selectionFactorLocation = glGetUniformLocation(modelRenderProgram, "selectionFactor");
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);

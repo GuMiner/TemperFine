@@ -15,6 +15,7 @@
 #include "ModelManager.h"
 #include "Physics.h"
 #include "PhysicsConfig.h"
+#include "PhysicsOps.h"
 #include "Player.h"
 #include "Scenery.h"
 #include "ShaderManager.h"
@@ -84,6 +85,7 @@ public:
     // Used just for data storage.
     static Constants Constant;
     static MathOps MathOp;
+    static PhysicsOps PhysicsOp;
 
     // Initializes TemperFine and any construction-time setup (such as threads).
     TemperFine();

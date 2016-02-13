@@ -1,6 +1,7 @@
 #include "ArmorConfig.h"
 #include "BodyConfig.h"
 #include "MatrixOps.h"
+#include "PhysicsOps.h"
 #include "TurretConfig.h"
 #include "Unit.h"
 
@@ -85,16 +86,13 @@ void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSel
 
     const BodyType& bodyType = BodyConfig::Bodies[bodyTypeId];
 
-    // TODO remove, used for click selection. MOVE TO SHADER.
-    float scaleFactor = (isSelected ? 1.5f : 1.0f) * bodyType.scale;
-
-    vec::mat4 bodyMatrix = unitOrientation * MatrixOps::Scale(scaleFactor, scaleFactor, scaleFactor);
-    modelManager.RenderModel(projectionMatrix, bodyType.bodyModelId, bodyMatrix);
+    vec::mat4 bodyMatrix = unitOrientation * MatrixOps::Scale(bodyType.scale, bodyType.scale, bodyType.scale);
+    modelManager.RenderModel(projectionMatrix, bodyType.bodyModelId, bodyMatrix, isSelected);
 
     const ArmorType& armorType = ArmorConfig::Armors[armor.armorTypeId];
 
     vec::mat4 armorMatrix = MatrixOps::Translate(armorType.translationOffset) * bodyMatrix * armorType.rotationOffset.asMatrix();
-    modelManager.RenderModel(projectionMatrix, armorType.armorModelId, armorMatrix);
+    modelManager.RenderModel(projectionMatrix, armorType.armorModelId, armorMatrix, isSelected);
 
     for (unsigned int i = 0; i < turrets.size(); i++)
     {
@@ -102,29 +100,19 @@ void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSel
 
         vec::mat4 turretDefaultMatrix = MatrixOps::Translate(turretType.translationOffset) * bodyMatrix * turretType.rotationOffset.asMatrix();
         vec::mat4 turretMatrix = MatrixOps::Translate(turrets[i].currentTranslation) * turretDefaultMatrix * turrets[i].currentRotation.asMatrix();
-        modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix);
+        modelManager.RenderModel(projectionMatrix, turretType.turretModelId, turretMatrix, isSelected);
     }
 }
 
 bool Unit::InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, const vec::vec3& rayVector)
 {
-    // TODO improve this to do something *drastically* better. Also, this should probably move to the vmath library.
+    // TODO improve this to do something *drastically* better.
 
     // Assume the unit is in the ray path if the body, represented as a sphere, is hit by the ray.
     const TextureModel& modelData = modelManager.GetModel(BodyConfig::Bodies[bodyTypeId].bodyModelId);
     float sphereRadius = 1.0f;//BodyConfig::Bodies[bodyTypeId].scale * (vec::length(modelData.maxBounds) + vec::length(modelData.minBounds)) / 4.0f;
 
-    // Sphere equation => ((x - pos.x)^2 + (y - pos.y)^2 + (z - pos.z)^2 = sphereRadius^2
-    // Ray equation => (rayStart.x + t*rayVector.x, rs.y + t*v.y, rs.z + t*v.z), t >= 0
-    // We hit if we can find a value for t that satisfies the above equation.
-    // After some work on paper, you end up with just determining if the discriminant of a polynomial is positive
-    vec::vec3 rayOffset = rayStart - position;
-    float polyC = vec::length(rayOffset * rayOffset) - pow(sphereRadius, 2);
-
-    vec::vec3 polyBComp = rayVector * rayOffset;
-    float polyB = polyBComp.x + polyBComp.y + polyBComp.z;
-
-    return (polyB*polyB - polyC) > 0;
+    return PhysicsOps::HitsSphere(rayStart, rayVector, position, sphereRadius);
 }
 
 void Unit::UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute)

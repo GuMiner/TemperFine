@@ -1,11 +1,68 @@
+#include "MathOps.h"
 #include "MatrixOps.h"
 #include "PhysicsOps.h"
+#include "VecOps.h"
+
+vec::vec3 PhysicsOps::XY_PLANE_NORMAL;
+vec::vec3 PhysicsOps::YZ_PLANE_NORMAL;
+vec::vec3 PhysicsOps::XZ_PLANE_NORMAL;
 
 // Determines if a given ray hits a given plane. Returns true and fills in the intersection factor ('t', where rs + t*ray = intersection point).
 bool PhysicsOps::HitsPlane(const vec::vec3& rayStart, const vec::vec3& ray, const vec::vec3& planeNormal, const vec::vec3& planePoint, float* intersectionFactor)
 {
-    // TODO
-    return false;
+    float rayDotNormal = VecOps::Dot(ray, planeNormal);
+    if (rayDotNormal == 0)
+    {
+        return false;
+    }
+
+    *intersectionFactor = VecOps::Dot(planePoint - rayStart, planeNormal) / rayDotNormal;
+    return true;
+}
+
+bool PhysicsOps::HitsPlane(const vec::vec3& rayStart, const vec::vec3& ray, Plane plane, const vec::vec3& planePoint, float* intersectionFactor)
+{
+    vec::vec3 actualPlane;
+    switch (plane)
+    {
+    case Plane::XY:
+        actualPlane = XY_PLANE_NORMAL;
+    case Plane::YZ:
+        actualPlane = YZ_PLANE_NORMAL;
+    case Plane::XZ:
+    default:
+        actualPlane = XZ_PLANE_NORMAL;
+    }
+
+    return HitsPlane(rayStart, ray, actualPlane, planePoint, intersectionFactor);
+}
+
+bool PhysicsOps::WithinSquare(const vec::vec3& position, Plane plane, const vec::vec3& minPosition, const vec::vec3& maxPosition)
+{
+    switch (plane)
+    {
+    case Plane::XY:
+        return MathOps::WithinRange(vec::vec2(position.x, position.y),
+            vec::vec2(minPosition.x, minPosition.y), vec::vec2(maxPosition.x, maxPosition.y));
+    case Plane::YZ:
+        return MathOps::WithinRange(vec::vec2(position.y, position.z),
+            vec::vec2(minPosition.y, minPosition.z), vec::vec2(maxPosition.y, maxPosition.z));
+    case Plane::XZ:
+    default:
+        return MathOps::WithinRange(vec::vec2(position.x, position.z),
+            vec::vec2(minPosition.x, minPosition.z), vec::vec2(maxPosition.x, maxPosition.z));
+    }
+}
+
+bool PhysicsOps::HitsSphere(const vec::vec3& rayStart, const vec::vec3& ray, const vec::vec3& sphereCenter, float sphereRadius)
+{
+    // After some work on paper, it ends up that you just need to calculate a determinant and ensure it is > 0
+    vec::vec3 rayOffset = rayStart - sphereCenter;
+
+    float first = pow(VecOps::Dot(ray, rayOffset), 2);
+    float second = VecOps::Dot(rayOffset, rayOffset) - pow(sphereRadius, 2);
+
+    return first >= second; // first - second >= 0
 }
 
 // Computes a ray from the current mouse position into the scene.

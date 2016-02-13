@@ -20,8 +20,11 @@ class VoxelMap
         // Sets up the VoxelMap from the provided map info.
         void SetupFromMap(MapInfo* mapInfo);
 
+        // Sets the currently-selected voxel, which renders specially.
+        void SetSelectedVoxel(const vec::vec3i& selectedVoxel);
+
         // Renders the voxel map, using the current viewer position matrix.
-        void Render(vec::mat4& projectionMatrix);
+        void Render(const vec::mat4& projectionMatrix);
 
         // Deletes any OpenGL voxel resources that have been consumed.
         ~VoxelMap();
@@ -47,6 +50,9 @@ class VoxelMap
         GLuint projLocation;
         GLuint xyLengthsLocation;
         GLuint currentVoxelIdLocation;
+
+        GLuint selectedIndexLocation;
+        vec::vec3i selectedVoxel;
 
         GLuint textureLocation;
         GLuint voxelTopTextureLocation;

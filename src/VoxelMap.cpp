@@ -5,6 +5,7 @@
 
 VoxelMap::VoxelMap()
 {
+    selectedVoxel = vec::vec3i(0, 0, 0);
 }
 
 void VoxelMap::InitOpenGl()
@@ -32,6 +33,8 @@ bool VoxelMap::CreateVoxelShader(ShaderManager& shaderManager)
     projLocation = glGetUniformLocation(voxelMapRenderProgram, "projMatrix");
     xyLengthsLocation = glGetUniformLocation(voxelMapRenderProgram, "xyLengths");
     currentVoxelIdLocation = glGetUniformLocation(voxelMapRenderProgram, "currentVoxelId");
+
+    selectedIndexLocation = glGetUniformLocation(voxelMapRenderProgram, "selectedIndex");
 
     textureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTextures");
     voxelTopTextureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTopTexture");
@@ -208,7 +211,13 @@ void VoxelMap::SetupFromMap(MapInfo* mapInfo)
 	delete[] interlacedData;
 }
 
-void VoxelMap::Render(vec::mat4& projectionMatrix)
+// Sets the currently-selected voxel, which renders specially.
+void VoxelMap::SetSelectedVoxel(const vec::vec3i& selectedVoxel)
+{
+    this->selectedVoxel = selectedVoxel;
+}
+
+void VoxelMap::Render(const vec::mat4& projectionMatrix)
 {
     glUseProgram(voxelMapRenderProgram);
 
@@ -224,6 +233,7 @@ void VoxelMap::Render(vec::mat4& projectionMatrix)
     // Bind our vertex data
     glBindVertexArray(vao);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+	glUniform3iv(selectedIndexLocation, 1, &selectedVoxel[0]);
 
 	glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
 

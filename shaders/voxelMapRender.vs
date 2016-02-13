@@ -9,7 +9,7 @@ out VS_OUT
 {
     vec2 uvPos;
     uint voxelId;
-    vec3 data;
+    ivec3 xyzIndex;
 } vs_out;
 
 uniform mat4 projMatrix;
@@ -52,6 +52,7 @@ mat4 calculateTranslationMatrix()
     int zIndex = (gl_InstanceID / xyLength);
     int yIndex = (gl_InstanceID - zIndex * xyLength) / xyLengths.x;
     int xIndex = gl_InstanceID - (zIndex * xyLength + yIndex * xyLengths.x);
+    vs_out.xyzIndex = ivec3(xIndex, yIndex, zIndex);
 
     return mat4(
         1.0f, 0.0f, 0.0f, 0.0f,

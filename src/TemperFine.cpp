@@ -226,7 +226,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&modelManager, &players, &unitRouter, &viewer, &testMap);
+    physics.Initialize(&modelManager, &players, &unitRouter, &viewer, &voxelMap, &testMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -390,6 +390,7 @@ int main(int argc, char* argv[])
     // Startup 'static' stuff
     TemperFine::Constant = Constants();
     TemperFine::MathOp = MathOps();
+    TemperFine::PhysicsOp = PhysicsOps();
 
     Logger::Setup();
 

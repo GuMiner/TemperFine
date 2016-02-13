@@ -1,3 +1,4 @@
+#include <cmath>
 #include "MathOps.h"
 #include "MatrixOps.h"
 
@@ -29,6 +30,12 @@ bool MathOps::WithinRange(vec::vec3 point, vec::vec3 minPoint, vec::vec3 maxPoin
             point.x < maxPoint.x && point.y < maxPoint.y && point.z < maxPoint.z);
 }
 
+bool MathOps::WithinRange(vec::vec2 point, vec::vec2 minPoint, vec::vec2 maxPoint)
+{
+    return (point.x > minPoint.x && point.y > minPoint.y &&
+            point.x < maxPoint.x && point.y < maxPoint.y);
+}
+
 float MathOps::Rand()
 {
     return uniformDistribution(mersenneTwiser);
@@ -42,5 +49,20 @@ int MathOps::Rand(int min, int max)
 float MathOps::Rand(float range)
 {
     return range*Rand() - range*0.5f;
+}
+
+// Given two values, returns the smallest positive one.
+// If both are negative, returns 'first'.
+float MathOps::SmallestPositive(float first, float second)
+{
+    if (first < 0 && second < 0)
+    {
+        return first;
+    }
+
+    // Either first or second can be negative, which means the other is positive
+    first = first < 0 ? second + 1 : first;
+    second = second < 0 ? first + 1 : second;
+    return std::min(first, second);
 }
 

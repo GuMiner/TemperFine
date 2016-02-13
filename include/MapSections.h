@@ -1,5 +1,6 @@
 #pragma once
 #include "MapInfo.h"
+#include "PhysicsOps.h"
 #include "VoxelRoute.h"
 
 // Represents the sections of the map that units can travel in.
@@ -26,4 +27,9 @@ class MapSections
     private:
         bool needsRecomputation;
         voxelSubsectionsMap subsections;
+
+        // Performs a trace through the known voxels, given that we know which plane it hit.
+        // Returns true if the trace hits a non-air voxel (and fills in the voxel ID), false otherwise.
+        bool PerformVoxelTrace(MapInfo* mapInfo, const vec::vec3& rayStart, const vec::vec3& rayVector,
+            PhysicsOps::Plane plane, float intersectionPoint, vec::vec3i* voxelId);
 };

@@ -25,6 +25,21 @@ struct MapInfo
     unsigned char* blockOrientation;
     unsigned char* blockProperty;
 
+    inline float GetXSize() const
+    {
+        return SPACING * xSize;
+    }
+
+    inline float GetYSize() const
+    {
+        return SPACING * ySize;
+    }
+
+    inline float GetZSize() const
+    {
+        return SPACING * zSize;
+    }
+
     // Gets the voxels in the map, including empty ones!
     inline int GetVoxelCount() const
     {

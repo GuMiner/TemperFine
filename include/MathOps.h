@@ -23,6 +23,7 @@ class MathOps
 
         // Determines if the given point is within the cube specified by the min and max point.
         static bool WithinRange(vec::vec3 point, vec::vec3 minPoint, vec::vec3 maxPoint);
+        static bool WithinRange(vec::vec2 point, vec::vec2 minPoint, vec::vec2 maxPoint);
 
         // Gets the next random floating-point value from 0 to 1, inclusive.
         static float Rand();
@@ -32,4 +33,8 @@ class MathOps
 
         // Gets the next random floating-point value from (-range/2 to range/2)
         static float Rand(float range);
+
+        // Given two values, returns the smallest positive one.
+        // If both are negative, returns 'first'.
+        static float SmallestPositive(float first, float second);
 };

@@ -15,12 +15,13 @@ Physics::Physics()
     isLeftMouseClicked = true;
 }
 
-void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, MapInfo* mapInfo)
+void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo)
 {
     this->modelManager = modelManager;
     this->players = players;
     this->unitRouter = unitRouter;
     this->viewer = viewer;
+    this->voxelMap = voxelMap;
     this->mapInfo = mapInfo;
 }
 
@@ -54,8 +55,8 @@ void Physics::HandleLeftMouseClicked()
         vec::vec3i hitVoxel;
         if (mapSections.HitByRay(mapInfo, viewer->viewPosition, worldRay, &hitVoxel))
         {
-
-            // TODO move the units -- nicely -- to the clicked voxel. Also don't crowd them.
+            // TODO route and move units to destination.
+            voxelMap->SetSelectedVoxel(hitVoxel);
         }
     }
 }

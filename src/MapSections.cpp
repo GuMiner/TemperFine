@@ -1,8 +1,10 @@
+#include <cmath>
 #include <set>
 #include <queue>
 #include "Logger.h"
 #include "MapSections.h"
 #include "MathOps.h"
+#include "PhysicsOps.h"
 
 MapSections::MapSections()
 {
@@ -173,10 +175,146 @@ bool MapSections::HitByRay(MapInfo* mapInfo, const vec::vec3& rayStart, const ve
 {
     // First, figure out if the ray will hit the voxel area.
     vec::vec3 minVoxelArea = vec::vec3(0.0f, 0.0f, 0.0f);
-    vec::vec3 maxVoxelArea = vec::vec3(MapInfo::SPACING * mapInfo->xSize, MapInfo::SPACING * mapInfo->ySize, MapInfo::SPACING * mapInfo->zSize);
+    vec::vec3 maxVoxelArea = vec::vec3(mapInfo->GetXSize(), mapInfo->GetYSize(), mapInfo->GetZSize());
     if (MathOps::WithinRange(rayStart, minVoxelArea, maxVoxelArea))
     {
         // Start position is within the voxel box, so it definitely intersects it.
+        // TODO iterate through the voxels.
+        Logger::Log("Within range");
+        return true;
+    }
+    else
+    {
+        // Check the five possible planes (4 sides + top) that the user could have hit.
+        float intersectionFactor;
+        if (PhysicsOps::HitsPlane(rayStart, rayVector, PhysicsOps::XY, vec::vec3(0.0f, 0.0f, mapInfo->GetZSize()), &intersectionFactor)
+            && intersectionFactor > 0)
+        {
+            // Top
+            vec::vec3 intersectionPoint = rayStart + rayVector * intersectionFactor;
+            if (PhysicsOps::WithinSquare(intersectionPoint, PhysicsOps::Plane::XY, minVoxelArea, maxVoxelArea))
+            {
+                // Perform a voxel trace.
+                return PerformVoxelTrace(mapInfo, rayStart, rayVector, PhysicsOps::XY, intersectionFactor, voxelId);
+            }
+        }
+
+        float firstFactor, secondFactor;
+        if (PhysicsOps::HitsPlane(rayStart, rayVector, PhysicsOps::YZ, vec::vec3(0.0f, 0.0f, 0.0f), &firstFactor) &&
+            PhysicsOps::HitsPlane(rayStart, rayVector, PhysicsOps::YZ, vec::vec3(mapInfo->GetXSize(), 0.0f, 0.0f), &secondFactor) &&
+            (firstFactor > 0 || secondFactor > 0))
+        {
+            float actualFactor = MathOps::SmallestPositive(firstFactor, secondFactor);
+
+            // YZ min
+            vec::vec3 intersectionPoint = rayStart + rayVector * actualFactor;
+            if (PhysicsOps::WithinSquare(intersectionPoint, PhysicsOps::Plane::YZ, minVoxelArea, maxVoxelArea))
+            {
+                // Perform a voxel trace.
+                return PerformVoxelTrace(mapInfo, rayStart, rayVector, PhysicsOps::YZ, actualFactor, voxelId);
+            }
+        }
+
+        if (PhysicsOps::HitsPlane(rayStart, rayVector, PhysicsOps::XZ, vec::vec3(0.0f, 0.0f, 0.0f), &firstFactor) &&
+            PhysicsOps::HitsPlane(rayStart, rayVector, PhysicsOps::XZ, vec::vec3(0.0f, mapInfo->GetYSize(), 0.0f), &secondFactor) &&
+            (firstFactor > 0 || secondFactor > 0))
+        {
+            float actualFactor = MathOps::SmallestPositive(firstFactor, secondFactor);
+
+            // XZ min
+            vec::vec3 intersectionPoint = rayStart + rayVector * actualFactor;
+            if (PhysicsOps::WithinSquare(intersectionPoint, PhysicsOps::Plane::XZ, minVoxelArea, maxVoxelArea))
+            {
+                // Perform a voxel trace.
+                return PerformVoxelTrace(mapInfo, rayStart, rayVector, PhysicsOps::XZ, actualFactor, voxelId);
+            }
+        }
+    }
+
+    return false;
+}
+
+// Performs a trace through the known voxels, given that we know which plane it hit.
+        // Returns true if the trace hits a non-air voxel (and fills in the voxel ID), false otherwise.
+bool MapSections::PerformVoxelTrace(MapInfo* mapInfo, const vec::vec3& rayStart, const vec::vec3& rayVector,
+    PhysicsOps::Plane plane, float intersectionPoint, vec::vec3i* foundVoxelId)
+{
+    // First, move in 1/20th of a unit so we're inside the voxel. If we're not, we're at the very very corner of a voxel.
+    float wiggleAmount = MapInfo::SPACING / 20.0f;
+    vec::vec3 currentPoint = rayStart + rayVector * (intersectionPoint + wiggleAmount);
+
+    // Second, find the current voxel we're in.
+    vec::vec3 voxelIdFloating = currentPoint / MapInfo::SPACING;
+    vec::vec3i voxelId = vec::vec3i((int)voxelIdFloating.x, (int)voxelIdFloating.y, (int)voxelIdFloating.z);
+
+    while (mapInfo->InBounds(voxelId))
+    {
+        if (mapInfo->GetType(voxelId) != MapInfo::VoxelTypes::AIR)
+        {
+            // We hit a non-air voxel
+            *foundVoxelId = voxelId;
+            Logger::Log("Selected voxel (", voxelId.x, ", ", voxelId.y, ", ", voxelId.z, ").");
+            return true;
+        }
+
+
+        // We hit an air voxel. Iterate onwards.
+        // Each iteration, we're going to hit one of four planes. Figure out which one, using the current point as the ray start.
+        // The next one we hit is the lowest positive for range.
+        float intersectionDistances[6];
+
+        vec::vec3 voxelMin = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
+        vec::vec3 voxelMax = MapInfo::SPACING * vec::vec3(voxelId.x + 1, voxelId.y + 1, voxelId.z + 1);
+
+        // We can assume these all hit, it's rather inevitable, planes are pervasive.
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::YZ, voxelMin, &intersectionDistances[0]);
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::YZ, voxelMax, &intersectionDistances[1]);
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::XZ, voxelMin, &intersectionDistances[2]);
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::XZ, voxelMax, &intersectionDistances[3]);
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::XY, voxelMin, &intersectionDistances[4]);
+        PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::XY, voxelMax, &intersectionDistances[5]);
+
+        // Order (lower x, upper x, lower y, upper y, lower z, upper z)
+        unsigned int minIndex = 0;
+        float minDistance = MapInfo::SPACING * 10.0f; // Way outside of a voxel.
+        for (unsigned int i = 0; i < 6; i++)
+        {
+            if (intersectionDistances[i] > 0 && intersectionDistances[i] < minDistance)
+            {
+                minIndex = i;
+                minDistance = intersectionDistances[i];
+            }
+        }
+
+        switch (minIndex)
+        {
+        case 0:
+            // Iterate in the X- direction.
+            voxelId.x--;
+            break;
+        case 1:
+            // X+
+            voxelId.x++;
+            break;
+        case 2:
+            // Y-
+            voxelId.y--;
+            break;
+        case 3:
+            // Y+
+            voxelId.y++;
+            break;
+        case 4:
+            // Z-
+            voxelId.z--;
+            break;
+        case 5:
+            // Z+
+            voxelId.z++;
+            break;
+        }
+
+        currentPoint = currentPoint + rayVector * (minDistance + wiggleAmount);
     }
 
     return false;

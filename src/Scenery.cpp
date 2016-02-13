@@ -69,7 +69,7 @@ bool Scenery::Initialize(ShaderManager& shaderManager)
 void Scenery::Render(vec::mat4& viewMatrix, vec::mat4& projectionMatrix)
 {
     // Render the ground plane
-    modelManager->RenderModel(projectionMatrix, groundModelId, groundOrientation);
+    modelManager->RenderModel(projectionMatrix, groundModelId, groundOrientation, false);
 
     // Render the sky
     glUseProgram(skyCubeProgram);

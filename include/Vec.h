@@ -81,6 +81,11 @@ namespace vec
         // Single-value construction.
         vec3T(T value);
 
+        // Direct-access operators. Dangerous, but useful for high-speed operations.
+        // Not stored in the C++ file as this is specific to vecT items.
+        inline T& operator[](int n) { return *(&x + n); }
+        inline const T& operator[](int n) const { return *(&x + n); }
+
         // Overridden +-= operators
         vec3T& operator+=(const vec3T& other);
         vec3T& operator-=(const vec3T& other);
@@ -151,7 +156,7 @@ namespace vec
         vec4T(T value);
 
         // Direct-access operators. Dangerous, but useful for high-speed operations.
-        // Not stored in the C++ file as this is specific to vec4T items.
+        // Not stored in the C++ file as this is specific to vecT items.
         inline T& operator[](int n) { return *(&x + n); }
         inline const T& operator[](int n) const { return *(&x + n); }
 
