@@ -36,6 +36,10 @@ class UnitRouter
         void RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
             const std::vector<vec::vec3i>& givenPath, std::vector<vec::vec3i>& refinedPath, std::vector<vec::vec3>& visualPath);
 
+        // Performs a spring-mass 'string' refinement to make our routes look nice
+        // Updates the string route and refined integer path based on our string route.
+        void PerformStringRefinement(const voxelSubsectionsMap& voxelSubsections, std::vector<vec::vec3>& stringRoute, std::vector<vec::vec3i>& refinedPath);
+
     private:
         // Sends route data to OpenGL.
         void SendRoutesToOpenGl();
