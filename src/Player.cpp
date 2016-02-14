@@ -37,6 +37,14 @@ void Player::UpdateUnitRoute(int unitId, const std::vector<vec::vec3>& route)
     units[unitId].UpdateAssignedRoute(route);
 }
 
+void Player::MoveUnits()
+{
+    for (unsigned int i = 0; i < units.size(); i++)
+    {
+        units[i].MoveAlongRoute();
+    }
+}
+
 void Player::ToggleUnitSelection(int unitId)
 {
     std::set<int>::const_iterator searchResult = selectedUnits.find(unitId);
@@ -50,6 +58,12 @@ void Player::ToggleUnitSelection(int unitId)
         // Found, deselect
         selectedUnits.erase(searchResult);
     }
+}
+
+// Returns the players selected units.
+const std::set<int>& Player::GetSelectedUnits() const
+{
+    return selectedUnits;
 }
 
 void Player::AddUnit(const Unit unit)

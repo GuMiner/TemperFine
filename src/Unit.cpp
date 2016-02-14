@@ -1,8 +1,10 @@
 #include "ArmorConfig.h"
 #include "BodyConfig.h"
+#include "Logger.h"
 #include "MatrixOps.h"
 #include "PhysicsOps.h"
 #include "TurretConfig.h"
+#include "VecOps.h"
 #include "Unit.h"
 
 Unit::Unit()
@@ -119,6 +121,46 @@ void Unit::UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute)
 {
     assignedRoute = newAssignedRoute;
     routeNeedsVisualUpdate = true;
+
+    currentSegment = 0;
+    currentSegmentPercentage = 0.0f;
+}
+
+void Unit::MoveAlongRoute()
+{
+    // TODO speed needs to be defined here.
+    // TODO unit needs to rotate while it moves.
+    float travelAmountPerStep = 0.10f;
+    if (assignedRoute.size() != 0 && currentSegment != assignedRoute.size() - 1)
+    {
+        bool finishedTravelling = false;
+        while (!finishedTravelling)
+        {
+            vec::vec3 currentSegmentVector = assignedRoute[currentSegment + 1] - assignedRoute[currentSegment];
+            float currentSegmentVectorLength = vec::length(currentSegmentVector);
+
+            float newPercentage = currentSegmentPercentage + travelAmountPerStep / currentSegmentVectorLength;
+            if (newPercentage < 1.0f)
+            {
+                // Length small enough that we don't span segments.
+                currentSegmentPercentage = newPercentage;
+                position = currentSegmentVector * currentSegmentPercentage + assignedRoute[currentSegment];
+                finishedTravelling = true;
+            }
+            else
+            {
+                // We span a segment, so iterate to that segment, and exit if we're at the end of the route.
+                travelAmountPerStep -= (1.0f - currentSegmentPercentage) * currentSegmentVectorLength;
+                currentSegmentPercentage = 0.0f;
+                currentSegment++;
+                if (currentSegment == assignedRoute.size() - 1)
+                {
+                    position = assignedRoute[assignedRoute.size() - 1];
+                    finishedTravelling = true;
+                }
+            }
+        }
+    }
 }
 
 void Unit::Move(vec::vec3 pos)

@@ -27,11 +27,14 @@ bool PhysicsOps::HitsPlane(const vec::vec3& rayStart, const vec::vec3& ray, Plan
     {
     case Plane::XY:
         actualPlane = XY_PLANE_NORMAL;
+        break;
     case Plane::YZ:
         actualPlane = YZ_PLANE_NORMAL;
+        break;
     case Plane::XZ:
     default:
         actualPlane = XZ_PLANE_NORMAL;
+        break;
     }
 
     return HitsPlane(rayStart, ray, actualPlane, planePoint, intersectionFactor);

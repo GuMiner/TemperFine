@@ -1,4 +1,6 @@
 #include "Logger.h"
+#include "VecOps.h"
+#include "VoxelRoute.h"
 #include "UnitRouter.h"
 
 UnitRouter::UnitRouter()
@@ -75,7 +77,7 @@ void UnitRouter::SendRoutesToOpenGl()
     routeVerties.TransferPositionToOpenGl(positionBuffer);
 }
 
-void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
+void UnitRouter::RefineRoute(MapInfo* mapInfo, const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
     const std::vector<vec::vec3i>& givenPath, std::vector<vec::vec3i>& refinedPath, std::vector<vec::vec3>& visualPath)
 {
     const vec::vec3 offsetSpacing = vec::vec3(MapInfo::SPACING / 2.0f, MapInfo::SPACING / 2.0f, MapInfo::SPACING * 1.10f);
@@ -98,10 +100,10 @@ void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const 
     }
     else
     {
-        // Perform physics-based refinement.
         //   The route is currently a right-angled, not-very-direct route.
         //   To refine the route, we create a spring-mass system ('string'), with a spring from each route point (mass).
         //   We then pull the string tight until the average distance between each mass is > starting amount * some factor.
+        Logger::Log("Performing physics-based route refinement.");
 
         // Divide each segment in quarters to improve the resolution of the above.
         std::vector<vec::vec3> subdividedPath;
@@ -119,7 +121,7 @@ void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const 
         }
 
         // Perform our algorithm
-        PerformStringRefinement(voxelSubsections, subdividedPath, refinedPath);
+        PerformStringRefinement(mapInfo, voxelSubsections, subdividedPath, refinedPath);
 
         // Save the (updated) integer path (for viability calculations) and scale up the floating-point path (actual travel and visibility calculations)
         for (const vec::vec3& point : subdividedPath)
@@ -127,14 +129,79 @@ void UnitRouter::RefineRoute(const voxelSubsectionsMap& voxelSubsections, const 
             visualPath.push_back((point * MapInfo::SPACING) + offsetSpacing);
         }
     }
+
+    Logger::Log("Route refinement complete.");
 }
 
 // Performs a spring-mass 'string' refinement to make our routes look nice
 // Updates the string route and refined integer path based on our string route.
-void UnitRouter::PerformStringRefinement(const voxelSubsectionsMap& voxelSubsections, std::vector<vec::vec3>& stringRoute, std::vector<vec::vec3i>& refinedPath)
+void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsectionsMap& voxelSubsections, std::vector<vec::vec3>& stringRoute, std::vector<vec::vec3i>& refinedPath)
 {
-    // TODO TODO TODO
+    float stretchinessDesired = 0.10f; // 10%
 
+    // Lengths for which *after* this amount is pulled, a reverse-stretchiness force is applied. Think a rubber band, but unstretched
+    std::vector<float> restingLengths;
+    float avgRestingLengthDistance = 0.0f;
+    for (unsigned int i = 1; i < stringRoute.size(); i++)
+    {
+        float distance = VecOps::Distance(stringRoute[i], stringRoute[i - 1]);
+
+        // Note that we offset the resting distance to naturally gravitate towards our desired distance.
+        restingLengths.push_back(distance / (1.0f + stretchinessDesired));
+        avgRestingLengthDistance += distance;
+    }
+
+    avgRestingLengthDistance /= (stringRoute.size() - 2);
+
+    const vec::vec3 start = stringRoute[0];
+    const vec::vec3 end = stringRoute[stringRoute.size() - 1];
+
+    // Note that we only allow relative motion on the
+    std::vector<vec::vec3> velocities;
+    for (unsigned int i = 1; i < stringRoute.size() - 1; i++)
+    {
+        velocities.push_back(vec::vec3(0.0f));
+    }
+
+    const float springConstant = 6.0f;
+    const float simulationTimestep = 0.04f;
+    const float dampeningConstant = 0.98f;
+    const float mass = 1.0f;
+
+    // 10% stretchiness.
+    float currentDistance = avgRestingLengthDistance;
+    unsigned int iterations = 0;
+    Logger::Log("Starting physics-based route refinement with ", stringRoute.size(), " total nodes.");
+    const unsigned int maxIterations = 100;
+    while (!IsStretchedPercentage(avgRestingLengthDistance, stringRoute, stretchinessDesired) && iterations < maxIterations)
+    {
+        for (unsigned int i = 0; i < velocities.size(); i++)
+        {
+            vec::vec3 force = vec::vec3(0.0f);
+            vec::vec3 negativeVector = stringRoute[i + 1] - stringRoute[i];
+            vec::vec3 positiveVector = stringRoute[i + 2] - stringRoute[i + 1];
+            force += -(springConstant) * (
+                ((restingLengths[i] - vec::length(negativeVector)) * vec::normalize(negativeVector)) +
+                ((restingLengths[i + 1] - vec::length(positiveVector)) * vec::normalize(positiveVector)));
+
+            vec::vec3 accel = force / mass;
+
+            // This is really stupid integration, but it gets the job done.
+            velocities[i] += accel * simulationTimestep * dampeningConstant;
+            stringRoute[i + 1] += velocities[i] * simulationTimestep;
+        }
+
+        ++iterations;
+    }
+
+    Logger::Log("Physics-based route refinement complete after ", iterations, " iterations, with ", stringRoute.size(), " nodes remaining.");
+    if (iterations == maxIterations)
+    {
+        Logger::LogWarn("Hit the maximum number of iterations for route calculation! Route may appear odd.");
+    }
+
+    // TODO need to perform z-height updates.
+    // VoxelRouteRules::GetHeightForVoxel()
 
     // Save out the refined path based on on the subsection route.
     vec::vec3i priorPoint = vec::vec3i((int)stringRoute[0].x, (int)stringRoute[0].y, (int)stringRoute[0].z);
@@ -149,6 +216,19 @@ void UnitRouter::PerformStringRefinement(const voxelSubsectionsMap& voxelSubsect
             priorPoint = pointLocation;
         }
     }
+}
+
+// Returns true if the average distance of the given points (excluding the start and end point) is > restingDistance * (1.0f + maxPercentage);
+bool UnitRouter::IsStretchedPercentage(float restingDistanceAvg, const std::vector<vec::vec3>& currentPoints, float maxPercentage)
+{
+    float currentDistance = 0.0f;
+    for (unsigned int i = 1; i < currentPoints.size(); i++)
+    {
+        currentDistance += VecOps::Distance(currentPoints[i], currentPoints[i - 1]);
+    }
+
+    currentDistance /= (currentPoints.size() - 1);
+    return currentDistance > restingDistanceAvg * (1.0f + maxPercentage);
 }
 
 UnitRouter::~UnitRouter()

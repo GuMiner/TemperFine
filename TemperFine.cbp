@@ -5,7 +5,7 @@
 		<Option title="TemperFine" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Configs\;Managers\;Utility\;GUI\;" />
+		<Option virtualFolders="Configs\;Managers\;Utility\;GUI\;Math\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/TemperFine" prefix_auto="1" extension_auto="1" />
@@ -98,7 +98,14 @@
 		<Unit filename="include/MapManager.h">
 			<Option virtualFolder="Managers/" />
 		</Unit>
+		<Unit filename="include/MapRoute.h" />
 		<Unit filename="include/MapSections.h" />
+		<Unit filename="include/MathOps.h">
+			<Option virtualFolder="Math/" />
+		</Unit>
+		<Unit filename="include/MatrixOps.h">
+			<Option virtualFolder="Math/" />
+		</Unit>
 		<Unit filename="include/Model.h" />
 		<Unit filename="include/ModelManager.h">
 			<Option virtualFolder="Managers/" />
@@ -106,6 +113,9 @@
 		<Unit filename="include/Physics.h" />
 		<Unit filename="include/PhysicsConfig.h">
 			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="include/PhysicsOps.h">
+			<Option virtualFolder="Math/" />
 		</Unit>
 		<Unit filename="include/Player.h" />
 		<Unit filename="include/Projectile.h" />
@@ -134,18 +144,25 @@
 		</Unit>
 		<Unit filename="include/TurretInfo.h" />
 		<Unit filename="include/Unit.h" />
+		<Unit filename="include/UnitRouter.h" />
+		<Unit filename="include/Vec.h">
+			<Option virtualFolder="Math/" />
+		</Unit>
+		<Unit filename="include/VecOps.h">
+			<Option virtualFolder="Math/" />
+		</Unit>
 		<Unit filename="include/Vertex.h">
 			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="include/Viewer.h" />
 		<Unit filename="include/VoxelMap.h" />
-		<Unit filename="include/vmath.hpp">
-			<Option virtualFolder="Utility/" />
-		</Unit>
+		<Unit filename="include/VoxelRoute.h" />
 		<Unit filename="shaders/fontRender.fs" />
 		<Unit filename="shaders/fontRender.vs" />
 		<Unit filename="shaders/modelRender.fs" />
 		<Unit filename="shaders/modelRender.vs" />
+		<Unit filename="shaders/routeRender.fs" />
+		<Unit filename="shaders/routeRender.vs" />
 		<Unit filename="shaders/skyCubeRender.fs" />
 		<Unit filename="shaders/skyCubeRender.vs" />
 		<Unit filename="shaders/voxelMapRender.fs" />
@@ -184,16 +201,26 @@
 		<Unit filename="src/Logger.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>
+		<Unit filename="src/MapInfo.cpp" />
 		<Unit filename="src/MapManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
 		<Unit filename="src/MapSections.cpp" />
+		<Unit filename="src/MathOps.cpp">
+			<Option virtualFolder="Math/" />
+		</Unit>
+		<Unit filename="src/MatrixOps.cpp">
+			<Option virtualFolder="Math/" />
+		</Unit>
 		<Unit filename="src/ModelManager.cpp">
 			<Option virtualFolder="Managers/" />
 		</Unit>
 		<Unit filename="src/Physics.cpp" />
 		<Unit filename="src/PhysicsConfig.cpp">
 			<Option virtualFolder="Configs/" />
+		</Unit>
+		<Unit filename="src/PhysicsOps.cpp">
+			<Option virtualFolder="Math/" />
 		</Unit>
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Projectile.cpp" />
@@ -216,11 +243,19 @@
 			<Option virtualFolder="Configs/" />
 		</Unit>
 		<Unit filename="src/Unit.cpp" />
+		<Unit filename="src/UnitRouter.cpp" />
+		<Unit filename="src/Vec.cpp">
+			<Option virtualFolder="Math/" />
+		</Unit>
+		<Unit filename="src/VecOps.cpp">
+			<Option virtualFolder="Math/" />
+		</Unit>
 		<Unit filename="src/Vertex.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>
 		<Unit filename="src/Viewer.cpp" />
 		<Unit filename="src/VoxelMap.cpp" />
+		<Unit filename="src/VoxelRoute.cpp" />
 		<Unit filename="src/stb_implementations.cpp">
 			<Option virtualFolder="Utility/" />
 		</Unit>
@@ -228,7 +263,7 @@
 		<Extensions>
 			<AutoVersioning>
 				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
-				<Settings autoincrement="1" date_declarations="1" use_define="0" update_manifest="0" do_auto_increment="0" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
+				<Settings autoincrement="1" date_declarations="1" use_define="0" update_manifest="0" do_auto_increment="1" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
 				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
 			</AutoVersioning>

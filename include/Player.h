@@ -23,11 +23,17 @@ class Player
         // Either adds or removed the specified unit from the set of selected units.
         void ToggleUnitSelection(int unitId);
 
+        // Returns the players selected units.
+        const std::set<int>& GetSelectedUnits() const;
+
         // Adds the unit to the units the player has under control.
         void AddUnit(const Unit unit);
 
         // Updates a unit's route to the new given route.
         void UpdateUnitRoute(int unitId, const std::vector<vec::vec3>& route);
+
+        // Moves the player's units along their assigned routes.
+        void MoveUnits();
 
     protected:
     private:

@@ -1,3 +1,4 @@
+#include <set>
 #include <SFML\System.hpp>
 #include "Constants.h"
 #include "Logger.h"
@@ -55,8 +56,31 @@ void Physics::HandleLeftMouseClicked()
         vec::vec3i hitVoxel;
         if (mapSections.HitByRay(mapInfo, viewer->viewPosition, worldRay, &hitVoxel))
         {
-            // TODO route and move units to destination.
             voxelMap->SetSelectedVoxel(hitVoxel);
+
+            // If there are units selected, move them to the selected voxel (if possible)
+            const std::set<int>& selectedUnits = (*players)[0].GetSelectedUnits();
+            for (int selectedUnit : selectedUnits)
+            {
+                vec::vec3i start = vec::vec3i(0, 0, 0); // TODO invalid, used for testing purposes. until units have predefined current voxels.
+
+                std::vector<vec::vec3i> route;
+                if (!mapSections.ComputeRoute(start, hitVoxel, route))
+                {
+                    Logger::Log("Route computation failed from ", start.x, ", ", start.y, ", ", start.z, " to ", hitVoxel.x, ", ", hitVoxel.y, ", ", hitVoxel.z, ".");
+                }
+                else
+                {
+                    // Send the route to the selected unit.
+                    std::vector<vec::vec3i> betterRoute;
+                    std::vector<vec::vec3> graphicalRoute;
+                    Logger::Log("Refining route...");
+                    unitRouter->RefineRoute(mapInfo, mapSections.GetSubsections(), start, hitVoxel, route, betterRoute, graphicalRoute);
+
+                    Logger::Log("Updating player 0, selected unit ", selectedUnit, " with graphical route using ", graphicalRoute.size(), " segments.");
+                    (*players)[0].UpdateUnitRoute(selectedUnit, graphicalRoute);
+                }
+            }
         }
     }
 }
@@ -103,27 +127,12 @@ void Physics::Run()
                         rotation += 0.20;
                     }
                 }
+            }
 
-                // TODO test routing code until click-selection is working.
-                vec::vec3i start = vec::vec3i(0, 0, 0);
-                vec::vec3i end = vec::vec3i(18, 18, 1);
-                std::vector<vec::vec3i> route;
-                if (!mapSections.ComputeRoute(start, end, route))
-                {
-                    Logger::Log("Route computation failed!");
-                }
-                else
-                {
-                    std::vector<vec::vec3i> betterRoute;
-                    std::vector<vec::vec3> graphicalRoute;
-                    unitRouter->RefineRoute(mapSections.GetSubsections(), start, end, route, betterRoute, graphicalRoute);
-
-                    Logger::Log("Updating player 0, unit 0, with graphical route with ", graphicalRoute.size(), " segments.");
-                    (*players)[0].UpdateUnitRoute(0, graphicalRoute);
-                }
-
-                // Random valid route.
-
+            // All units move
+            for (Player& player : (*players))
+            {
+                player.MoveUnits();
             }
         }
 

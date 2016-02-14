@@ -25,6 +25,9 @@ class Unit
         // Updates (or adds) an assigned route for a unit.
         void UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute);
 
+        // Performs realistic unit motion.
+        void MoveAlongRoute();
+
         // Moves the unit to the specified position.
         void Move(vec::vec3 pos);
 
@@ -49,6 +52,8 @@ class Unit
         int routeVisualId;
         bool routeNeedsVisualUpdate;
         std::vector<vec::vec3> assignedRoute;
+        unsigned int currentSegment;
+        float currentSegmentPercentage;
 
         // Whether the unit will travel on the same route again after completing the route.
         bool routeLoops;
