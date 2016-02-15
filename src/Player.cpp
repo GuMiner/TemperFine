@@ -5,11 +5,11 @@ Player::Player()
     name = std::string("Default Player");
 }
 
-void Player::RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vec::mat4& projectionMatrix)
+void Player::RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix)
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
-        units[i].Render(modelManager, unitRouter, selectedUnits.find(i) != selectedUnits.end(), projectionMatrix);
+        units[i].Render(modelManager, routeVisual, selectedUnits.find(i) != selectedUnits.end(), projectionMatrix);
     }
 }
 

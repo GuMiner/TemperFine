@@ -4,7 +4,7 @@
 #include "BodyInfo.h"
 #include "ModelManager.h"
 #include "TurretInfo.h"
-#include "UnitRouter.h"
+#include "RouteVisual.h"
 #include "Vec.h"
 
 // Represents a physical unit.
@@ -17,7 +17,7 @@ class Unit
         void CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation);
 
         // Renders the unit.
-        void Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSelected, vec::mat4& projectionMatrix);
+        void Render(ModelManager& modelManager, RouteVisual& unitRouter, bool isSelected, vec::mat4& projectionMatrix);
 
         // Returns true if the unit is currently in the path of the ray, false otherwise.
         bool InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, const vec::vec3& rayVector);

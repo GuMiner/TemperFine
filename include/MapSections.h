@@ -3,6 +3,9 @@
 #include "PhysicsOps.h"
 #include "VoxelRoute.h"
 
+// Simplifies usages of the subsection map.
+typedef std::map<vec::vec3i, VoxelRoute, vec::vec3iComparer> voxelSubsectionsMap;
+
 // Represents the sections of the map that units can travel in.
 class MapSections
 {

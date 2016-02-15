@@ -1,80 +1,9 @@
 #include "Logger.h"
 #include "VecOps.h"
-#include "VoxelRoute.h"
 #include "UnitRouter.h"
 
 UnitRouter::UnitRouter()
 {
-    nextRouteId = 0;
-}
-
-// Initializes the route visualization shader.
-bool UnitRouter::Initialize(ShaderManager& shaderManager)
-{
-    // Route program.
-    if (!shaderManager.CreateShaderProgram("routeRender", &routeVisualProgram))
-    {
-        Logger::Log("Failure creating the route shader program!");
-        return false;
-    }
-
-    projMatrixLocation = glGetUniformLocation(routeVisualProgram, "projMatrix");
-
-    // General OpenGL resources.
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &positionBuffer);
-    return true;
-}
-
-// Renders the specified route.
-void UnitRouter::Render(vec::mat4& projectionMatrix, int routeId, bool selected)
-{
-    glUseProgram(routeVisualProgram);
-    glBindVertexArray(vao);
-
-    glUniformMatrix4fv(projMatrixLocation, 1, GL_FALSE, projectionMatrix);
-
-    // TODO use selected to visualize routes that are selected.
-    glDrawArrays(GL_LINE_STRIP, routeData[routeId].offset, routeData[routeId].count);
-}
-
-// Creates a visual for the specified route.
-int UnitRouter::CreateRouteVisual(const std::vector<vec::vec3>& route)
-{
-    RouteVisualData routeVisualData;
-    routeVisualData.offset = routeVerties.positions.size();
-    routeVisualData.count = route.size();
-
-    routeVerties.positions.insert(routeVerties.positions.end(), route.begin(), route.end());
-    SendRoutesToOpenGl();
-
-    int routeId = nextRouteId++;
-
-    routeData[routeId] = routeVisualData;
-    return routeId;
-}
-
-// Deletes the visual for the specified route.
-void UnitRouter::DeleteRouteVisual(int routeId)
-{
-    // const RouteVisualData& routeVisualData = routeData[routeId];
-
-    // TODO data needs to be remove from universalVertices.
-    routeData.erase(routeId);
-
-    // Skip an OpenGL update if there are no routes left.
-    if (routeVerties.positions.size() != 0)
-    {
-        SendRoutesToOpenGl();
-    }
-}
-
-void UnitRouter::SendRoutesToOpenGl()
-{
-    glBindVertexArray(vao);
-    routeVerties.TransferPositionToOpenGl(positionBuffer);
 }
 
 void UnitRouter::RefineRoute(MapInfo* mapInfo, const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
@@ -133,11 +62,60 @@ void UnitRouter::RefineRoute(MapInfo* mapInfo, const voxelSubsectionsMap& voxelS
     Logger::Log("Route refinement complete.");
 }
 
+// Determines the height of a given voxel at the provided position.
+float UnitRouter::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& voxelId, const vec::vec3& position)
+{
+    if (voxelMap->InBounds(voxelId))
+    {
+        vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
+        vec::vec3 difference = position - voxelMinPosition;
+
+        if (difference.x >= 0 && difference.y >= 0 && difference.z >= 0 &&
+            difference.x <= MapInfo::SPACING && difference.y <= MapInfo::SPACING && difference.z <= MapInfo::SPACING)
+        {
+            // In-bounds of given voxel, perform height calculation.
+            int type = voxelMap->GetType(voxelId);
+            bool cubeType = (type == MapInfo::VoxelTypes::CUBE) || (type == MapInfo::VoxelTypes::SLANT && voxelMap->GetOrientation(voxelId) > 3);
+            if (cubeType)
+            {
+                // Flat plane.
+                return voxelMinPosition.z + MapInfo::SPACING;
+            }
+            else if (type == MapInfo::SLANT)
+            {
+                // We know the orientation can only be 0-3 now.
+                int orientation = voxelMap->GetOrientation(voxelId);
+                switch (orientation)
+                {
+                case 0:
+                    // Moving along X+ lowers height.
+                    return voxelMinPosition.z + MapInfo::SPACING - difference.x;
+                case 1:
+                    // Moving along Y+ lowers height.
+                    return voxelMinPosition.z + MapInfo::SPACING - difference.y;
+                case 2:
+                    // Reverse of 0
+                    return voxelMinPosition.z + difference.x;
+                case 3:
+                    // Reverse of 2
+                    return voxelMinPosition.z + difference.y;
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    // If out-of-bounds, return a really invalid height for debugging purposes.
+    return MapInfo::SPACING * (voxelMap->zSize + 2);
+}
+
+
 // Performs a spring-mass 'string' refinement to make our routes look nice
 // Updates the string route and refined integer path based on our string route.
 void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsectionsMap& voxelSubsections, std::vector<vec::vec3>& stringRoute, std::vector<vec::vec3i>& refinedPath)
 {
-    float stretchinessDesired = 0.10f; // 10%
+    float stretchinessDesired = 0.90f; // 10%
 
     // Lengths for which *after* this amount is pulled, a reverse-stretchiness force is applied. Think a rubber band, but unstretched
     std::vector<float> restingLengths;
@@ -201,7 +179,7 @@ void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsection
     }
 
     // TODO need to perform z-height updates.
-    // VoxelRouteRules::GetHeightForVoxel()
+    // UnitRouter::GetHeightForVoxel()
 
     // Save out the refined path based on on the subsection route.
     vec::vec3i priorPoint = vec::vec3i((int)stringRoute[0].x, (int)stringRoute[0].y, (int)stringRoute[0].z);
@@ -229,10 +207,4 @@ bool UnitRouter::IsStretchedPercentage(float restingDistanceAvg, const std::vect
 
     currentDistance /= (currentPoints.size() - 1);
     return currentDistance > restingDistanceAvg * (1.0f + maxPercentage);
-}
-
-UnitRouter::~UnitRouter()
-{
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &positionBuffer);
 }

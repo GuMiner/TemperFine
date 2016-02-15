@@ -14,7 +14,7 @@ Scenery::Scenery(ModelManager* modelManager)
 bool Scenery::Initialize(ShaderManager& shaderManager)
 {
     // Load the ground
-    groundModelId = modelManager->LoadModel("models/scenery/ground");
+    groundModelId = 1; // modelManager->LoadModel("models/scenery/ground");
     if (groundModelId == 0)
     {
         Logger::Log("Error loading the ground scenery model!");
@@ -69,7 +69,7 @@ bool Scenery::Initialize(ShaderManager& shaderManager)
 void Scenery::Render(vec::mat4& viewMatrix, vec::mat4& projectionMatrix)
 {
     // Render the ground plane
-    modelManager->RenderModel(projectionMatrix, groundModelId, groundOrientation, false);
+    // modelManager->RenderModel(projectionMatrix, groundModelId, groundOrientation, false);
 
     // Render the sky
     glUseProgram(skyCubeProgram);

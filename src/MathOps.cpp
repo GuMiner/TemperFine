@@ -63,6 +63,6 @@ float MathOps::SmallestPositive(float first, float second)
     // Either first or second can be negative, which means the other is positive
     first = first < 0 ? second + 1 : first;
     second = second < 0 ? first + 1 : second;
-    return std::min(first, second);
+    return first < second ? first : second;
 }
 

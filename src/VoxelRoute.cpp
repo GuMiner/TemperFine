@@ -1,53 +1,5 @@
 #include "VoxelRoute.h"
 
-// Determines the height of a given voxel at the provided position.
-float VoxelRouteRules::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& voxelId, const vec::vec3& position)
-{
-    if (voxelMap->InBounds(voxelId))
-    {
-        vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
-        vec::vec3 difference = position - voxelMinPosition;
-
-        if (difference.x >= 0 && difference.y >= 0 && difference.z >= 0 &&
-            difference.x <= MapInfo::SPACING && difference.y <= MapInfo::SPACING && difference.z <= MapInfo::SPACING)
-        {
-            // In-bounds of given voxel, perform height calculation.
-            int type = voxelMap->GetType(voxelId);
-            bool cubeType = (type == MapInfo::VoxelTypes::CUBE) || (type == MapInfo::VoxelTypes::SLANT && voxelMap->GetOrientation(voxelId) > 3);
-            if (cubeType)
-            {
-                // Flat plane.
-                return voxelMinPosition.z + MapInfo::SPACING;
-            }
-            else if (type == MapInfo::SLANT)
-            {
-                // We know the orientation can only be 0-3 now.
-                int orientation = voxelMap->GetOrientation(voxelId);
-                switch (orientation)
-                {
-                case 0:
-                    // Moving along X+ lowers height.
-                    return voxelMinPosition.z + MapInfo::SPACING - difference.x;
-                case 1:
-                    // Moving along Y+ lowers height.
-                    return voxelMinPosition.z + MapInfo::SPACING - difference.y;
-                case 2:
-                    // Reverse of 0
-                    return voxelMinPosition.z + difference.x;
-                case 3:
-                    // Reverse of 2
-                    return voxelMinPosition.z + difference.y;
-                default:
-                    break;
-                }
-            }
-        }
-    }
-
-    // If out-of-bounds, return a really invalid height for debugging purposes.
-    return MapInfo::SPACING * (voxelMap->zSize + 2);
-}
-
 // Given a voxel, finds all valid voxel neighbors for travel. Returns true if neighbors were found, false otherwise.
 void VoxelRouteRules::FindVoxelNeighbors(MapInfo* voxelMap, const vec::vec3i& voxelId, std::vector<vec::vec3i>& neighbors)
 {

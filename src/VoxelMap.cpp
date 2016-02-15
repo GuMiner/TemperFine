@@ -222,7 +222,7 @@ void VoxelMap::Render(const vec::mat4& projectionMatrix)
     glUseProgram(voxelMapRenderProgram);
 
     // Bind our textures
-	glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, voxelTextureId);
     glUniform1i(textureLocation, 0);
 
@@ -232,10 +232,10 @@ void VoxelMap::Render(const vec::mat4& projectionMatrix)
 
     // Bind our vertex data
     glBindVertexArray(vao);
-	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
-	glUniform3iv(selectedIndexLocation, 1, &selectedVoxel[0]);
+    glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
+    glUniform3iv(selectedIndexLocation, 1, &selectedVoxel[0]);
 
-	glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
+    glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
 
     for (unsigned int i = 0; i < (unsigned int)GraphicsConfig::VoxelTypes; i++)
     {

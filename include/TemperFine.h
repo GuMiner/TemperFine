@@ -17,13 +17,13 @@
 #include "PhysicsConfig.h"
 #include "PhysicsOps.h"
 #include "Player.h"
+#include "RouteVisual.h"
 #include "Scenery.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
 #include "TechConfig.h"
 #include "TechTreeWindow.h"
 #include "TurretConfig.h"
-#include "UnitRouter.h"
 #include "Viewer.h"
 #include "VoxelMap.h"
 
@@ -57,7 +57,7 @@ class TemperFine
     Statistics statistics;
     Viewer viewer;
     VoxelMap voxelMap;
-    UnitRouter unitRouter;
+    RouteVisual routeVisuals;
     Scenery scenery;
 
     std::vector<Player> players;
@@ -76,10 +76,10 @@ class TemperFine
     void PerformGuiThreadUpdates(float currentGameTime);
 
     // Handles GUI-based events, such as closing the application, resizing the window, etc.
-    void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
+    void HandleEvents(sfg::Desktop& desktop, sf::Window& window, bool& alive, bool& paused);
 
     // Renders the scene.
-    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
+    void Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
 
 public:
     // Used just for data storage.

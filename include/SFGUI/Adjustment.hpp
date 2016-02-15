@@ -16,9 +16,7 @@ class SFGUI_API Adjustment : public Object, public std::enable_shared_from_this<
 
 		/** Dtor.
 		 */
-		~Adjustment()
-		{
-		}
+		~Adjustment() = default;
 
 		/** Create Adjustment.
 		 * @param value Current value.

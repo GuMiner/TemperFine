@@ -16,11 +16,10 @@ Physics::Physics()
     isLeftMouseClicked = true;
 }
 
-void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo)
+void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo)
 {
     this->modelManager = modelManager;
     this->players = players;
-    this->unitRouter = unitRouter;
     this->viewer = viewer;
     this->voxelMap = voxelMap;
     this->mapInfo = mapInfo;
@@ -75,10 +74,11 @@ void Physics::HandleLeftMouseClicked()
                     std::vector<vec::vec3i> betterRoute;
                     std::vector<vec::vec3> graphicalRoute;
                     Logger::Log("Refining route...");
-                    unitRouter->RefineRoute(mapInfo, mapSections.GetSubsections(), start, hitVoxel, route, betterRoute, graphicalRoute);
+                    unitRouter.RefineRoute(mapInfo, mapSections.GetSubsections(), start, hitVoxel, route, betterRoute, graphicalRoute);
 
                     Logger::Log("Updating player 0, selected unit ", selectedUnit, " with graphical route using ", graphicalRoute.size(), " segments.");
                     (*players)[0].UpdateUnitRoute(selectedUnit, graphicalRoute);
+
                 }
             }
         }
@@ -116,7 +116,7 @@ void Physics::Run()
                 // The zeros are the indexes into ArmorConfig::Armors and BodyConfig::Bodies
                 float step = 5.0f;
                 unsigned int maxSize = 2;
-                float rotation = 0.20;
+                float rotation = 0.20f;
                 for (unsigned int i = 0; i < maxSize; i++)
                 {
                     for (unsigned int j = 0; j < maxSize; j++)
@@ -124,7 +124,7 @@ void Physics::Run()
                         testUnit.CreateNew(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
                            vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
                         (*players)[0].AddUnit(testUnit);
-                        rotation += 0.20;
+                        rotation += 0.20f;
                     }
                 }
             }

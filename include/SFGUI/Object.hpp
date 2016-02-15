@@ -20,9 +20,7 @@ class SFGUI_API Object {
 
 		/** Dtor.
 		 */
-		virtual ~Object()
-		{
-		}
+		virtual ~Object() = default;
 
 		/// @cond
 		// Fix for VS2013 not supporting = default move members.

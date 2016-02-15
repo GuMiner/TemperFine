@@ -7,11 +7,13 @@ Frequent contributers will be granted direct commit access to TemperFine.
 
 ## Development Environment
 --------------------------
-TemperFine is developed with CodeBlocks. You should download and install CodeBlocks from [their website](http://www.codeblocks.org/downloads/26), selecting the release with MinGW (GCC-TDM 2.7.1) for Windows.
+TemperFine is developed with Visual Studio 2015. Any variant of Visual Studio 2015 is supported.
+
+TemperFine was developed initially with CodeBlocks, however due to lacklustre support for memory usage debugging on Windows and modern C++ functionality, Visual Studio has been chosen instead.
 
 To simplify dependency management, assets; library binaries (DLL, LIB); and includes are included within the TemperFine repository. Therefore, once you have downloaded and installed CodeBlocks, **you can build and run TemperFine immediately**, no additional setup required.
 
-If you want to build TemperFine with a different toolset (Visual Studio), compiler version (!= GCC 2.7.1), and/or OS (OS != Windows 7-10), you will need to replace the library binaries with the appropriate binaries for your setup.
+If you want to build TemperFine with a different toolset (Code Blocks), compiler version (!= GCC 2.7.1), and/or OS (OS != Windows 7-10), you will need to replace the library binaries with the appropriate binaries for your setup.
 
 ## Managing Source Code
 ------------------------

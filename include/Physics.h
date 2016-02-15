@@ -25,7 +25,7 @@ class Physics
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(ModelManager* modelManager, std::vector<Player>* players, UnitRouter* unitRouter, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo);
+        void Initialize(ModelManager* modelManager, std::vector<Player>* players, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo);
 
         // Queues a mouse click for future processing.
         void QueueLeftMouseClick(int x, int y, int xSize, int ySize);
@@ -45,7 +45,7 @@ class Physics
     private:
         ModelManager* modelManager;
         std::vector<Player>* players;
-        UnitRouter* unitRouter;
+        UnitRouter unitRouter;
         Viewer* viewer;
         VoxelMap* voxelMap;
         MapInfo* mapInfo;

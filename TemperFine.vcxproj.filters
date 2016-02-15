@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\MathOps.cpp">
+      <Filter>Math\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MatrixOps.cpp">
+      <Filter>Math\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsOps.cpp">
+      <Filter>Math\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec.cpp">
+      <Filter>Math\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VecOps.cpp">
+      <Filter>Math\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArmorConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BodyConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KeyBindingConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConfigManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderManager.cpp">
+      <Filter>Managers\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TechTreeWindow.cpp">
+      <Filter>GUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiWindow.cpp">
+      <Filter>GUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TechConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurretConfig.cpp">
+      <Filter>Config\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_implementations.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConversionUtils.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Constants.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapSections.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapInfo.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Projectile.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenery.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Statistics.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TemperFine.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Unit.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Viewer.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VoxelMap.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VoxelRoute.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vertex.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UnitRouter.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RouteVisual.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ArmorConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BodyConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MathOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MatrixOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GraphicsConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\KeyBindingConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PhysicsConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VecOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PhysicsOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConversionUtils.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConfigManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ModelManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MapManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImageManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FontManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Constants.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GuiWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TechTreeWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TurretConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TechConfig.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Projectile.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scenery.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Statistics.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TemperFine.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MapInfo.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Unit.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Viewer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VoxelMap.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MapSections.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VoxelRoute.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BodyInfo.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ArmorInfo.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderableSentence.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TechInfo.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TurretInfo.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextInfo.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImageTexture.h">
+      <Filter>Source\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vertex.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitRouter.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RouteVisual.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{987e5ffe-01a0-4372-9b93-d42d5aa95ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{ee93178d-2b0a-4ff6-9d56-41fdde07c427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{c0875e4a-3662-4f88-be9c-5fe620a7a8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\src">
+      <UniqueIdentifier>{ce10092d-e147-4024-8503-08ec4694f6c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config\src">
+      <UniqueIdentifier>{a1891abb-d1fc-471f-b54f-80397ebb0b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6e835e49-b241-417e-86e6-29dce54c931b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{2b99d39c-3513-474e-864d-dc5692bdf9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\src">
+      <UniqueIdentifier>{33cffa80-5dd2-446b-9cb8-6a8f6c261ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\src">
+      <UniqueIdentifier>{bed11f60-3121-41b9-b43c-d0d20d98a663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\src">
+      <UniqueIdentifier>{22c1f831-b8bb-4ba9-af5f-08a15558a68b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{f6291ab9-26fa-4753-be12-1ea9a4c08a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\src">
+      <UniqueIdentifier>{33cea86a-8c16-41da-a0d2-841f8abef977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{b3a2648d-f689-4998-a23b-a38174705716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\src">
+      <UniqueIdentifier>{a0aceacf-dc63-48c5-8c77-5ef6f5844bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\data">
+      <UniqueIdentifier>{da4df0d9-1d7c-4dd1-8ce9-c28ca9dd6277}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

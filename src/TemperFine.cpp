@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <thread>
@@ -8,6 +9,24 @@
 #include "MatrixOps.h"
 #include "TemperFine.h"
 #include "../version.h"
+
+#pragma comment(lib, "opengl32")
+
+#ifndef _DEBUG
+    #pragma comment(lib, "lib/glew32.lib")
+    #pragma comment(lib, "lib/sfml-audio")
+    #pragma comment(lib, "lib/sfml-system")
+    #pragma comment(lib, "lib/sfml-window")
+    #pragma comment(lib, "lib/sfml-graphics")
+    #pragma comment(lib, "lib/sfgui")
+#else
+    #pragma comment(lib, "lib/glew32d.lib")
+    #pragma comment(lib, "lib/sfml-audio-d")
+    #pragma comment(lib, "lib/sfml-system-d")
+    #pragma comment(lib, "lib/sfml-window-d")
+    #pragma comment(lib, "lib/sfml-graphics-d")
+    #pragma comment(lib, "lib/sfgui-d")
+#endif
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),
@@ -169,7 +188,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Unit router and  visualization
     Logger::Log("Unit router and visualizer loading...");
-    if (!unitRouter.Initialize(shaderManager))
+    if (!routeVisuals.Initialize(shaderManager))
     {
         Logger::Log("Bad unit router!");
         return Constants::Status::BAD_ROUTER;
@@ -216,17 +235,17 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     modelManager.ResetOpenGlModelData();
 
     // UI
-    if (!techTreeWindow.Initialize(desktop))
-    {
-        return Constants::Status::BAD_UI;
-    }
+  //  if (!techTreeWindow.Initialize(desktop))
+ //   {
+   //     return Constants::Status::BAD_UI;
+  //  }
 
     // TODO test code remove
-    techTreeWindow.Display();
+  //  techTreeWindow.Display();
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&modelManager, &players, &unitRouter, &viewer, &voxelMap, &testMap);
+    physics.Initialize(&modelManager, &players, &viewer, &voxelMap, &testMap);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -237,11 +256,11 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
 {
     // Update useful statistics that are fancier than the standard GUI
-    statistics.UpdateRunTime(currentGameTime);
-    statistics.UpdateViewPos(viewer.viewPosition);
+    // statistics.UpdateRunTime(currentGameTime);
+    // statistics.UpdateViewPos(viewer.viewPosition);
 }
 
-void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused)
+void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::Window& window, bool& alive, bool& paused)
 {
     // Handle all events.
     sf::Event event;
@@ -276,6 +295,11 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             {
                 techTreeWindow.ToggleDisplay();
             }
+            // TODO TEST CODE REMOVE
+            else if (event.key.code == sf::Keyboard::T)
+            {
+                // tag = 1;
+            }
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
@@ -287,7 +311,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
     }
 }
 
-void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
+void TemperFine::Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
 {
     vec::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
 
@@ -303,18 +327,18 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     // Renders each players' units.
     for (unsigned int i = 0; i < players.size(); i++)
     {
-        players[i].RenderUnits(modelManager, unitRouter, projectionMatrix);
+        players[i].RenderUnits(modelManager, routeVisuals, projectionMatrix);
     }
 
     // Renders the voxel map
     voxelMap.Render(projectionMatrix);
 
     // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
-    statistics.RenderStats(Constants::PerspectiveMatrix);
+    // statistics.RenderStats(Constants::PerspectiveMatrix);
 
     // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
     // window.resetGLStates(); // This crashes on my AMD card.
-    desktop.Update(guiClock.restart().asSeconds());
+    // desktop.Update(guiClock.restart().asSeconds());
 }
 
 Constants::Status TemperFine::Run()
@@ -324,7 +348,7 @@ Constants::Status TemperFine::Run()
     sf::ContextSettings contextSettings = sf::ContextSettings(24, 8, 8, 4, 0);
 
     sf::Uint32 style = GraphicsConfig::IsFullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close;
-    sf::RenderWindow window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
+    sf::Window window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
     sfg::Desktop desktop;
 
     // Now that we have an OpenGL Context, load our graphics.
@@ -355,10 +379,10 @@ Constants::Status TemperFine::Run()
         {
             Render(desktop, window, guiClock, viewMatrix);
 
-            glViewport(0, 0, window.getSize().x, window.getSize().y);
-            sfgui.Display(window);
+          //  glViewport(0, 0, window.getSize().x, window.getSize().y);
+           // sfgui.Display(window);
 
-            UpdatePerspective(window.getSize().x, window.getSize().y);
+          //  UpdatePerspective(window.getSize().x, window.getSize().y);
             window.display();
         }
 
@@ -387,6 +411,8 @@ void TemperFine::Deinitialize()
 // Runs the main application.
 int main(int argc, char* argv[])
 {
+    std::cout << "TemperFine Start!" << std::endl;
+
     // Startup 'static' stuff
     TemperFine::Constant = Constants();
     TemperFine::MathOp = MathOps();
@@ -394,7 +420,7 @@ int main(int argc, char* argv[])
 
     Logger::Setup();
 
-    Logger::Log("TemperFine ", AutoVersion::MAJOR, ".", AutoVersion::MINOR, ".", AutoVersion::BUILD);
+    Logger::Log("TemperFine ", AutoVersion::MAJOR_VERSION, ".", AutoVersion::MINOR_VERSION, ".");
 
     Constants::Status runStatus;
     std::unique_ptr<TemperFine> temperFine(new TemperFine());
@@ -414,6 +440,8 @@ int main(int argc, char* argv[])
     // Wait before closing for display purposes.
     Logger::Log("Application End!");
     Logger::Shutdown();
+    std::cout << "TemperFine End!" << std::endl;
+
     sf::sleep(sf::milliseconds(1000));
 
     // Log is auto-shutdown.

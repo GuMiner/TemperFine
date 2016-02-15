@@ -51,36 +51,36 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
     }
 }
 
-void Unit::Render(ModelManager& modelManager, UnitRouter& unitRouter, bool isSelected, vec::mat4& projectionMatrix)
+void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isSelected, vec::mat4& projectionMatrix)
 {
     // Update the route visual if the physics system has recomputed it.
     if (routeNeedsVisualUpdate)
     {
         if (routeVisualId != -1)
         {
-            unitRouter.DeleteRouteVisual(routeVisualId);
+            routeVisual.DeleteRouteVisual(routeVisualId);
         }
 
-        routeVisualId = unitRouter.CreateRouteVisual(assignedRoute);
+        routeVisualId = routeVisual.CreateRouteVisual(assignedRoute);
     }
 
     if (routeVisualId != -1)
     {
         // We have an active route, so render it.
-        unitRouter.Render(projectionMatrix, routeVisualId, isSelected);
+        routeVisual.Render(projectionMatrix, routeVisualId, isSelected);
     }
 
     // TODO test remove
     if (testRoutes.size() != testKnownRouteCount)
     {
         testKnownRouteCount = testRoutes.size();
-        testRouteIds.push_back(unitRouter.CreateRouteVisual(testRoutes[testRoutes.size() - 1]));
+        testRouteIds.push_back(routeVisual.CreateRouteVisual(testRoutes[testRoutes.size() - 1]));
     }
 
     // TODO test remove.
     for (int routeId : testRouteIds)
     {
-        unitRouter.Render(projectionMatrix, routeId, isSelected);
+        routeVisual.Render(projectionMatrix, routeId, isSelected);
     }
 
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.

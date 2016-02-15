@@ -13,9 +13,7 @@ class SFGUI_API Misc {
 	public:
 		/** Dtor.
 		 */
-		virtual ~Misc()
-		{
-		}
+		virtual ~Misc() = default;
 
 		/** Set alignment
 		 * @param alignment Alignment (0..1 for x and y).

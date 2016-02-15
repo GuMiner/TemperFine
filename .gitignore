@@ -10,5 +10,16 @@
 # CodeBlocks temp stuffs
 *.layout
 
+# VS temp stuffs
+*.sdf
+*.opensdf
+*.vcxproj.user
+.vs/
+
+
 # Build results
 [Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+bin/Debug/TemperFine.ilk
+bin/Debug/TemperFine.pdb

@@ -4,7 +4,7 @@
 #include <vector>
 #include "ModelManager.h"
 #include "Unit.h"
-#include "UnitRouter.h"
+#include "RouteVisual.h"
 #include "Vec.h"
 
 // Represents an in-game player.
@@ -14,7 +14,7 @@ class Player
         Player();
 
         // Renders the player's units.
-        void RenderUnits(ModelManager& modelManager, UnitRouter& unitRouter, vec::mat4& projectionMatrix);
+        void RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix);
 
         // Checks if the given world ray intersects with a unit.
         // Returns the index of the unit if true, -1 if false.

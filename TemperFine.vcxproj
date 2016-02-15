@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FBD9F244-CF7F-A29E-8A96-3B8E0C26A958}</ProjectGuid>
+    <RootNamespace>TemperFine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-D_CRT_SECURE_NO_WARNINGS -wd4251 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)\IncrementBuildVersion.py</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/wd4251 -D_CRT_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)\IncrementBuildVersion.py</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ArmorConfig.h" />
+    <ClInclude Include="include\ArmorInfo.h" />
+    <ClInclude Include="include\BodyConfig.h" />
+    <ClInclude Include="include\BodyInfo.h" />
+    <ClInclude Include="include\ConfigManager.h" />
+    <ClInclude Include="include\Constants.h" />
+    <ClInclude Include="include\ConversionUtils.h" />
+    <ClInclude Include="include\FontManager.h" />
+    <ClInclude Include="include\GraphicsConfig.h" />
+    <ClInclude Include="include\GuiWindow.h" />
+    <ClInclude Include="include\ImageManager.h" />
+    <ClInclude Include="include\ImageTexture.h" />
+    <ClInclude Include="include\KeyBindingConfig.h" />
+    <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\MapInfo.h" />
+    <ClInclude Include="include\MapManager.h" />
+    <ClInclude Include="include\MapSections.h" />
+    <ClInclude Include="include\MathOps.h" />
+    <ClInclude Include="include\MatrixOps.h" />
+    <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ModelManager.h" />
+    <ClInclude Include="include\Physics.h" />
+    <ClInclude Include="include\PhysicsConfig.h" />
+    <ClInclude Include="include\PhysicsOps.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Projectile.h" />
+    <ClInclude Include="include\RenderableSentence.h" />
+    <ClInclude Include="include\RouteVisual.h" />
+    <ClInclude Include="include\Scenery.h" />
+    <ClInclude Include="include\ShaderManager.h" />
+    <ClInclude Include="include\Statistics.h" />
+    <ClInclude Include="include\StringUtils.h" />
+    <ClInclude Include="include\TechConfig.h" />
+    <ClInclude Include="include\TechInfo.h" />
+    <ClInclude Include="include\TechTreeWindow.h" />
+    <ClInclude Include="include\TemperFine.h" />
+    <ClInclude Include="include\TextInfo.h" />
+    <ClInclude Include="include\TurretConfig.h" />
+    <ClInclude Include="include\TurretInfo.h" />
+    <ClInclude Include="include\Unit.h" />
+    <ClInclude Include="include\UnitRouter.h" />
+    <ClInclude Include="include\Vec.h" />
+    <ClInclude Include="include\VecOps.h" />
+    <ClInclude Include="include\Vertex.h" />
+    <ClInclude Include="include\Viewer.h" />
+    <ClInclude Include="include\VoxelMap.h" />
+    <ClInclude Include="include\VoxelRoute.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ArmorConfig.cpp" />
+    <ClCompile Include="src\BodyConfig.cpp" />
+    <ClCompile Include="src\ConfigManager.cpp" />
+    <ClCompile Include="src\Constants.cpp" />
+    <ClCompile Include="src\ConversionUtils.cpp" />
+    <ClCompile Include="src\FontManager.cpp" />
+    <ClCompile Include="src\GraphicsConfig.cpp" />
+    <ClCompile Include="src\GuiWindow.cpp" />
+    <ClCompile Include="src\ImageManager.cpp" />
+    <ClCompile Include="src\KeyBindingConfig.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\MapInfo.cpp" />
+    <ClCompile Include="src\MapManager.cpp" />
+    <ClCompile Include="src\MapSections.cpp" />
+    <ClCompile Include="src\MathOps.cpp" />
+    <ClCompile Include="src\MatrixOps.cpp" />
+    <ClCompile Include="src\ModelManager.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\PhysicsConfig.cpp" />
+    <ClCompile Include="src\PhysicsOps.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Projectile.cpp" />
+    <ClCompile Include="src\RouteVisual.cpp" />
+    <ClCompile Include="src\Scenery.cpp" />
+    <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\Statistics.cpp" />
+    <ClCompile Include="src\stb_implementations.cpp" />
+    <ClCompile Include="src\StringUtils.cpp" />
+    <ClCompile Include="src\TechConfig.cpp" />
+    <ClCompile Include="src\TechTreeWindow.cpp" />
+    <ClCompile Include="src\TemperFine.cpp" />
+    <ClCompile Include="src\TurretConfig.cpp" />
+    <ClCompile Include="src\Unit.cpp" />
+    <ClCompile Include="src\UnitRouter.cpp" />
+    <ClCompile Include="src\Vec.cpp" />
+    <ClCompile Include="src\VecOps.cpp" />
+    <ClCompile Include="src\Vertex.cpp" />
+    <ClCompile Include="src\Viewer.cpp" />
+    <ClCompile Include="src\VoxelMap.cpp" />
+    <ClCompile Include="src\VoxelRoute.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
