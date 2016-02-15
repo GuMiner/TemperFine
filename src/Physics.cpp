@@ -123,7 +123,7 @@ void Physics::Run()
                     {
                         testUnit.CreateNew(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
                            vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
-                        (*players)[0].AddUnit(testUnit);
+                        //(*players)[0].AddUnit(testUnit);
                         rotation += 0.20f;
                     }
                 }
