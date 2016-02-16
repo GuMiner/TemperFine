@@ -5,9 +5,19 @@
 Viewer::Viewer()
 {
     viewPosition = vec::vec3(0, 0, 10);
-	viewOrientation = vec::quaternion(0, 0, 0, 1);
+    viewOrientation = vec::quaternion(0, 0, 0, 1);
 
-	lastMousePos = sf::Vector2i(-1, -1);
+    lastMousePos = sf::Vector2i(-1, -1);
+}
+
+const vec::vec3& Viewer::GetViewPosition() const
+{
+    return viewPosition;
+}
+
+const vec::quaternion& Viewer::GetViewOrientation() const
+{
+    return viewOrientation;
 }
 
 void Viewer::InputUpdate()

@@ -10,17 +10,6 @@
 Unit::Unit()
 {
     routeVisualId = -1;
-    routeNeedsVisualUpdate = false;
-
-    testKnownRouteCount = 0;
-}
-
-void Unit::TestAddRayPath(vec::vec3 start, vec::vec3 end)
-{
-    std::vector<vec::vec3> testRoute;
-    testRoute.push_back(start);
-    testRoute.push_back(end);
-    testRoutes.push_back(testRoute);
 }
 
 // Creates a new unit, with full armor.
@@ -54,7 +43,7 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
 void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isSelected, vec::mat4& projectionMatrix)
 {
     // Update the route visual if the physics system has recomputed it.
-    if (routeNeedsVisualUpdate)
+    if (false) // TODO move to GUI thread updates, where route visuals are added if a new route is available in the general structure.
     {
         if (routeVisualId != -1)
         {
@@ -68,19 +57,6 @@ void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isS
     {
         // We have an active route, so render it.
         routeVisual.Render(projectionMatrix, routeVisualId, isSelected);
-    }
-
-    // TODO test remove
-    if (testRoutes.size() != testKnownRouteCount)
-    {
-        testKnownRouteCount = testRoutes.size();
-        testRouteIds.push_back(routeVisual.CreateRouteVisual(testRoutes[testRoutes.size() - 1]));
-    }
-
-    // TODO test remove.
-    for (int routeId : testRouteIds)
-    {
-        routeVisual.Render(projectionMatrix, routeId, isSelected);
     }
 
     // We do a bunch of matrix math (but nothing to complex) to properly draw armor, bodies, and turrets.
@@ -119,8 +95,8 @@ bool Unit::InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, cons
 
 void Unit::UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute)
 {
+    // TODO this is very invalid with the new syncbuffer structure.
     assignedRoute = newAssignedRoute;
-    routeNeedsVisualUpdate = true;
 
     currentSegment = 0;
     currentSegmentPercentage = 0.0f;

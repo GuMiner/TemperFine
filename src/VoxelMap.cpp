@@ -6,29 +6,30 @@
 VoxelMap::VoxelMap()
 {
     selectedVoxel = vec::vec3i(0, 0, 0);
+    hasValidMap = false;
 }
 
 void VoxelMap::InitOpenGl()
 {
     // OpenGL drawing data.
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
     glGenBuffers(1, &positionBuffer);
-	glGenBuffers(1, &indexBuffer);
-	glGenBuffers(1, &uvBuffer);
+    glGenBuffers(1, &indexBuffer);
+    glGenBuffers(1, &uvBuffer);
 
-	glGenTextures(1, &voxelTopTexture);
+    glGenTextures(1, &voxelTopTexture);
 }
 
 bool VoxelMap::CreateVoxelShader(ShaderManager& shaderManager)
 {
     // Voxel Map shader creation. Note we also get the location of the matrix and textures to set later.
     Logger::Log("Voxel Map shader creation...");
-	if (!shaderManager.CreateShaderProgramWithGeometryShader("voxelMapRender", &voxelMapRenderProgram))
-	{
-		return false;
-	}
+    if (!shaderManager.CreateShaderProgramWithGeometryShader("voxelMapRender", &voxelMapRenderProgram))
+    {
+        return false;
+    }
 
     projLocation = glGetUniformLocation(voxelMapRenderProgram, "projMatrix");
     xyLengthsLocation = glGetUniformLocation(voxelMapRenderProgram, "xyLengths");
@@ -38,8 +39,8 @@ bool VoxelMap::CreateVoxelShader(ShaderManager& shaderManager)
 
     textureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTextures");
     voxelTopTextureLocation = glGetUniformLocation(voxelMapRenderProgram, "voxelTopTexture");
-	Logger::Log("Voxel Map shader creation successful!");
-	return true;
+    Logger::Log("Voxel Map shader creation successful!");
+    return true;
 }
 
 std::vector<GLuint> VoxelMap::LoadVoxelTextures(ImageManager& imageManager)
@@ -177,38 +178,40 @@ bool VoxelMap::Initialize(ImageManager& imageManager, ModelManager& modelManager
     imageManager.ResendToOpenGl(voxelTextureId);
     InitOpenGl();
 
-	voxelVertices.TransferPositionToOpenGl(positionBuffer);
-	voxelVertices.TransferUvsToOpenGl(uvBuffer);
-	voxelVertices.TransferIndicesToOpenGl(indexBuffer);
+    voxelVertices.TransferPositionToOpenGl(positionBuffer);
+    voxelVertices.TransferUvsToOpenGl(uvBuffer);
+    voxelVertices.TransferIndicesToOpenGl(indexBuffer);
 
-	return true;
+    return true;
 }
 
-void VoxelMap::SetupFromMap(MapInfo* mapInfo)
+void VoxelMap::SetupFromMap(const MapInfo& mapInfo)
 {
-    this->mapInfo = mapInfo;
+    xMapSize = (int)mapInfo.xSize;
+    yMapSize = (int)mapInfo.ySize;
+    totalVoxelSize = mapInfo.GetVoxelCount();
 
     Logger::Log("Creating 1D texture for voxel type, orientation, and property data.");
-    int textureLength = mapInfo->GetVoxelCount();
     glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_1D, voxelTopTexture);
-	glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA8, textureLength);
+    glBindTexture(GL_TEXTURE_1D, voxelTopTexture);
+    glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA8, totalVoxelSize);
 
-	Logger::Log("Interlacing the map data...");
-	unsigned char* interlacedData = new unsigned char[textureLength * 4];
+    Logger::Log("Interlacing the map data...");
+    unsigned char* interlacedData = new unsigned char[totalVoxelSize * 4];
 
-	for (int i = 0; i < textureLength; i++)
+    for (int i = 0; i < totalVoxelSize; i++)
     {
-        interlacedData[i * 4] = mapInfo->blockType[i];
-        interlacedData[i * 4 + 1] = mapInfo->blockOrientation[i];
-        interlacedData[i * 4 + 2] = mapInfo->blockProperty[i];
+        interlacedData[i * 4] = mapInfo.blockType[i];
+        interlacedData[i * 4 + 1] = mapInfo.blockOrientation[i];
+        interlacedData[i * 4 + 2] = mapInfo.blockProperty[i];
         interlacedData[i * 4 + 3] = 128; // Some data can go here as it is an RGBA 8-bit image.
     }
 
-	Logger::Log("Sending the data to OpenGL...");
-	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, textureLength, GL_RGBA, GL_UNSIGNED_BYTE, &interlacedData[0]);
+    Logger::Log("Sending the data to OpenGL...");
+    glTexSubImage1D(GL_TEXTURE_1D, 0, 0, totalVoxelSize, GL_RGBA, GL_UNSIGNED_BYTE, &interlacedData[0]);
 
-	delete[] interlacedData;
+    delete[] interlacedData;
+    hasValidMap = true;
 }
 
 // Sets the currently-selected voxel, which renders specially.
@@ -219,6 +222,12 @@ void VoxelMap::SetSelectedVoxel(const vec::vec3i& selectedVoxel)
 
 void VoxelMap::Render(const vec::mat4& projectionMatrix)
 {
+    if (!hasValidMap)
+    {
+        // Exit if we haven't received a valid map yet.
+        return;
+    }
+
     glUseProgram(voxelMapRenderProgram);
 
     // Bind our textures
@@ -235,21 +244,21 @@ void VoxelMap::Render(const vec::mat4& projectionMatrix)
     glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix);
     glUniform3iv(selectedIndexLocation, 1, &selectedVoxel[0]);
 
-    glUniform2i(xyLengthsLocation, mapInfo->xSize, mapInfo->ySize);
+    glUniform2i(xyLengthsLocation, xMapSize, yMapSize);
 
     for (unsigned int i = 0; i < (unsigned int)GraphicsConfig::VoxelTypes; i++)
     {
         glUniform1ui(currentVoxelIdLocation, i + 1);
-        glDrawElementsInstanced(GL_TRIANGLES, voxelIndexCounts[i], GL_UNSIGNED_INT, (const void*)(voxelIndexOffsets[i] * sizeof(GL_UNSIGNED_INT)), mapInfo->GetVoxelCount());
+        glDrawElementsInstanced(GL_TRIANGLES, voxelIndexCounts[i], GL_UNSIGNED_INT, (const void*)(voxelIndexOffsets[i] * sizeof(GL_UNSIGNED_INT)), totalVoxelSize);
     }
 }
 
 VoxelMap::~VoxelMap()
 {
     glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &positionBuffer);
-	glDeleteBuffers(1, &indexBuffer);
-	glDeleteBuffers(1, &uvBuffer);
+    glDeleteBuffers(1, &positionBuffer);
+    glDeleteBuffers(1, &indexBuffer);
+    glDeleteBuffers(1, &uvBuffer);
 
-	glDeleteTextures(1, &voxelTopTexture);
+    glDeleteTextures(1, &voxelTopTexture);
 }

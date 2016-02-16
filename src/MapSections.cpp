@@ -8,23 +8,22 @@
 
 MapSections::MapSections()
 {
-    needsRecomputation = true;
 }
 
 // Recomputes the map sections to use for routing.
-void MapSections::RecomputeMapSections(MapInfo* mapInfo)
+void MapSections::RecomputeMapSections(const MapInfo& mapInfo)
 {
     Logger::Log("Recomputing map sections...");
     int nextSubsectionId = 0;
 
     subsections.clear();
-    for (unsigned int z = 0; z < mapInfo->zSize; z++)
+    for (unsigned int z = 0; z < mapInfo.zSize; z++)
     {
-        for (unsigned int y = 0; y < mapInfo->ySize; y++)
+        for (unsigned int y = 0; y < mapInfo.ySize; y++)
         {
-            for (unsigned int x = 0; x < mapInfo->xSize; x++)
+            for (unsigned int x = 0; x < mapInfo.xSize; x++)
             {
-                if (mapInfo->blockType[mapInfo->GetIndex(x, y, z)] == MapInfo::VoxelTypes::AIR)
+                if (mapInfo.blockType[mapInfo.GetIndex(x, y, z)] == MapInfo::VoxelTypes::AIR)
                 {
                     // Air voxels cannot be traveled on top of.
                     continue;
@@ -83,8 +82,6 @@ void MapSections::RecomputeMapSections(MapInfo* mapInfo)
             }
         }
     }
-
-    needsRecomputation = false;
 }
 
 // Computes a route between two points using the map sections. Returns true (and fills in the path) if a path was found, false otherwise.
@@ -163,12 +160,6 @@ bool MapSections::ComputeRoute(const vec::vec3i start, const vec::vec3i destinat
 const voxelSubsectionsMap& MapSections::GetSubsections() const
 {
     return subsections;
-}
-
-// True if the map needs to be recomputed, false otherwise.
-bool MapSections::NeedsRecomputation() const
-{
-    return needsRecomputation;
 }
 
 bool MapSections::HitByRay(MapInfo* mapInfo, const vec::vec3& rayStart, const vec::vec3& rayVector, vec::vec3i* voxelId)

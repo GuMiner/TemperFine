@@ -6,7 +6,6 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
 #include "Logger.h"
-#include "MatrixOps.h"
 #include "TemperFine.h"
 #include "../version.h"
 
@@ -39,17 +38,17 @@ TemperFine::TemperFine()
 void TemperFine::LogGraphicsSettings()
 {
     Logger::Log("OpenGL vendor: ", glGetString(GL_VENDOR), ", version ", glGetString(GL_VERSION), ", renderer ", glGetString(GL_RENDERER));
-	Logger::Log("OpenGL extensions: ", glGetString(GL_EXTENSIONS));
+    Logger::Log("OpenGL extensions: ", glGetString(GL_EXTENSIONS));
 
-	GLint maxTextureUnits, maxUniformBlockSize;
-	GLint maxVertexUniformBlocks, maxFragmentUniformBlocks;
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &maxTextureUnits);
-	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &maxVertexUniformBlocks);
-	glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &maxFragmentUniformBlocks);
-	glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &maxUniformBlockSize);
+    GLint maxTextureUnits, maxUniformBlockSize;
+    GLint maxVertexUniformBlocks, maxFragmentUniformBlocks;
+    glGetIntegerv(GL_MAX_TEXTURE_UNITS, &maxTextureUnits);
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &maxVertexUniformBlocks);
+    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &maxFragmentUniformBlocks);
+    glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &maxUniformBlockSize);
 
-	Logger::Log("Max Texture Units: ", ", Max Uniform Size: ", (maxUniformBlockSize/1024), " kB");
-	Logger::Log("Max Vertex Uniform Blocks: ", maxVertexUniformBlocks, ", Max Fragment Uniform Blocks: ", maxFragmentUniformBlocks);
+    Logger::Log("Max Texture Units: ", ", Max Uniform Size: ", (maxUniformBlockSize/1024), " kB");
+    Logger::Log("Max Vertex Uniform Blocks: ", maxVertexUniformBlocks, ", Max Fragment Uniform Blocks: ", maxFragmentUniformBlocks);
 }
 
 void TemperFine::UpdatePerspective(unsigned int width, unsigned int height)
@@ -77,7 +76,7 @@ Constants::Status TemperFine::Initialize()
     Logger::Log("Loading graphics config file...");
     if (!graphicsConfig.ReadConfiguration())
     {
-		Logger::Log("Bad graphics config file!");
+        Logger::Log("Bad graphics config file!");
         return Constants::Status::BAD_CONFIG;
     }
 
@@ -100,13 +99,6 @@ Constants::Status TemperFine::Initialize()
     {
         Logger::Log("Bad technology config file!");
         return Constants::Status::BAD_CONFIG;
-    }
-
-    Logger::Log("Loading maps...");
-    if (!mapManager.ReadMap("maps/test.txt", testMap))
-    {
-        Logger::Log("Bad test map!");
-        return Constants::Status::BAD_MAP;
     }
 
     Logger::Log("Configuration loaded!");
@@ -138,7 +130,7 @@ Constants::Status TemperFine::LoadGraphics(sfg::Desktop* desktop)
     glEnable(GL_MULTISAMPLE);
 
     // Let OpenGL shaders determine point sizes.
-	glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     // Disable face culling so that see-through flat objects work.
     glDisable(GL_CULL_FACE);
@@ -219,11 +211,20 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
         return Constants::Status::BAD_VOXEL_MAP;
     }
 
-    // TODO: This should be setup from some sort of menu / user input / network input
-    voxelMap.SetupFromMap(&testMap);
+    // TODO this should be some menu code, once the UI bugs are fixed.
+    MapInfo testMap;
+    Logger::Log("Loading maps...");
+    if (!mapManager.ReadMap("maps/test.txt", testMap))
+    {
+        Logger::Log("Bad test map!");
+        return Constants::Status::BAD_MAP;
+    }
 
-    // Load the current player, who is always the first element in the players list.
-    players.push_back(Player());
+    // TODO we start at a menu, not inside a game. This can be called from the physics thread!
+    physicsSyncBuffer.SetRoundMap(testMap);
+
+    // Load the current player, who is always the first element in the players list. TODO name should be from config.
+    physicsSyncBuffer.AddPlayer("Default Player");
 
     // Now that *all* the models have loaded, prepare for rendering models by initializing OpenGL and sending the model data to OpenGL
     Logger::Log("Sending model VAO to OpenGL...");
@@ -235,17 +236,14 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     modelManager.ResetOpenGlModelData();
 
     // UI
-  //  if (!techTreeWindow.Initialize(desktop))
- //   {
-   //     return Constants::Status::BAD_UI;
-  //  }
-
-    // TODO test code remove
-  //  techTreeWindow.Display();
+    if (!techTreeWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&modelManager, &players, &viewer, &voxelMap, &testMap);
+    physics.Initialize(&physicsSyncBuffer, &modelManager); // TODO use sync buffer here instead of all of this data.
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");
@@ -255,12 +253,25 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
 void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
 {
+    // Update the selected voxel.
+    vec::vec3i selectedVoxel;
+    if (physicsSyncBuffer.TryGetNewSelectedVoxel(&selectedVoxel))
+    {
+        voxelMap.SetSelectedVoxel(selectedVoxel);
+    }
+
+    // Update the map from changes, if applicable.
+    if (physicsSyncBuffer.UpdateRoundMapDisplay(voxelMap))
+    {
+        Logger::Log("Voxel Map Display updated!");
+    }
+
     // Update useful statistics that are fancier than the standard GUI
     // statistics.UpdateRunTime(currentGameTime);
     // statistics.UpdateViewPos(viewer.viewPosition);
 }
 
-void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::Window& window, bool& alive, bool& paused)
+void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused)
 {
     // Handle all events.
     sf::Event event;
@@ -311,7 +322,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::Window& window, bool& a
     }
 }
 
-void TemperFine::Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
+void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
 {
     vec::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
 
@@ -325,10 +336,7 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& gu
     scenery.Render(viewMatrix, projectionMatrix);
 
     // Renders each players' units.
-    for (unsigned int i = 0; i < players.size(); i++)
-    {
-        players[i].RenderUnits(modelManager, routeVisuals, projectionMatrix);
-    }
+    physicsSyncBuffer.RenderPlayers(modelManager, routeVisuals, projectionMatrix);
 
     // Renders the voxel map
     voxelMap.Render(projectionMatrix);
@@ -338,7 +346,8 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& gu
 
     // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
     // window.resetGLStates(); // This crashes on my AMD card.
-    // desktop.Update(guiClock.restart().asSeconds());
+    // Note that SFGUI crashes for some reason when the UI is displayed when not rendering stats. TODO diagnose, later on.
+    desktop.Update(guiClock.restart().asSeconds());
 }
 
 Constants::Status TemperFine::Run()
@@ -348,7 +357,7 @@ Constants::Status TemperFine::Run()
     sf::ContextSettings contextSettings = sf::ContextSettings(24, 8, 8, 4, 0);
 
     sf::Uint32 style = GraphicsConfig::IsFullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close;
-    sf::Window window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
+    sf::RenderWindow window(sf::VideoMode(GraphicsConfig::ScreenWidth, GraphicsConfig::ScreenHeight), "Temper Fine", style, contextSettings);
     sfg::Desktop desktop;
 
     // Now that we have an OpenGL Context, load our graphics.
@@ -369,7 +378,7 @@ Constants::Status TemperFine::Run()
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
-        viewMatrix = viewer.viewOrientation.asMatrix() * MatrixOps::Translate(-viewer.viewPosition);
+        viewMatrix = physicsSyncBuffer.GetViewMatrix();
 
         HandleEvents(desktop, window, alive, paused);
         PerformGuiThreadUpdates(clock.getElapsedTime().asSeconds());
@@ -379,10 +388,10 @@ Constants::Status TemperFine::Run()
         {
             Render(desktop, window, guiClock, viewMatrix);
 
-          //  glViewport(0, 0, window.getSize().x, window.getSize().y);
-           // sfgui.Display(window);
+            glViewport(0, 0, window.getSize().x, window.getSize().y);
+            sfgui.Display(window);
 
-          //  UpdatePerspective(window.getSize().x, window.getSize().y);
+            UpdatePerspective(window.getSize().x, window.getSize().y);
             window.display();
         }
 

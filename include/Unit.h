@@ -30,16 +30,9 @@ class Unit
 
         // Moves the unit to the specified position.
         void Move(vec::vec3 pos);
-
-        // TODO test remove
-        void TestAddRayPath(vec::vec3 start, vec::vec3 end);
-
+        
     protected:
     private:
-        // TODO test remove
-        int testKnownRouteCount;
-        std::vector<int> testRouteIds;
-        std::vector<std::vector<vec::vec3>> testRoutes;
 
         // The current voxel the unit is above.
         vec::vec3i voxelPosition;
@@ -50,7 +43,6 @@ class Unit
 
         // The route assigned to this unit.
         int routeVisualId;
-        bool routeNeedsVisualUpdate;
         std::vector<vec::vec3> assignedRoute;
         unsigned int currentSegment;
         float currentSegmentPercentage;

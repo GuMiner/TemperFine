@@ -103,9 +103,6 @@
     <ClCompile Include="src\Unit.cpp">
       <Filter>Source\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Viewer.cpp">
-      <Filter>Source\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\VoxelMap.cpp">
       <Filter>Source\src</Filter>
     </ClCompile>
@@ -120,6 +117,15 @@
     </ClCompile>
     <ClCompile Include="src\RouteVisual.cpp">
       <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SyncBuffer.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Viewer.cpp">
+      <Filter>Physics\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameRound.cpp">
+      <Filter>Physics\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -216,9 +222,6 @@
     <ClInclude Include="include\Unit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="include\Viewer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="include\VoxelMap.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -263,6 +266,15 @@
     </ClInclude>
     <ClInclude Include="include\RouteVisual.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SyncBuffer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Viewer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameRound.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

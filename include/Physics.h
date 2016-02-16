@@ -3,9 +3,9 @@
 #include "MapSections.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "SyncBuffer.h"
 #include "UnitRouter.h"
 #include "Viewer.h"
-#include "VoxelMap.h"
 
 // Simple structure for where the mouse was clicked and the screen size at the time of clicking.
 struct MouseClickData
@@ -25,7 +25,7 @@ class Physics
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(ModelManager* modelManager, std::vector<Player>* players, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo);
+        void Initialize(SyncBuffer* syncBuffer, ModelManager* modelManager);
 
         // Queues a mouse click for future processing.
         void QueueLeftMouseClick(int x, int y, int xSize, int ySize);
@@ -43,18 +43,21 @@ class Physics
         void Stop();
 
     private:
+        SyncBuffer *syncBuffer;
         ModelManager* modelManager;
-        std::vector<Player>* players;
-        UnitRouter unitRouter;
-        Viewer* viewer;
-        VoxelMap* voxelMap;
-        MapInfo* mapInfo;
 
+        // Physics computation classes
         MapSections mapSections;
+        UnitRouter unitRouter;
 
+        // Physics run state (includes sync buffer, above).
+        Viewer viewer;
+        
+        // Physics operation state.
         bool isAlive;
         bool isPaused;
 
+        // Input events.
         bool isLeftMouseClicked;
         MouseClickData leftMouseClickData;
         void HandleLeftMouseClicked();

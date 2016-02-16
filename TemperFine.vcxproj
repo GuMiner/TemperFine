@@ -52,6 +52,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+    <IncludePath>$(ProjectDir)\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <SourcePath>$(ProjectDir)\src</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +122,7 @@
     <ClInclude Include="include\ShaderManager.h" />
     <ClInclude Include="include\Statistics.h" />
     <ClInclude Include="include\StringUtils.h" />
+    <ClInclude Include="include\SyncBuffer.h" />
     <ClInclude Include="include\TechConfig.h" />
     <ClInclude Include="include\TechInfo.h" />
     <ClInclude Include="include\TechTreeWindow.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="include\TurretConfig.h" />
     <ClInclude Include="include\TurretInfo.h" />
     <ClInclude Include="include\Unit.h" />
+    <ClInclude Include="include\GameRound.h" />
     <ClInclude Include="include\UnitRouter.h" />
     <ClInclude Include="include\Vec.h" />
     <ClInclude Include="include\VecOps.h" />
@@ -165,11 +169,13 @@
     <ClCompile Include="src\Statistics.cpp" />
     <ClCompile Include="src\stb_implementations.cpp" />
     <ClCompile Include="src\StringUtils.cpp" />
+    <ClCompile Include="src\SyncBuffer.cpp" />
     <ClCompile Include="src\TechConfig.cpp" />
     <ClCompile Include="src\TechTreeWindow.cpp" />
     <ClCompile Include="src\TemperFine.cpp" />
     <ClCompile Include="src\TurretConfig.cpp" />
     <ClCompile Include="src\Unit.cpp" />
+    <ClCompile Include="src\GameRound.cpp" />
     <ClCompile Include="src\UnitRouter.cpp" />
     <ClCompile Include="src\Vec.cpp" />
     <ClCompile Include="src\VecOps.cpp" />

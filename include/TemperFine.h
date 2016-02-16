@@ -21,10 +21,10 @@
 #include "Scenery.h"
 #include "ShaderManager.h"
 #include "Statistics.h"
+#include "SyncBuffer.h"
 #include "TechConfig.h"
 #include "TechTreeWindow.h"
 #include "TurretConfig.h"
-#include "Viewer.h"
 #include "VoxelMap.h"
 
 // Handles startup and the base graphics rendering loop.
@@ -54,15 +54,14 @@ class TemperFine
 
     // Game data
     Physics physics;
+    SyncBuffer physicsSyncBuffer;
+
     Statistics statistics;
     Viewer viewer;
     VoxelMap voxelMap;
     RouteVisual routeVisuals;
     Scenery scenery;
-
-    std::vector<Player> players;
-    MapInfo testMap; // TODO, there should be a vector of default maps, such as this one.
-
+    
     // Non-graphics threads
     sf::Thread physicsThread;
 
@@ -76,10 +75,10 @@ class TemperFine
     void PerformGuiThreadUpdates(float currentGameTime);
 
     // Handles GUI-based events, such as closing the application, resizing the window, etc.
-    void HandleEvents(sfg::Desktop& desktop, sf::Window& window, bool& alive, bool& paused);
+    void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
 
     // Renders the scene.
-    void Render(sfg::Desktop& desktop, sf::Window& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
+    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
 
 public:
     // Used just for data storage.

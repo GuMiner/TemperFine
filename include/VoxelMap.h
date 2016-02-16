@@ -18,7 +18,7 @@ class VoxelMap
         bool Initialize(ImageManager& imageManager, ModelManager& modelManager, ShaderManager& shaderManager);
 
         // Sets up the VoxelMap from the provided map info.
-        void SetupFromMap(MapInfo* mapInfo);
+        void SetupFromMap(const MapInfo& mapInfo);
 
         // Sets the currently-selected voxel, which renders specially.
         void SetSelectedVoxel(const vec::vec3i& selectedVoxel);
@@ -39,8 +39,11 @@ class VoxelMap
         // Loads models, returning the ModelManager ID of the models.
         std::vector<int> LoadModels(ModelManager& modelManager);
 
-        // The map for which the voxel data is currently created from.
-        MapInfo* mapInfo;
+        // Minimal map data required for rendering. The rest of the data is stored in the texture.
+        bool hasValidMap;
+        int xMapSize;
+        int yMapSize;
+        int totalVoxelSize;
 
         // The textures for all of the voxels in a single nicely-packed image.
         GLuint voxelTextureId;

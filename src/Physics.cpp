@@ -16,13 +16,10 @@ Physics::Physics()
     isLeftMouseClicked = true;
 }
 
-void Physics::Initialize(ModelManager* modelManager, std::vector<Player>* players, Viewer* viewer, VoxelMap* voxelMap, MapInfo* mapInfo)
+void Physics::Initialize(SyncBuffer* syncBuffer, ModelManager* modelManager)
 {
+    this->syncBuffer = syncBuffer;
     this->modelManager = modelManager;
-    this->players = players;
-    this->viewer = viewer;
-    this->voxelMap = voxelMap;
-    this->mapInfo = mapInfo;
 }
 
 // Queues a mouse click for manipulation with the physics thread.
@@ -41,11 +38,12 @@ void Physics::HandleLeftMouseClicked()
     vec::vec2 mousePos = vec::vec2((float)leftMouseClickData.x, (float)leftMouseClickData.y);
     vec::vec2 screenSize = vec::vec2((float)leftMouseClickData.xSize, (float)leftMouseClickData.ySize);
 
-    vec::mat4 viewRotationMatrix = viewer->viewOrientation.asMatrix();
+    vec::mat4 viewRotationMatrix = viewer.GetViewOrientation().asMatrix();
     vec::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
-
+    
+    /* TODO semaphore structure required. 
     // Check to see if we clicked a unit. You can only select your own units.
-    int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer->viewPosition, worldRay);
+    int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer.GetViewPosition(), worldRay);
     if (collidedUnit != -1)
     {
         (*players)[0].ToggleUnitSelection(collidedUnit);
@@ -53,9 +51,10 @@ void Physics::HandleLeftMouseClicked()
     else
     {
         vec::vec3i hitVoxel;
-        if (mapSections.HitByRay(mapInfo, viewer->viewPosition, worldRay, &hitVoxel))
+        // TODO need a semaphore structure from syncbuffer for this to work.
+        if (mapSections.HitByRay(mapInfo, viewer.GetViewPosition(), worldRay, &hitVoxel))
         {
-            voxelMap->SetSelectedVoxel(hitVoxel);
+            syncBuffer->SetNewSelectedVoxel(hitVoxel);
 
             // If there are units selected, move them to the selected voxel (if possible)
             const std::set<int>& selectedUnits = (*players)[0].GetSelectedUnits();
@@ -82,7 +81,7 @@ void Physics::HandleLeftMouseClicked()
                 }
             }
         }
-    }
+    } */
 }
 
 void Physics::Run()
@@ -93,8 +92,11 @@ void Physics::Run()
     {
         if (!isPaused)
         {
-			// Update the viewer's position
-            viewer->InputUpdate();
+            // Update the viewer's position
+            viewer.InputUpdate();
+
+            // Synchronize with the GUI thread.
+            syncBuffer->UpdateViewMatrix(viewer.GetViewPosition(), viewer.GetViewOrientation());
 
             if (isLeftMouseClicked)
             {
@@ -102,9 +104,11 @@ void Physics::Run()
                 isLeftMouseClicked = false;
             }
 
-            if (mapSections.NeedsRecomputation())
+            if (syncBuffer->UpdateRoundMapPhysics(mapSections))
             {
-                mapSections.RecomputeMapSections(mapInfo);
+                Logger::Log("Round map physics updated!");
+                
+                // The round map was updated, so perform additional updates based on the map changing.
 
                 // TODO test code, player shouldn't start with unit, and should be toggled off of something.
 
@@ -130,10 +134,12 @@ void Physics::Run()
             }
 
             // All units move
+            // TODO need syncbuffer support.
+            /*
             for (Player& player : (*players))
             {
                 player.MoveUnits();
-            }
+            }*/
         }
 
         // The physics thread runs at a configurable delay, which we abide by here.

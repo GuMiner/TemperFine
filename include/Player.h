@@ -11,7 +11,7 @@
 class Player
 {
     public:
-        Player();
+        Player(const std::string& name, int id);
 
         // Renders the player's units.
         void RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix);
@@ -26,17 +26,15 @@ class Player
         // Returns the players selected units.
         const std::set<int>& GetSelectedUnits() const;
 
-        // Adds the unit to the units the player has under control.
-        void AddUnit(const Unit unit);
-
         // Updates a unit's route to the new given route.
         void UpdateUnitRoute(int unitId, const std::vector<vec::vec3>& route);
 
         // Moves the player's units along their assigned routes.
         void MoveUnits();
 
-    protected:
     private:
+        // ID of the player
+        int id;
 
         // Display name of the player
         std::string name;

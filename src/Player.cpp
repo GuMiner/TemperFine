@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(const std::string& name, int id)
 {
-    name = std::string("Default Player");
+    this->name = name;
+    this->id = id;
 }
 
 void Player::RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix)
@@ -17,12 +18,6 @@ int Player::CollisionCheck(ModelManager& modelManager, vec::vec3 cameraPos, vec:
 {
     for (unsigned int i = 0; i < units.size(); i++)
     {
-        // TODO test code remove
-        if (i == 0)
-        {
-            units[i].TestAddRayPath(cameraPos, cameraPos + 80.0f * worldRay);
-        }
-
         if (units[i].InRayPath(modelManager, cameraPos, worldRay))
         {
             return i;
@@ -64,9 +59,4 @@ void Player::ToggleUnitSelection(int unitId)
 const std::set<int>& Player::GetSelectedUnits() const
 {
     return selectedUnits;
-}
-
-void Player::AddUnit(const Unit unit)
-{
-    units.push_back(unit);
 }
