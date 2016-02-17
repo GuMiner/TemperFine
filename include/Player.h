@@ -2,6 +2,7 @@
 #include <string>
 #include <set>
 #include <vector>
+#include <SFML\System.hpp>
 #include "ModelManager.h"
 #include "Unit.h"
 #include "RouteVisual.h"
@@ -11,7 +12,13 @@
 class Player
 {
     public:
+        Player();
+        Player(const Player& player);
         Player(const std::string& name, int id);
+
+        sf::Mutex playerUnitMutex;
+
+        void AddUnit(const Unit unit);
 
         // Renders the player's units.
         void RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix);

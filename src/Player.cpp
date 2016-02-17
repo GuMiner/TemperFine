@@ -1,9 +1,24 @@
 #include "Player.h"
 
+Player::Player()
+{
+
+}
+
+Player::Player(const Player& player)
+{
+    // TODO, potential bug here.
+}
+
 Player::Player(const std::string& name, int id)
 {
     this->name = name;
     this->id = id;
+}
+
+void Player::AddUnit(const Unit unit)
+{
+    units.push_back(unit);
 }
 
 void Player::RenderUnits(ModelManager& modelManager, RouteVisual& routeVisual, vec::mat4& projectionMatrix)

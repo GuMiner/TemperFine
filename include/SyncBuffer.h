@@ -4,6 +4,7 @@
 #include "MapSections.h"
 #include "ModelManager.h"
 #include "RouteVisual.h"
+#include "Unit.h"
 #include "Vec.h"
 #include "VoxelMap.h"
 
@@ -18,6 +19,10 @@ public:
 
     // Renders the players
     void RenderPlayers(ModelManager& modelManager, RouteVisual& routeVisuals, vec::mat4& projectionMatrix);
+
+    // TODO more fine-grained semaphore concurrency
+    void AddUnit(unsigned int playerId, const Unit& unit);
+    void UpdatePlayers();
 
     // Sets the round map.
     void SetRoundMap(const MapInfo& testMap);

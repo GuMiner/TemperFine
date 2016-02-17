@@ -106,9 +106,8 @@ void Physics::Run()
 
             if (syncBuffer->UpdateRoundMapPhysics(mapSections))
             {
-                Logger::Log("Round map physics updated!");
-                
                 // The round map was updated, so perform additional updates based on the map changing.
+                Logger::Log("Round map physics updated!");
 
                 // TODO test code, player shouldn't start with unit, and should be toggled off of something.
 
@@ -127,19 +126,14 @@ void Physics::Run()
                     {
                         testUnit.CreateNew(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
                            vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
-                        //(*players)[0].AddUnit(testUnit);
+                        syncBuffer->AddUnit(0, testUnit);
                         rotation += 0.20f;
                     }
                 }
             }
 
             // All units move
-            // TODO need syncbuffer support.
-            /*
-            for (Player& player : (*players))
-            {
-                player.MoveUnits();
-            }*/
+            syncBuffer->UpdatePlayers();
         }
 
         // The physics thread runs at a configurable delay, which we abide by here.

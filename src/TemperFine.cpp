@@ -306,11 +306,6 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             {
                 techTreeWindow.ToggleDisplay();
             }
-            // TODO TEST CODE REMOVE
-            else if (event.key.code == sf::Keyboard::T)
-            {
-                // tag = 1;
-            }
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
@@ -339,6 +334,7 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     physicsSyncBuffer.RenderPlayers(modelManager, routeVisuals, projectionMatrix);
 
     // Renders the voxel map
+    // TODO needs a semaphore to prevent inadvertent updates.
     voxelMap.Render(projectionMatrix);
 
     // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.

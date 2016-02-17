@@ -16,12 +16,39 @@ void SyncBuffer::AddPlayer(const std::string& playerName)
     playerVectorMutex.unlock();
 }
 
+void SyncBuffer::AddUnit(unsigned int playerId, const Unit& unit)
+{
+    playerVectorMutex.lock();
+    if (playerId < gameRound.players.size())
+    {
+        gameRound.players[playerId].playerUnitMutex.lock();
+        gameRound.players[playerId].AddUnit(unit);
+        gameRound.players[playerId].playerUnitMutex.unlock();
+
+    }
+    playerVectorMutex.unlock();
+}
+
 void SyncBuffer::RenderPlayers(ModelManager& modelManager, RouteVisual& routeVisuals, vec::mat4& projectionMatrix)
 {
     playerVectorMutex.lock();
     for (unsigned int i = 0; i < gameRound.players.size(); i++)
     {
+        gameRound.players[i].playerUnitMutex.lock();
         gameRound.players[i].RenderUnits(modelManager, routeVisuals, projectionMatrix);
+        gameRound.players[i].playerUnitMutex.unlock();
+    }
+    playerVectorMutex.unlock();
+}
+
+void SyncBuffer::UpdatePlayers()
+{
+    playerVectorMutex.lock();
+    for (unsigned int i = 0; i < gameRound.players.size(); i++)
+    {
+        gameRound.players[i].playerUnitMutex.lock();
+        gameRound.players[i].MoveUnits();
+        gameRound.players[i].playerUnitMutex.unlock();
     }
     playerVectorMutex.unlock();
 }
