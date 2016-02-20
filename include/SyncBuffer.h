@@ -1,9 +1,9 @@
 #pragma once
-#include <SFML\System.hpp>
 #include "GameRound.h"
 #include "MapSections.h"
 #include "ModelManager.h"
 #include "RouteVisual.h"
+#include "SharedExclusiveLock.h"
 #include "Unit.h"
 #include "Vec.h"
 #include "VoxelMap.h"
@@ -48,18 +48,19 @@ public:
 private:
     GameRound gameRound;
 
-    sf::Mutex playerVectorMutex;
+    // Mutex for updating the player vector. Acquire a WriteLock to add/remove players.
+    SharedExclusiveLock playerVectorMutex;
     
-    sf::Mutex mapUpdateMutex;
+    SharedExclusiveLock mapUpdateMutex;
     bool roundMapUpdatedVisuals;
     bool roundMapUpdatedPhysics;
 
     // View matrix and operation mutex.
-    sf::Mutex viewMatrixMutex;
+    SharedExclusiveLock viewMatrixMutex;
     vec::mat4 viewMatrix;
 
     // If there's a new selected voxel.
-    sf::Mutex selectedVoxelMutex;
+    SharedExclusiveLock selectedVoxelMutex;
     bool newSelectedVoxel;
     vec::vec3i selectedVoxel;
 };

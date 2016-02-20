@@ -11,69 +11,56 @@ SyncBuffer::SyncBuffer()
 // Adds the player to the players in the round.
 void SyncBuffer::AddPlayer(const std::string& playerName)
 {
-    playerVectorMutex.lock();
+    WriteLock writeLock(playerVectorMutex);
     gameRound.players.push_back(Player(playerName, (int)gameRound.players.size()));
-    playerVectorMutex.unlock();
 }
 
 void SyncBuffer::AddUnit(unsigned int playerId, const Unit& unit)
 {
-    playerVectorMutex.lock();
+    ReadLock readLock(playerVectorMutex);
     if (playerId < gameRound.players.size())
     {
-        gameRound.players[playerId].playerUnitMutex.lock();
         gameRound.players[playerId].AddUnit(unit);
-        gameRound.players[playerId].playerUnitMutex.unlock();
-
     }
-    playerVectorMutex.unlock();
 }
 
 void SyncBuffer::RenderPlayers(ModelManager& modelManager, RouteVisual& routeVisuals, vec::mat4& projectionMatrix)
 {
-    playerVectorMutex.lock();
+    ReadLock readLock(playerVectorMutex);
     for (unsigned int i = 0; i < gameRound.players.size(); i++)
     {
-        gameRound.players[i].playerUnitMutex.lock();
+        gameRound.players[i].PerformUnitGuiUpdates(routeVisuals);
         gameRound.players[i].RenderUnits(modelManager, routeVisuals, projectionMatrix);
-        gameRound.players[i].playerUnitMutex.unlock();
     }
-    playerVectorMutex.unlock();
 }
 
 void SyncBuffer::UpdatePlayers()
 {
-    playerVectorMutex.lock();
+    ReadLock readLock(playerVectorMutex);
     for (unsigned int i = 0; i < gameRound.players.size(); i++)
     {
-        gameRound.players[i].playerUnitMutex.lock();
         gameRound.players[i].MoveUnits();
-        gameRound.players[i].playerUnitMutex.unlock();
     }
-    playerVectorMutex.unlock();
 }
 
 // Sets the round map.
 void SyncBuffer::SetRoundMap(const MapInfo& testMap)
 {
-    mapUpdateMutex.lock();
+    WriteLock writeLock(mapUpdateMutex);
     gameRound.map = testMap;
     roundMapUpdatedVisuals = true;
     roundMapUpdatedPhysics = true;
-    mapUpdateMutex.unlock();
 }
 
 bool SyncBuffer::UpdateRoundMapPhysics(MapSections& mapSections)
 {
-    // TODO this should use a semaphore (which we'd implement) instead.
     if (roundMapUpdatedPhysics)
     {
         // Note that because we don't 'unset' the boolean and there's only one reader,
         //  we don't need to check the if-block again.
-        mapUpdateMutex.lock();
+        ReadLock readLock(mapUpdateMutex);
         mapSections.RecomputeMapSections(gameRound.map);
         roundMapUpdatedPhysics = false;
-        mapUpdateMutex.unlock();
 
         return true;
     }
@@ -88,10 +75,9 @@ bool SyncBuffer::UpdateRoundMapDisplay(VoxelMap& voxelMap)
     {
         // Note that because we don't 'unset' the boolean and there's only one reader,
         //  we don't need to check the if-block again.
-        mapUpdateMutex.lock();
+        ReadLock readLock(mapUpdateMutex);
         voxelMap.SetupFromMap(gameRound.map);
         roundMapUpdatedVisuals = false;
-        mapUpdateMutex.unlock();
 
         return true;
     }
@@ -102,9 +88,8 @@ bool SyncBuffer::UpdateRoundMapDisplay(VoxelMap& voxelMap)
 // Updates the view matrix given the viewer position and rotation.
 void SyncBuffer::UpdateViewMatrix(const vec::vec3& position, const vec::quaternion& rotation)
 {
-    viewMatrixMutex.lock();
+    WriteLock writeLock(viewMatrixMutex);
     viewMatrix = rotation.asMatrix() * MatrixOps::Translate(-position);
-    viewMatrixMutex.unlock();
 }
 
 // Retrives a copy of the current view matrix.
@@ -112,20 +97,17 @@ vec::mat4 SyncBuffer::GetViewMatrix()
 {
     vec::mat4 copy;
 
-    viewMatrixMutex.lock();
+    ReadLock readLock(viewMatrixMutex);
     copy = viewMatrix;
-    viewMatrixMutex.unlock();
-
     return copy;
 }
 
 // Sets a new voxel as the selected voxel.
 void SyncBuffer::SetNewSelectedVoxel(const vec::vec3i& selectedVoxel)
 {
-    selectedVoxelMutex.lock();
+    WriteLock writeLock(selectedVoxelMutex);
     this->selectedVoxel = selectedVoxel;
     newSelectedVoxel = true;
-    selectedVoxelMutex.unlock();
 }
 
 // Attempts to get a new selected voxel. If successful, returns true (and will return false subsequently until the next update).
@@ -135,10 +117,9 @@ bool SyncBuffer::TryGetNewSelectedVoxel(vec::vec3i* selectedVoxel)
     {
         // Note that because we don't 'unset' the boolean and there's only one reader,
         //  we don't need to check the if-block again.
-        selectedVoxelMutex.lock();
+        ReadLock readLock(selectedVoxelMutex);
         *selectedVoxel = this->selectedVoxel;
         newSelectedVoxel = false;
-        selectedVoxelMutex.unlock();
 
         return true;
     }

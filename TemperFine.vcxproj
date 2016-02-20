@@ -120,6 +120,7 @@
     <ClInclude Include="include\RouteVisual.h" />
     <ClInclude Include="include\Scenery.h" />
     <ClInclude Include="include\ShaderManager.h" />
+    <ClInclude Include="include\SharedExclusiveLock.h" />
     <ClInclude Include="include\Statistics.h" />
     <ClInclude Include="include\StringUtils.h" />
     <ClInclude Include="include\SyncBuffer.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\RouteVisual.cpp" />
     <ClCompile Include="src\Scenery.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\SharedExclusiveLock.cpp" />
     <ClCompile Include="src\Statistics.cpp" />
     <ClCompile Include="src\stb_implementations.cpp" />
     <ClCompile Include="src\StringUtils.cpp" />

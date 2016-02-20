@@ -243,7 +243,7 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
 
     // Physics
     Logger::Log("Physics loading...");
-    physics.Initialize(&physicsSyncBuffer, &modelManager); // TODO use sync buffer here instead of all of this data.
+    physics.Initialize(&physicsSyncBuffer);
 
     physicsThread.launch();
     Logger::Log("Physics Thread Started!");

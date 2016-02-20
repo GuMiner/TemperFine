@@ -10,11 +10,12 @@
 Unit::Unit()
 {
     routeVisualId = -1;
+    routeNeedsVisualUpdate = false;
 }
 
 // Creates a new unit, with full armor.
 // Note that the unrotated unit is pointing in the x direction, with zero rotation.
-void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation)
+Unit::Unit(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation)
 {
     this->position = position;
     this->rotation = rotation;
@@ -40,10 +41,13 @@ void Unit::CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vec
     }
 }
 
-void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isSelected, vec::mat4& projectionMatrix)
+// Performs rendering updates that need to be done in the physics thread that don't draw anything.
+void Unit::PerformGuiThreadUpdates(RouteVisual& routeVisual)
 {
+    ReadLock readLock(assignedRouteLock);
+
     // Update the route visual if the physics system has recomputed it.
-    if (false) // TODO move to GUI thread updates, where route visuals are added if a new route is available in the general structure.
+    if (routeNeedsVisualUpdate)
     {
         if (routeVisualId != -1)
         {
@@ -52,7 +56,12 @@ void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isS
 
         routeVisualId = routeVisual.CreateRouteVisual(assignedRoute);
     }
+}
 
+void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isSelected, vec::mat4& projectionMatrix)
+{
+    ReadLock readLock(unitPhysicsLock);
+    
     if (routeVisualId != -1)
     {
         // We have an active route, so render it.
@@ -82,21 +91,19 @@ void Unit::Render(ModelManager& modelManager, RouteVisual& routeVisual, bool isS
     }
 }
 
-bool Unit::InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, const vec::vec3& rayVector)
+bool Unit::InRayPath(const vec::vec3& rayStart, const vec::vec3& rayVector)
 {
-    // TODO improve this to do something *drastically* better.
-
-    // Assume the unit is in the ray path if the body, represented as a sphere, is hit by the ray.
-    const TextureModel& modelData = modelManager.GetModel(BodyConfig::Bodies[bodyTypeId].bodyModelId);
-    float sphereRadius = 1.0f;//BodyConfig::Bodies[bodyTypeId].scale * (vec::length(modelData.maxBounds) + vec::length(modelData.minBounds)) / 4.0f;
-
+    // TODO improve this to do something *drastically* better. Also store unit size data in the unit itself.
+    ReadLock readLock(unitPhysicsLock);
+    float sphereRadius = 1.0f;
     return PhysicsOps::HitsSphere(rayStart, rayVector, position, sphereRadius);
 }
 
 void Unit::UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute)
 {
-    // TODO this is very invalid with the new syncbuffer structure.
+    WriteLock writeLock(assignedRouteLock);
     assignedRoute = newAssignedRoute;
+    routeNeedsVisualUpdate = true;
 
     currentSegment = 0;
     currentSegmentPercentage = 0.0f;
@@ -104,6 +111,9 @@ void Unit::UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute)
 
 void Unit::MoveAlongRoute()
 {
+    ReadLock readLock(assignedRouteLock);
+    WriteLock writeLock(unitPhysicsLock);
+
     // TODO speed needs to be defined here.
     // TODO unit needs to rotate while it moves.
     float travelAmountPerStep = 0.10f;
@@ -141,5 +151,6 @@ void Unit::MoveAlongRoute()
 
 void Unit::Move(vec::vec3 pos)
 {
+    WriteLock writeLock(unitPhysicsLock);
     position = pos;
 }

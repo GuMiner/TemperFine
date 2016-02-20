@@ -127,6 +127,9 @@
     <ClCompile Include="src\GameRound.cpp">
       <Filter>Physics\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\SharedExclusiveLock.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ArmorConfig.h">
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="include\GameRound.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SharedExclusiveLock.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

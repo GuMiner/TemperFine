@@ -5,6 +5,7 @@
 #include "ModelManager.h"
 #include "TurretInfo.h"
 #include "RouteVisual.h"
+#include "SharedExclusiveLock.h"
 #include "Vec.h"
 
 // Represents a physical unit.
@@ -14,13 +15,16 @@ class Unit
         Unit();
 
         // Creates a new unit, with full armor.
-        void CreateNew(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation);
+        Unit(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation);
+        
+        // Performs rendering updates that need to be done in the physics thread that don't draw anything.
+        void PerformGuiThreadUpdates(RouteVisual& routeVisual);
 
         // Renders the unit.
         void Render(ModelManager& modelManager, RouteVisual& unitRouter, bool isSelected, vec::mat4& projectionMatrix);
 
         // Returns true if the unit is currently in the path of the ray, false otherwise.
-        bool InRayPath(ModelManager& modelManager, const vec::vec3& rayStart, const vec::vec3& rayVector);
+        bool InRayPath(const vec::vec3& rayStart, const vec::vec3& rayVector);
 
         // Updates (or adds) an assigned route for a unit.
         void UpdateAssignedRoute(std::vector<vec::vec3> newAssignedRoute);
@@ -31,8 +35,9 @@ class Unit
         // Moves the unit to the specified position.
         void Move(vec::vec3 pos);
         
-    protected:
     private:
+        SharedExclusiveLock unitPhysicsLock;
+        SharedExclusiveLock assignedRouteLock;
 
         // The current voxel the unit is above.
         vec::vec3i voxelPosition;
@@ -42,6 +47,7 @@ class Unit
         vec::quaternion rotation;
 
         // The route assigned to this unit.
+        bool routeNeedsVisualUpdate;
         int routeVisualId;
         std::vector<vec::vec3> assignedRoute;
         unsigned int currentSegment;

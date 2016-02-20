@@ -25,7 +25,7 @@ class Physics
         Physics();
 
         // Initializes the physics thread with variables it needs.
-        void Initialize(SyncBuffer* syncBuffer, ModelManager* modelManager);
+        void Initialize(SyncBuffer* syncBuffer);
 
         // Queues a mouse click for future processing.
         void QueueLeftMouseClick(int x, int y, int xSize, int ySize);
@@ -44,7 +44,6 @@ class Physics
 
     private:
         SyncBuffer *syncBuffer;
-        ModelManager* modelManager;
 
         // Physics computation classes
         MapSections mapSections;

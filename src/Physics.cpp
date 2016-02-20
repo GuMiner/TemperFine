@@ -16,10 +16,9 @@ Physics::Physics()
     isLeftMouseClicked = true;
 }
 
-void Physics::Initialize(SyncBuffer* syncBuffer, ModelManager* modelManager)
+void Physics::Initialize(SyncBuffer* syncBuffer)
 {
     this->syncBuffer = syncBuffer;
-    this->modelManager = modelManager;
 }
 
 // Queues a mouse click for manipulation with the physics thread.
@@ -40,10 +39,9 @@ void Physics::HandleLeftMouseClicked()
 
     vec::mat4 viewRotationMatrix = viewer.GetViewOrientation().asMatrix();
     vec::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
-    
-    /* TODO semaphore structure required. 
+    /*
     // Check to see if we clicked a unit. You can only select your own units.
-    int collidedUnit = (*players)[0].CollisionCheck(*modelManager, viewer.GetViewPosition(), worldRay);
+    int collidedUnit = players[0].CollisionCheck(viewer.GetViewPosition(), worldRay);
     if (collidedUnit != -1)
     {
         (*players)[0].ToggleUnitSelection(collidedUnit);
@@ -112,7 +110,6 @@ void Physics::Run()
                 // TODO test code, player shouldn't start with unit, and should be toggled off of something.
 
                 // TODO test code, the player shouldn't start with units.
-                Unit testUnit;
                 std::vector<unsigned int> turrets;
                 turrets.push_back(0); // TurretConfig::Turrets, first item.
 
@@ -124,9 +121,9 @@ void Physics::Run()
                 {
                     for (unsigned int j = 0; j < maxSize; j++)
                     {
-                        testUnit.CreateNew(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
-                           vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
-                        syncBuffer->AddUnit(0, testUnit);
+                        Unit unit = Unit(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
+                            vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
+                        syncBuffer->AddUnit(0, unit);
                         rotation += 0.20f;
                     }
                 }
