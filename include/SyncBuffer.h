@@ -5,6 +5,7 @@
 #include "RouteVisual.h"
 #include "SharedExclusiveLock.h"
 #include "Unit.h"
+#include "UnitRouter.h"
 #include "Vec.h"
 #include "VoxelMap.h"
 
@@ -17,11 +18,16 @@ public:
     // Adds the player to the players in the round.
     void AddPlayer(const std::string& playerName);
 
+    // Locks a player for direct physics-thread use.
+    Player& LockPlayer(unsigned int playerId);
+
+    // Unlocks a player for direct physics-thread use.
+    void UnlockPlayer(unsigned int playerId);
+
     // Renders the players
     void RenderPlayers(ModelManager& modelManager, RouteVisual& routeVisuals, vec::mat4& projectionMatrix);
 
-    // TODO more fine-grained semaphore concurrency
-    void AddUnit(unsigned int playerId, const Unit& unit);
+    // Updates the players.
     void UpdatePlayers();
 
     // Sets the round map.
@@ -29,6 +35,13 @@ public:
 
     // Updates the round map physics. Returns true if an update was performed.
     bool UpdateRoundMapPhysics(MapSections& mapSections);
+
+    // Wrapper to MapSections HitByRay method, locking and providing the map.
+    bool HitByRay(MapSections& mapSections, const vec::vec3& rayStart, const vec::vec3& rayVector, vec::vec3i* voxelId);
+
+    // Wrapper to UnitRouter's RefineRoute, locking and providing the map.
+    void RefineRoute(UnitRouter& unitRouter, const voxelSubsectionsMap& voxelSubsections, const vec::vec3i start, const vec::vec3i destination,
+        const std::vector<vec::vec3i>& givenPath, std::vector<vec::vec3i>& refinedPath, std::vector<vec::vec3>& visualPath);
 
     // Updates the round map display. Returns true if an update was performed.
     bool UpdateRoundMapDisplay(VoxelMap& voxelMap);

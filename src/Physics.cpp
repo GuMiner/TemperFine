@@ -39,23 +39,24 @@ void Physics::HandleLeftMouseClicked()
 
     vec::mat4 viewRotationMatrix = viewer.GetViewOrientation().asMatrix();
     vec::vec3 worldRay = PhysicsOps::ScreenRay(mousePos, screenSize, Constants::PerspectiveMatrix, viewRotationMatrix);
-    /*
-    // Check to see if we clicked a unit. You can only select your own units.
-    int collidedUnit = players[0].CollisionCheck(viewer.GetViewPosition(), worldRay);
+    
+    // Check to see if we clicked a unit. You can only select your own units (player 0);
+    Player& player = syncBuffer->LockPlayer(0);
+
+    int collidedUnit = player.CollisionCheck(viewer.GetViewPosition(), worldRay);
     if (collidedUnit != -1)
     {
-        (*players)[0].ToggleUnitSelection(collidedUnit);
+        player.ToggleUnitSelection(collidedUnit);
     }
     else
     {
         vec::vec3i hitVoxel;
-        // TODO need a semaphore structure from syncbuffer for this to work.
-        if (mapSections.HitByRay(mapInfo, viewer.GetViewPosition(), worldRay, &hitVoxel))
+        if (syncBuffer->HitByRay(mapSections, viewer.GetViewPosition(), worldRay, &hitVoxel))
         {
             syncBuffer->SetNewSelectedVoxel(hitVoxel);
 
             // If there are units selected, move them to the selected voxel (if possible)
-            const std::set<int>& selectedUnits = (*players)[0].GetSelectedUnits();
+            const std::set<int>& selectedUnits = player.GetSelectedUnits();
             for (int selectedUnit : selectedUnits)
             {
                 vec::vec3i start = vec::vec3i(0, 0, 0); // TODO invalid, used for testing purposes. until units have predefined current voxels.
@@ -71,15 +72,17 @@ void Physics::HandleLeftMouseClicked()
                     std::vector<vec::vec3i> betterRoute;
                     std::vector<vec::vec3> graphicalRoute;
                     Logger::Log("Refining route...");
-                    unitRouter.RefineRoute(mapInfo, mapSections.GetSubsections(), start, hitVoxel, route, betterRoute, graphicalRoute);
+                    syncBuffer->RefineRoute(unitRouter, mapSections.GetSubsections(), start, hitVoxel, route, betterRoute, graphicalRoute);
 
                     Logger::Log("Updating player 0, selected unit ", selectedUnit, " with graphical route using ", graphicalRoute.size(), " segments.");
-                    (*players)[0].UpdateUnitRoute(selectedUnit, graphicalRoute);
+                    player.UpdateUnitRoute(selectedUnit, graphicalRoute);
 
                 }
             }
         }
-    } */
+    }
+
+    syncBuffer->UnlockPlayer(0);
 }
 
 void Physics::Run()
@@ -123,7 +126,10 @@ void Physics::Run()
                     {
                         Unit unit = Unit(0, 0, turrets, vec::vec3(step * i, step * j, 4.0f),
                             vec::quaternion::fromAxisAngle(rotation, vec::vec3(0.0f, 1.0f, 0.0f)) * vec::quaternion::fromAxisAngle(MathOps::Radians(-90.0f), vec::vec3(1.0f, 0.0f, 0.0f)));
-                        syncBuffer->AddUnit(0, unit);
+                        Player& player = syncBuffer->LockPlayer(0);
+                        player.AddUnit(unit);
+                        syncBuffer->UnlockPlayer(0);
+
                         rotation += 0.20f;
                     }
                 }

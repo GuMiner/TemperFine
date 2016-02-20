@@ -21,7 +21,7 @@ struct CopyableMutex : std::mutex
 
 // Also known as a multiple-reader, single-writer lock.
 // Allows for multiple readers to access the single object, but only a single object.
-//  [Not accessible directly. Use ReadLock and WriteLock]
+//  [Not indended for direct use. Use ReadLock and WriteLock for most use cases]
 class SharedExclusiveLock
 {
     friend class ReadLock;
@@ -29,10 +29,10 @@ class SharedExclusiveLock
 
 public:
     SharedExclusiveLock();
-
-protected:
     void ReadLock();
     void ReadUnlock();
+
+protected:
     void WriteLock();
     void WriteUnlock();
 
