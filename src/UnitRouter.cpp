@@ -33,29 +33,39 @@ void UnitRouter::RefineRoute(MapInfo* mapInfo, const voxelSubsectionsMap& voxelS
         //   To refine the route, we create a spring-mass system ('string'), with a spring from each route point (mass).
         //   We then pull the string tight until the average distance between each mass is > starting amount * some factor.
         Logger::Log("Performing physics-based route refinement.");
+        const vec::vec3 centeredOffset = vec::vec3(MapInfo::SPACING / 2.0f);
 
-        // Divide each segment in quarters to improve the resolution of the above.
+        // Divide each segment in quarters to improve the resolution of the above-- also apply offset spacing (putting the route on top of the voxel).
         std::vector<vec::vec3> subdividedPath;
         subdividedPath.reserve(givenPath.size() * 4);
-        subdividedPath.push_back(vec::vec3(givenPath[0].x, givenPath[0].y, givenPath[0].z));
+
+        vec::vec3 start = vec::vec3((float)givenPath[0].x, (float)givenPath[0].y, (float)givenPath[0].z) * MapInfo::SPACING + centeredOffset;
+        start.z = GetHeightForVoxel(mapInfo, givenPath[0], start);
+        subdividedPath.push_back(start);
         for (unsigned int i = 1; i < givenPath.size(); i++)
         {
-            const vec::vec3 priorPoint = vec::vec3(givenPath[i - 1].x, givenPath[i - 1].y, givenPath[i - 1].z);
-            const vec::vec3 difference = vec::vec3(givenPath[i].x, givenPath[i].y, givenPath[i].z) - priorPoint;
+            const vec::vec3 priorPoint = vec::vec3((float)givenPath[i - 1].x, (float)givenPath[i - 1].y, (float)givenPath[i - 1].z);
+            const vec::vec3 difference = vec::vec3((float)givenPath[i].x, (float)givenPath[i].y, (float)givenPath[i].z) - priorPoint;
 
-            subdividedPath.push_back(0.25f * difference + priorPoint);
-            subdividedPath.push_back(0.50f * difference + priorPoint);
-            subdividedPath.push_back(0.75f * difference + priorPoint);
-            subdividedPath.push_back(difference + priorPoint);
+            vec::vec3 quarter = (0.25f * difference + priorPoint) * MapInfo::SPACING + centeredOffset;
+            vec::vec3 half = (0.50f * difference + priorPoint) * MapInfo::SPACING + centeredOffset;
+            vec::vec3 threeQuarter = (0.75f * difference + priorPoint) * MapInfo::SPACING + centeredOffset;
+            vec::vec3 end = (difference + priorPoint) * MapInfo::SPACING + centeredOffset;
+            
+            subdividedPath.push_back(quarter);
+            subdividedPath.push_back(half);
+            subdividedPath.push_back(threeQuarter);
+            subdividedPath.push_back(end);
         }
 
         // Perform our algorithm
         PerformStringRefinement(mapInfo, voxelSubsections, subdividedPath, refinedPath);
 
         // Save the (updated) integer path (for viability calculations) and scale up the floating-point path (actual travel and visibility calculations)
+        const vec::vec3 hoverOffset = vec::vec3(0.0f, 0.0f, MapInfo::SPACING * 0.10f);
         for (const vec::vec3& point : subdividedPath)
         {
-            visualPath.push_back((point * MapInfo::SPACING) + offsetSpacing);
+            visualPath.push_back(point + hoverOffset);
         }
     }
 
@@ -67,7 +77,7 @@ float UnitRouter::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& voxelId
 {
     if (voxelMap->InBounds(voxelId))
     {
-        vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
+        vec::vec3 voxelMinPosition = MapInfo::SPACING * vec::vec3((float)voxelId.x, (float)voxelId.y, (float)voxelId.z);
         vec::vec3 difference = position - voxelMinPosition;
 
         if (difference.x >= 0 && difference.y >= 0 && difference.z >= 0 &&
@@ -115,7 +125,7 @@ float UnitRouter::GetHeightForVoxel(MapInfo* voxelMap, const vec::vec3i& voxelId
 // Updates the string route and refined integer path based on our string route.
 void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsectionsMap& voxelSubsections, std::vector<vec::vec3>& stringRoute, std::vector<vec::vec3i>& refinedPath)
 {
-    float stretchinessDesired = 0.90f; // 10%
+    float stretchinessDesired = 0.10f; // 10%
 
     // Lengths for which *after* this amount is pulled, a reverse-stretchiness force is applied. Think a rubber band, but unstretched
     std::vector<float> restingLengths;
@@ -134,7 +144,7 @@ void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsection
     const vec::vec3 start = stringRoute[0];
     const vec::vec3 end = stringRoute[stringRoute.size() - 1];
 
-    // Note that we only allow relative motion on the
+    // Note that we allow all relative motion, but constrain the points to appropriate z-heights.
     std::vector<vec::vec3> velocities;
     for (unsigned int i = 1; i < stringRoute.size() - 1; i++)
     {
@@ -146,10 +156,8 @@ void UnitRouter::PerformStringRefinement(MapInfo* mapInfo, const voxelSubsection
     const float dampeningConstant = 0.98f;
     const float mass = 1.0f;
 
-    // 10% stretchiness.
-    float currentDistance = avgRestingLengthDistance;
-    unsigned int iterations = 0;
     Logger::Log("Starting physics-based route refinement with ", stringRoute.size(), " total nodes.");
+    unsigned int iterations = 0;
     const unsigned int maxIterations = 100;
     while (!IsStretchedPercentage(avgRestingLengthDistance, stringRoute, stretchinessDesired) && iterations < maxIterations)
     {

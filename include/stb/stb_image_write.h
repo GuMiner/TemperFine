@@ -144,7 +144,9 @@ STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w,
 #ifdef STB_IMAGE_WRITE_IMPLEMENTATION
 
 #ifdef _WIN32
-   #define _CRT_SECURE_NO_WARNINGS
+   #ifndef _CRT_SECURE_NO_WARNINGS // 02/20/2016, compiler warning edit (autogen).
+      #define _CRT_SECURE_NO_WARNINGS
+   #endif
    #define _CRT_NONSTDC_NO_DEPRECATE
 #endif
 

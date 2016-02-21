@@ -226,7 +226,7 @@ bool MapSections::HitByRay(MapInfo* mapInfo, const vec::vec3& rayStart, const ve
 }
 
 // Performs a trace through the known voxels, given that we know which plane it hit.
-        // Returns true if the trace hits a non-air voxel (and fills in the voxel ID), false otherwise.
+// Returns true if the trace hits a non-air voxel (and fills in the voxel ID), false otherwise.
 bool MapSections::PerformVoxelTrace(MapInfo* mapInfo, const vec::vec3& rayStart, const vec::vec3& rayVector,
     PhysicsOps::Plane plane, float intersectionPoint, vec::vec3i* foundVoxelId)
 {
@@ -254,8 +254,8 @@ bool MapSections::PerformVoxelTrace(MapInfo* mapInfo, const vec::vec3& rayStart,
         // The next one we hit is the lowest positive for range.
         float intersectionDistances[6];
 
-        vec::vec3 voxelMin = MapInfo::SPACING * vec::vec3(voxelId.x, voxelId.y, voxelId.z);
-        vec::vec3 voxelMax = MapInfo::SPACING * vec::vec3(voxelId.x + 1, voxelId.y + 1, voxelId.z + 1);
+        vec::vec3 voxelMin = MapInfo::SPACING * vec::vec3((float)voxelId.x, (float)voxelId.y, (float)voxelId.z);
+        vec::vec3 voxelMax = MapInfo::SPACING * vec::vec3((float)voxelId.x + 1, (float)voxelId.y + 1, (float)voxelId.z + 1);
 
         // We can assume these all hit, it's rather inevitable, planes are pervasive.
         PhysicsOps::HitsPlane(currentPoint, rayVector, PhysicsOps::YZ, voxelMin, &intersectionDistances[0]);

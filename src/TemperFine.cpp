@@ -10,6 +10,7 @@
 #include "TemperFine.h"
 #include "../version.h"
 
+// Imports so that they're actually readable and not hidden away in a config file.
 #pragma comment(lib, "opengl32")
 
 #ifndef _DEBUG
@@ -27,6 +28,11 @@
     #pragma comment(lib, "lib/sfml-graphics-d")
     #pragma comment(lib, "lib/sfgui-d")
 #endif
+
+// Static definitions.
+Constants TemperFine::Constant;
+MathOps TemperFine::MathOp;
+PhysicsOps TemperFine::PhysicsOp;
 
 TemperFine::TemperFine()
     : graphicsConfig("config/graphics.txt"), keyBindingConfig("config/keyBindings.txt"), physicsConfig("config/physics.txt"),

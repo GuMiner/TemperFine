@@ -155,12 +155,12 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     uvVertexRemapping.clear();
 
     // Also figure out the min-max bounding box while we're at it.
-    minBounds->x = 1e20;
-    minBounds->y = 1e20;
-    minBounds->z = 1e20;
-    maxBounds->x = -1e20;
-    maxBounds->y = -1e20;
-    maxBounds->z = -1e20;
+    minBounds->x = 1e20f;
+    minBounds->y = 1e20f;
+    minBounds->z = 1e20f;
+    maxBounds->x = -1e20f;
+    maxBounds->y = -1e20f;
+    maxBounds->z = -1e20f;
 
     // There's guaranteed to be a UV for each point. Find it, and set it.
     for (unsigned int i = 0; i < vertices.positions.size(); i++)
