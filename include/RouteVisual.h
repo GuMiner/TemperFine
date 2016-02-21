@@ -10,7 +10,7 @@
 struct RouteVisualData
 {
     GLint offset;
-    GLsizei count;
+    GLint count;
 };
 
 // Visualizes routes for units.
@@ -26,7 +26,7 @@ public:
     void Render(vec::mat4& projectionMatrix, int routeId, bool selected);
 
     // Creates a visual for the specified route.
-    int CreateRouteVisual(const std::vector<vec::vec3>& route);
+    int CreateRouteVisual(const std::vector<vec::vec3> route);
 
     // Deletes the visual for the specified route.
     void DeleteRouteVisual(int routeId);
@@ -44,7 +44,7 @@ private:
     GLuint vao;
     GLuint positionBuffer;
 
-    universalVertices routeVerties;
+    universalVertices routeVertices;
 
     // Maps a route ID to the offset for vertices in OpenGL for the route.
     int nextRouteId;

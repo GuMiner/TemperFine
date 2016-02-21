@@ -53,6 +53,9 @@ class TemperFine
     TurretConfig turretConfig;
 
     // Game data
+    // TODO put somewhere better than here.
+    MapInfo testMap;
+
     Physics physics;
     SyncBuffer physicsSyncBuffer;
 

@@ -15,7 +15,8 @@ Unit::Unit()
 
 // Creates a new unit, with full armor.
 // Note that the unrotated unit is pointing in the x direction, with zero rotation.
-Unit::Unit(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation)
+Unit::Unit(unsigned int armorTypeId, unsigned int bodyTypeId, std::vector<unsigned int> turretTypeIds, const vec::vec3 position, const vec::quaternion rotation) 
+    : Unit()
 {
     this->position = position;
     this->rotation = rotation;
@@ -55,6 +56,7 @@ void Unit::PerformGuiThreadUpdates(RouteVisual& routeVisual)
         }
 
         routeVisualId = routeVisual.CreateRouteVisual(assignedRoute);
+        routeNeedsVisualUpdate = false;
     }
 }
 

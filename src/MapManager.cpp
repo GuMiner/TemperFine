@@ -121,3 +121,10 @@ bool MapManager::ReadMap(const char* filename, MapInfo& outputMap)
 
     return true;
 }
+
+void MapManager::ClearMap(MapInfo& map)
+{
+    delete[] map.blockType;
+    delete[] map.blockOrientation;
+    delete[] map.blockProperty;
+}

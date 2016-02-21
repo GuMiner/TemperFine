@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
+// #include <vld.h> // Enable for memory debugging.
 #include "Logger.h"
 #include "TemperFine.h"
 #include "../version.h"
@@ -212,7 +213,6 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     }
 
     // TODO this should be some menu code, once the UI bugs are fixed.
-    MapInfo testMap;
     Logger::Log("Loading maps...");
     if (!mapManager.ReadMap("maps/test.txt", testMap))
     {
@@ -401,6 +401,9 @@ Constants::Status TemperFine::Run()
 
 void TemperFine::Deinitialize()
 {
+    // TODO Test code remove.
+    mapManager.ClearMap(testMap);
+
     Logger::Log("Music Thread Stopping...");
     //musicManager.Stop();
 

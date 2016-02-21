@@ -1,7 +1,6 @@
 #include "RouteVisual.h"
 #include "Logger.h"
 
-
 RouteVisual::RouteVisual()
 {
     nextRouteId = 0;
@@ -40,31 +39,43 @@ void RouteVisual::Render(vec::mat4& projectionMatrix, int routeId, bool selected
 }
 
 // Creates a visual for the specified route.
-int RouteVisual::CreateRouteVisual(const std::vector<vec::vec3>& route)
+int RouteVisual::CreateRouteVisual(const std::vector<vec::vec3> route)
 {
     RouteVisualData routeVisualData;
-    routeVisualData.offset = routeVerties.positions.size();
+    routeVisualData.offset = routeVertices.positions.size();
     routeVisualData.count = route.size();
 
-    routeVerties.positions.insert(routeVerties.positions.end(), route.begin(), route.end());
+    routeVertices.positions.insert(routeVertices.positions.end(), route.begin(), route.end());
     SendRoutesToOpenGl();
 
     int routeId = nextRouteId++;
 
     routeData[routeId] = routeVisualData;
+    Logger::Log("Adding route id ", routeId, " with ", routeVisualData.count, " elements and ", routeVisualData.offset, " offset.");
     return routeId;
 }
 
 // Deletes the visual for the specified route.
 void RouteVisual::DeleteRouteVisual(int routeId)
 {
-    // const RouteVisualData& routeVisualData = routeData[routeId];
+    // Remove data from the map and universal vertices.
+    const RouteVisualData routeVisualData = routeData[routeId];
+    Logger::Log("Deleting route ", routeId, " with ", routeVisualData.count, " elements and ", routeVisualData.offset, " offset from array with ", routeVertices.positions.size(), " elements.");
 
-    // TODO data needs to be remove from universalVertices.
-    routeData.erase(routeId);
+    routeVertices.positions.erase(routeVertices.positions.begin() + routeVisualData.offset, routeVertices.positions.begin() + routeVisualData.offset + routeVisualData.count);
+    routeData.erase(routeData.find(routeId));
+
+    // Update all map entries to point to the correct map amount.
+    for (std::map<int, RouteVisualData>::iterator iter = routeData.begin(); iter != routeData.end(); iter++)
+    {
+        if (iter->second.offset > routeVisualData.offset)
+        {
+            iter->second.offset -= routeVisualData.count;
+        }
+    }
 
     // Skip an OpenGL update if there are no routes left.
-    if (routeVerties.positions.size() != 0)
+    if (routeVertices.positions.size() != 0)
     {
         SendRoutesToOpenGl();
     }
@@ -73,7 +84,7 @@ void RouteVisual::DeleteRouteVisual(int routeId)
 void RouteVisual::SendRoutesToOpenGl()
 {
     glBindVertexArray(vao);
-    routeVerties.TransferPositionToOpenGl(positionBuffer);
+    routeVertices.TransferPositionToOpenGl(positionBuffer);
 }
 
 RouteVisual::~RouteVisual()

@@ -10,6 +10,9 @@ class MapManager
 
         // Reads in a map file, filling in the MapInfo (if true is returned)
         bool ReadMap(const char* filename, MapInfo& outputMap);
+
+        // Clears in a MapInfo structure, deleting data allocated for it.
+        void ClearMap(MapInfo& map);
     protected:
     private:
         int currentLine;
