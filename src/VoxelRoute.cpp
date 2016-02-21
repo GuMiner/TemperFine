@@ -65,19 +65,19 @@ void VoxelRouteRules::FindVoxelNeighbors(const MapInfo& voxelMap, const vec::vec
         switch (slantOrientation)
         {
         case 0:
-            AddNeighborIfValidFromFlatVoxel(voxelMap, xMinusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xMinus, slantOrientation, neighbors);
             AddNeighborIfValidFromFlatVoxel(voxelMap, xMinusMinusZ, slantOrientation, neighbors);
             break;
         case 1:
-            AddNeighborIfValidFromFlatVoxel(voxelMap, yMinusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yMinus, slantOrientation, neighbors);
             AddNeighborIfValidFromFlatVoxel(voxelMap, yMinusMinusZ, slantOrientation, neighbors);
             break;
         case 2:
-            AddNeighborIfValidFromFlatVoxel(voxelMap, xPlusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, xPlus, slantOrientation, neighbors);
             AddNeighborIfValidFromFlatVoxel(voxelMap, xPlusMinusZ, slantOrientation, neighbors);
             break;
         case 3:
-            AddNeighborIfValidFromFlatVoxel(voxelMap, yPlusPlusZ, slantOrientation, neighbors);
+            AddNeighborIfValidFromFlatVoxel(voxelMap, yPlus, slantOrientation, neighbors);
             AddNeighborIfValidFromFlatVoxel(voxelMap, yPlusMinusZ, slantOrientation, neighbors);
             break;
         default:
