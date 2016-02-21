@@ -273,8 +273,8 @@ void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
     }
 
     // Update useful statistics that are fancier than the standard GUI
-    // statistics.UpdateRunTime(currentGameTime);
-    // statistics.UpdateViewPos(viewer.viewPosition);
+    statistics.UpdateRunTime(currentGameTime);
+    statistics.UpdateViewPos(physicsSyncBuffer.GetViewerPosition());
 }
 
 void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused)
@@ -344,11 +344,10 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
     voxelMap.Render(projectionMatrix);
 
     // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
-    // statistics.RenderStats(Constants::PerspectiveMatrix);
+    statistics.RenderStats(Constants::PerspectiveMatrix);
 
-    // Renders the UI. Note that we unbind the current vertex array to avoid MyGUI messing with our data.
-    // window.resetGLStates(); // This crashes on my AMD card.
-    // Note that SFGUI crashes for some reason when the UI is displayed when not rendering stats. TODO diagnose, later on.
+    // Renders the UI, unbinding the current vertex array to avoid messiness.
+    glBindVertexArray(0);
     desktop.Update(guiClock.restart().asSeconds());
 }
 

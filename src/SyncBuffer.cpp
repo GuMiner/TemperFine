@@ -121,6 +121,21 @@ vec::mat4 SyncBuffer::GetViewMatrix()
     return copy;
 }
 
+void SyncBuffer::UpdateViewerPosition(const vec::vec3& viewerPos)
+{
+    WriteLock writeLock(viewerPositionMutex);
+    viewerPosition = viewerPos;
+}
+
+vec::vec3 SyncBuffer::GetViewerPosition()
+{
+    vec::vec3 copy;
+    ReadLock readLock(viewerPositionMutex);
+    copy = viewerPosition;
+
+    return copy;
+}
+
 // Sets a new voxel as the selected voxel.
 void SyncBuffer::SetNewSelectedVoxel(const vec::vec3i& selectedVoxel)
 {

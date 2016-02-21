@@ -52,6 +52,10 @@ public:
     // Retrives a copy of the current view matrix.
     vec::mat4 GetViewMatrix();
 
+    // Gets and sets the viewer position.
+    void UpdateViewerPosition(const vec::vec3& viewerPos);
+    vec::vec3 GetViewerPosition();
+
     // Sets a new voxel as the selected voxel.
     void SetNewSelectedVoxel(const vec::vec3i& selectedVoxel);
 
@@ -71,6 +75,9 @@ private:
     // View matrix and operation mutex.
     SharedExclusiveLock viewMatrixMutex;
     vec::mat4 viewMatrix;
+
+    SharedExclusiveLock viewerPositionMutex;
+    vec::vec3 viewerPosition;
 
     // If there's a new selected voxel.
     SharedExclusiveLock selectedVoxelMutex;

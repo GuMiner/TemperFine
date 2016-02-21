@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <set>
 #include <string>
 #include <vector>
+#include "TechConfig.h"
 #include "Vec.h"
 
 // Represents a technology
@@ -25,26 +25,9 @@ struct Tech
     // Resources required to research this technology.
     float researchResources;
 
-    // Internal name, used for dependency formation. Not intended for other usages.
+    // Internal name, used for dependency formation and for conditional operations (does user have 'sensors', etc).
     std::string internalName;
 
     // The effective dependency level of this technology.
     int techLevel;
-};
-
-struct TechProgress
-{
-    std::set<unsigned int> completedTechs;
-    std::set<unsigned int> techsAvailableForResearch;
-
-
-    int GetMinTechLevel()
-    {
-        return 0;
-    }
-
-    int GetMaxTechLevel()
-    {
-        return 0;
-    }
 };

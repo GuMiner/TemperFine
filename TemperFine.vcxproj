@@ -126,6 +126,7 @@
     <ClInclude Include="include\SyncBuffer.h" />
     <ClInclude Include="include\TechConfig.h" />
     <ClInclude Include="include\TechInfo.h" />
+    <ClInclude Include="include\TechProgress.h" />
     <ClInclude Include="include\TechTreeWindow.h" />
     <ClInclude Include="include\TemperFine.h" />
     <ClInclude Include="include\TextInfo.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\SyncBuffer.cpp" />
     <ClCompile Include="src\TechConfig.cpp" />
+    <ClCompile Include="src\TechProgress.cpp" />
     <ClCompile Include="src\TechTreeWindow.cpp" />
     <ClCompile Include="src\TemperFine.cpp" />
     <ClCompile Include="src\TurretConfig.cpp" />

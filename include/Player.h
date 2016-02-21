@@ -5,6 +5,7 @@
 #include "ModelManager.h"
 #include "RouteVisual.h"
 #include "SharedExclusiveLock.h"
+#include "TechProgress.h"
 #include "Unit.h"
 #include "Vec.h"
 
@@ -53,4 +54,8 @@ class Player
         // The currently-selected units for the player.
         SharedExclusiveLock unitSelectionMutex; // STL isn't thread-safe, and we read this in the GUI, write in physics, as usual...
         std::set<int> selectedUnits;
+
+        // Player technology progress.
+        SharedExclusiveLock techProgressMutex;
+        TechProgress techProgress;
 };

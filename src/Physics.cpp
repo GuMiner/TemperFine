@@ -98,6 +98,7 @@ void Physics::Run()
 
             // Synchronize with the GUI thread.
             syncBuffer->UpdateViewMatrix(viewer.GetViewPosition(), viewer.GetViewOrientation());
+            syncBuffer->UpdateViewerPosition(viewer.GetViewPosition());
 
             if (isLeftMouseClicked)
             {

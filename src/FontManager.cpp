@@ -269,7 +269,7 @@ void FontManager::RenderSentence(int sentenceId, vec::mat4& perpective, vec::mat
     }
 
     glUseProgram(fontShader);
-	glUniform1i(fontImageLocation, 0);
+    glUniform1i(fontImageLocation, 0);
 
     // Bind in the texture and vertices we're using.
     glBindVertexArray(sentenceInfo.vao);
