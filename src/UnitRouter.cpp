@@ -61,11 +61,14 @@ void UnitRouter::RefineRoute(MapInfo* mapInfo, const voxelSubsectionsMap& voxelS
         // Perform our algorithm
         PerformStringRefinement(mapInfo, voxelSubsections, subdividedPath, refinedPath);
 
-        // Save the (updated) integer path (for viability calculations) and scale up the floating-point path (actual travel and visibility calculations)
-        const vec::vec3 hoverOffset = vec::vec3(0.0f, 0.0f, MapInfo::SPACING * 0.10f);
+        // Save the (updated) integer path (for viability calculations) and move the actual path to be on-top of the voxel.
+        const float hoverOffset = MapInfo::SPACING * 0.10f;
         for (const vec::vec3& point : subdividedPath)
         {
-            visualPath.push_back(point + hoverOffset);
+            vec::vec3 actualPoint = point;
+            vec::vec3i voxelId = vec::vec3i((int)(point.x / MapInfo::SPACING), (int)(point.y / MapInfo::SPACING), (int)(point.z / MapInfo::SPACING));
+            actualPoint.z = GetHeightForVoxel(mapInfo, voxelId, actualPoint) + hoverOffset;
+            visualPath.push_back(actualPoint);
         }
     }
 

@@ -64,6 +64,7 @@ class ModelManager
         // Temporary loading structures.
         std::vector<vec::vec2> rawUvs;
         std::vector<PosUvPair> rawIndices;
+        std::map<unsigned int, unsigned int> indexUvMap; // [positionId] = UV Id. Maps rawIndices for faster loading access.
         std::map<unsigned int, std::vector<PosUvPair>> uvVertexRemapping;
 
         // Given a position index and UV coordinate index, returns the actual index to use.

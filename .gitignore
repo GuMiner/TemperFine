@@ -16,10 +16,13 @@
 *.vcxproj.user
 .vs/
 
-
 # Build results
 [Oo]bj/
 [Dd]ebug/
 [Rr]elease/
 bin/Debug/TemperFine.ilk
 bin/Debug/TemperFine.pdb
+
+# Profiling
+*.psess
+*.vspx

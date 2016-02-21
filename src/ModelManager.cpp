@@ -119,6 +119,7 @@ bool ModelManager::ParseLine(const std::vector<std::string>& line, universalVert
             pair.uvId = (unsigned int)uvIndex;
 
             rawIndices.push_back(pair);
+            indexUvMap[pair.positionId] = pair.uvId;
         }
     }
 
@@ -138,6 +139,7 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     StringUtils::Split(fileString, StringUtils::Newline, true, fileLines);
 
     rawIndices.clear();
+    indexUvMap.clear();
     rawUvs.clear();
     for(const std::string& line : fileLines)
     {
@@ -165,22 +167,18 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     // There's guaranteed to be a UV for each point. Find it, and set it.
     for (unsigned int i = 0; i < vertices.positions.size(); i++)
     {
-        bool foundUv = false;
-        for (const PosUvPair& pair : rawIndices)
+        if (indexUvMap.find(i) != indexUvMap.end())
         {
-            if (pair.positionId == i)
-            {
-                foundUv = true;
-                vertices.uvs.push_back(rawUvs[pair.uvId]);
+            PosUvPair pair;
+            pair.positionId = i;
+            pair.uvId = indexUvMap[i];
+            vertices.uvs.push_back(rawUvs[pair.uvId]);
 
-                // Initialize the remapping for this index.
-                uvVertexRemapping[i] = std::vector<PosUvPair>();
-                uvVertexRemapping[i].push_back(pair);
-                break;
-            }
+            // Initialize the remapping for this index.
+            uvVertexRemapping[i] = std::vector<PosUvPair>();
+            uvVertexRemapping[i].push_back(pair);
         }
-
-        if (!foundUv)
+        else
         {
             std::stringstream errorStream;
             errorStream << "Failed to load in the UV for point " << i << ".";
