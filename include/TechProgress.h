@@ -20,8 +20,8 @@ private:
     std::set<unsigned int> completedTechs;
     std::set<unsigned int> techsAvailableForResearch;
 
-    int minTechLevel;
-    int maxTechLevel;
+    int minTechLevel; // Min level of techs to acquire.
+    int maxTechLevel; // Max level of acquired techs.
 
     // Updates the min/max current tech range and techs available for research.
     void UpdateTechs();

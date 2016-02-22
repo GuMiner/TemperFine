@@ -40,6 +40,9 @@ class Player
         // Moves the player's units along their assigned routes.
         void MoveUnits();
 
+        // Updates the current player's research progress.
+        void UpdateResearchProgress(float lastElapsedTime);
+
     private:
         // ID of the player
         int id;
@@ -58,4 +61,7 @@ class Player
         // Player technology progress.
         SharedExclusiveLock techProgressMutex;
         TechProgress techProgress;
+
+        int currentlyResearchingTech;
+        float elapsedResearchTimeSeconds;
 };

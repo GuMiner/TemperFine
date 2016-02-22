@@ -28,7 +28,7 @@ public:
     void RenderPlayers(ModelManager& modelManager, RouteVisual& routeVisuals, vec::mat4& projectionMatrix);
 
     // Updates the players.
-    void UpdatePlayers();
+    void UpdatePlayers(float lastElapsedTime);
 
     // Sets the round map.
     void SetRoundMap(const MapInfo& testMap);

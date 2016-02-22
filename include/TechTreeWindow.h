@@ -24,10 +24,18 @@ class TechTreeWindow : public GuiWindow
         virtual bool Setup();
 
     private:
-        std::vector<TechTile> techTiles;
         std::vector<sfg::Box::Ptr> techLevelBoxes;
+        void CreateTechLevelColumnBoxes();
+
+        std::vector<TechTile> techTiles;
+        void LoadTechTilesAndFillTechLevels();
+
         sfg::Box::Ptr masterBox;
         sfg::ScrolledWindow::Ptr scrollableWindow;
 
+        // Extracts out the full name of a tech, given that a tech is reachable from multiple endpoints.
         std::string GetFullTechName(const Tech& tech);
+
+        // Called in the GRAPHICS thread when a tile is clicked on.
+        void TechTileHit(unsigned int techId);
 };

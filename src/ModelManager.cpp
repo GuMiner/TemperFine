@@ -1,4 +1,5 @@
 #include <cstring>
+#include <limits>
 #include <sstream>
 #include "Logger.h"
 #include "ModelManager.h"
@@ -157,12 +158,12 @@ bool ModelManager::LoadModel(const char* objFilename, universalVertices& vertice
     uvVertexRemapping.clear();
 
     // Also figure out the min-max bounding box while we're at it.
-    minBounds->x = 1e20f;
-    minBounds->y = 1e20f;
-    minBounds->z = 1e20f;
-    maxBounds->x = -1e20f;
-    maxBounds->y = -1e20f;
-    maxBounds->z = -1e20f;
+    minBounds->x = std::numeric_limits<float>::max();
+    minBounds->y = std::numeric_limits<float>::max();
+    minBounds->z = std::numeric_limits<float>::max();
+    maxBounds->x = std::numeric_limits<float>::min();
+    maxBounds->y = std::numeric_limits<float>::min();
+    maxBounds->z = std::numeric_limits<float>::min();
 
     // There's guaranteed to be a UV for each point. Find it, and set it.
     for (unsigned int i = 0; i < vertices.positions.size(); i++)

@@ -283,7 +283,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
     sf::Event event;
     while (window.pollEvent(event))
     {
-        // Update SF GUI
+        // Update SF GUI. NOTE: This runs on the GUI thread!
         desktop.HandleEvent(event);
 
         if (event.type == sf::Event::Closed)
@@ -315,7 +315,7 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
-            if (event.mouseButton.button == sf::Mouse::Left)
+            if (event.mouseButton.button == sf::Mouse::Left && !techTreeWindow.WithinVisibleBounds(event.mouseButton.x, event.mouseButton.y))
             {
                 physics.QueueLeftMouseClick(event.mouseButton.x, event.mouseButton.y, window.getSize().x, window.getSize().y);
             }

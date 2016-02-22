@@ -88,7 +88,7 @@ void Physics::HandleLeftMouseClicked()
 void Physics::Run()
 {
     sf::Clock clock;
-    sf::Clock longRunningClock;
+    sf::Time physicsUpdateTime = sf::milliseconds(0);
     while (isAlive)
     {
         if (!isPaused)
@@ -137,11 +137,11 @@ void Physics::Run()
             }
 
             // All units move
-            syncBuffer->UpdatePlayers();
+            syncBuffer->UpdatePlayers(physicsUpdateTime.asSeconds());
         }
 
         // The physics thread runs at a configurable delay, which we abide by here.
-        sf::Time physicsUpdateTime = clock.restart();
+        physicsUpdateTime = clock.restart();
         int sleepAmount = PhysicsConfig::PhysicsThreadDelay - physicsUpdateTime.asMilliseconds();
         if (sleepAmount > 0)
         {

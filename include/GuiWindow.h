@@ -19,6 +19,9 @@ class GuiWindow
         // Swaps the window display state (shown/hidden)
         void ToggleDisplay();
 
+        // Returns true if the position is within the window bounds *and* the window is visible.
+        bool WithinVisibleBounds(int xp, int yp);
+
     protected:
         // Initialization method for children.
         virtual bool Setup() = 0;

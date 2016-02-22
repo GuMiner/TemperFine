@@ -39,9 +39,14 @@ void SyncBuffer::RenderPlayers(ModelManager& modelManager, RouteVisual& routeVis
     }
 }
 
-void SyncBuffer::UpdatePlayers()
+void SyncBuffer::UpdatePlayers(float lastElapsedTime)
 {
     ReadLock readLock(playerVectorMutex);
+    
+    // Current player receives a technology update.
+    gameRound.players[0].UpdateResearchProgress(lastElapsedTime);
+
+    // Move units.
     for (unsigned int i = 0; i < gameRound.players.size(); i++)
     {
         gameRound.players[i].MoveUnits();

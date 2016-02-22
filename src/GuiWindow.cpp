@@ -43,3 +43,15 @@ void GuiWindow::ToggleDisplay()
         Display();
     }
 }
+
+bool GuiWindow::WithinVisibleBounds(int xp, int yp)
+{
+    if (isDisplayed)
+    {
+        sf::FloatRect rect = window->GetAllocation();
+        return (xp > rect.left && yp > rect.top && xp < rect.left + rect.width && yp < rect.top + rect.height);
+    }
+
+    // Window not visible, nothing to hit.
+    return false;
+}

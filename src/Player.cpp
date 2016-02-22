@@ -1,11 +1,13 @@
+#include "TechConfig.h"
 #include "Player.h"
 
 Player::Player()
 {
-
+    currentlyResearchingTech = -1;
+    elapsedResearchTimeSeconds = 0.0f;
 }
 
-Player::Player(const std::string& name, int id)
+Player::Player(const std::string& name, int id) : Player()
 {
     this->name = name;
     this->id = id;
@@ -62,6 +64,25 @@ void Player::MoveUnits()
     for (unsigned int i = 0; i < units.size(); i++)
     {
         units[i].MoveAlongRoute();
+    }
+}
+
+void Player::UpdateResearchProgress(float lastElapsedTime)
+{
+    // TODO research multiplier by the number of research buildings the player has.
+    elapsedResearchTimeSeconds += lastElapsedTime;
+
+    // Note that we always add the research time, so your research buildings will keep accruing research points even if not
+    //  actively researching anything. This reduces the time pressure in selecting a new research topic.
+    if (currentlyResearchingTech != -1)
+    {
+        int techResearchTimeSec = TechConfig::Techs[currentlyResearchingTech].researchTimeSeconds;
+        if (techResearchTimeSec <= (int)elapsedResearchTimeSeconds)
+        {
+            techProgress.CompleteTech(currentlyResearchingTech);
+            currentlyResearchingTech = -1;
+            elapsedResearchTimeSeconds -= (float)techResearchTimeSec;
+        }
     }
 }
 
