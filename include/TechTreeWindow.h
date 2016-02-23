@@ -8,10 +8,8 @@
 // Represents a technology tile shown in the tree.
 struct TechTile
 {
-    sfg::Label::Ptr name;
     sfg::Image::Ptr image;
-
-    sfg::Box::Ptr box;
+    sfg::Frame::Ptr frame;
 };
 
 // Represents the technology tree.

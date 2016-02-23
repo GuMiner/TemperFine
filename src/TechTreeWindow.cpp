@@ -30,20 +30,19 @@ void TechTreeWindow::LoadTechTilesAndFillTechLevels()
     {
         TechTile techTile;
         techTile.image = sfg::Image::Create(TechConfig::Techs[i].techImage);
-        techTile.name = sfg::Label::Create(GetFullTechName(TechConfig::Techs[i]));
 
-        techTile.box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
-        techTile.box->SetRequisition(sf::Vector2f(130.0f, 130.0f));
-        techTile.box->Pack(techTile.image);
-        techTile.box->Pack(techTile.name);
+        techTile.frame = sfg::Frame::Create(GetFullTechName(TechConfig::Techs[i]));
+        techTile.frame->SetRequisition(sf::Vector2f(120.0f, 120.0f));
+        
+        techTile.frame->Add(techTile.image);
 
         techTiles.push_back(techTile);
 
-        techTile.box->GetSignal(sfg::Box::OnLeftClick).Connect(
+        techTile.frame->GetSignal(sfg::Box::OnLeftClick).Connect(
             std::bind(&TechTreeWindow::TechTileHit, this, i));
 
-        techLevelBoxes[TechConfig::Techs[i].techLevel]->Pack(techTile.box, false);
-    }void TechTileHit(unsigned int techId);
+        techLevelBoxes[TechConfig::Techs[i].techLevel]->Pack(techTile.frame, false);
+    }
 }
 
 bool TechTreeWindow::Setup()

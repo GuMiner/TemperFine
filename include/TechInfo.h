@@ -18,7 +18,7 @@ struct Tech
 
     // Display image of the technology.
     sf::Image techImage;
-
+    
     // Time required to research this technology.
     int researchTimeSeconds;
 

@@ -1,0 +1,7 @@
+Window {
+	BackgroundColor: #464646EE;
+}
+
+Frame {
+    Padding: 0.1f;
+}

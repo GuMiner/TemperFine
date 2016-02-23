@@ -148,6 +148,12 @@ Constants::Status TemperFine::LoadGraphics(sfg::Desktop* desktop)
     glDepthFunc(GL_LEQUAL);
 
     // Assets
+    if (!desktop->LoadThemeFromFile("themes/temperfine.theme"))
+    {
+        Logger::LogError("Could not load the GUI theme file!");
+        return Constants::Status::BAD_THEME;
+    }
+
     return LoadAssets(desktop);
 }
 
@@ -348,6 +354,7 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
 
     // Renders the UI, unbinding the current vertex array to avoid messiness.
     glBindVertexArray(0);
+    glUseProgram(0);    
     desktop.Update(guiClock.restart().asSeconds());
 }
 
