@@ -133,6 +133,9 @@
     <ClCompile Include="src\TechProgress.cpp">
       <Filter>Physics\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TechProgressWindow.cpp">
+      <Filter>GUI\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ArmorConfig.h">
@@ -287,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="include\TechProgress.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TechProgressWindow.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

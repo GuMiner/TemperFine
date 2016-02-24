@@ -12,6 +12,7 @@ class KeyBindingConfig : public ConfigManager
         static sf::Keyboard::Key MoveUp;
         static sf::Keyboard::Key MoveDown;
 
+        static sf::Keyboard::Key ToggleTechProgressWindow;
         static sf::Keyboard::Key ToggleTechTreeWindow;
     protected:
     private:

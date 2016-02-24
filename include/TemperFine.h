@@ -23,6 +23,7 @@
 #include "Statistics.h"
 #include "SyncBuffer.h"
 #include "TechConfig.h"
+#include "TechProgressWindow.h"
 #include "TechTreeWindow.h"
 #include "TurretConfig.h"
 #include "VoxelMap.h"
@@ -45,6 +46,7 @@ class TemperFine
 
     // GUI
     TechTreeWindow techTreeWindow;
+    TechProgressWindow techProgressWindow;
 
     // Game Data Configuration
     TechConfig techConfig;

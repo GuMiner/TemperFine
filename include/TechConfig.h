@@ -20,6 +20,7 @@ private:
 
 public:
     static std::vector<Tech> Techs;
+    static sf::Image NoCurrentTechImage;
 
     TechConfig(const char* configName);
 };

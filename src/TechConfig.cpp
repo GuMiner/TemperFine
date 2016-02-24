@@ -5,6 +5,7 @@
 #include "StringUtils.h"
 
 std::vector<Tech> TechConfig::Techs;
+sf::Image TechConfig::NoCurrentTechImage;
 
 bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
 {
@@ -95,6 +96,13 @@ bool TechConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
 
     CombineIdenticalTechs();
     AssignTechLevels();
+
+    // Load the 'NoCurrentTech' image.
+    if (!NoCurrentTechImage.loadFromFile("images/techs/NoCurrentTechImage.png"))
+    {
+        Logger::LogError("Error reading in the image for when a technology has not been selected!");
+        return false;
+    }
 
     return true;
 }

@@ -3,6 +3,7 @@
 #include <SFGUI/Widgets.hpp>
 #include <vector>
 #include "GuiWindow.h"
+#include "SharedExclusiveLock.h"
 #include "TechInfo.h"
 
 // Represents a technology tile shown in the tree.
@@ -18,10 +19,17 @@ class TechTreeWindow : public GuiWindow
     public:
         TechTreeWindow();
 
+        // Tries to get the hit tech tile. Returns true if successful, and the ID of the hit tech tile.
+        bool TryGetHitTechTile(unsigned int* techId);
+
     protected:
         virtual bool Setup();
 
     private:
+        SharedExclusiveLock techTileClickLock;
+        bool isTechTileClicked;
+        unsigned int hitTechTile;
+
         std::vector<sfg::Box::Ptr> techLevelBoxes;
         void CreateTechLevelColumnBoxes();
 

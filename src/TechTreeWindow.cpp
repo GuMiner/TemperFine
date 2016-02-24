@@ -5,6 +5,32 @@
 
 TechTreeWindow::TechTreeWindow()
 {
+    SharedExclusiveLock techTileClickLock;
+    isTechTileClicked = false;
+    hitTechTile = 0;
+}
+
+// Tries to get the hit tech tile. Returns true if successful, and the ID of the hit tech tile.
+bool TechTreeWindow::TryGetHitTechTile(unsigned int* techId)
+{
+    WriteLock writeLock(techTileClickLock);
+    if (isTechTileClicked)
+    {
+        *techId = hitTechTile;
+        isTechTileClicked = false;
+        return true;
+    }
+
+    return false;
+}
+
+// Handles hit events from the GUI.
+void TechTreeWindow::TechTileHit(unsigned int techId)
+{
+    Logger::Log("Clicked tech tile ", techId, ".");
+    WriteLock writeLock(techTileClickLock);
+    isTechTileClicked = true;
+    hitTechTile = techId;
 }
 
 void TechTreeWindow::CreateTechLevelColumnBoxes()
@@ -71,11 +97,6 @@ bool TechTreeWindow::Setup()
     return true;
 }
 
-void TechTreeWindow::TechTileHit(unsigned int techId)
-{
-    Logger::Log("Clicked tech tile ", techId, ".");
-}
-
 std::string TechTreeWindow::GetFullTechName(const Tech& tech)
 {
     std::stringstream nameStream;
@@ -85,6 +106,10 @@ std::string TechTreeWindow::GetFullTechName(const Tech& tech)
         if (i != tech.names.size() - 1)
         {
             nameStream << "\n";
+        }
+        else
+        {
+            nameStream << ": " << tech.researchTimeSeconds << "s";
         }
     }
 

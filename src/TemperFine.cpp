@@ -253,6 +253,11 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
         return Constants::Status::BAD_UI;
     }
 
+    if (!techProgressWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
+
     // Physics
     Logger::Log("Physics loading...");
     physics.Initialize(&physicsSyncBuffer);
@@ -318,6 +323,11 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             {
                 techTreeWindow.ToggleDisplay();
             }
+            else if (event.key.code == KeyBindingConfig::ToggleTechProgressWindow)
+            {
+                techProgressWindow.ToggleDisplay();
+            }
+
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
