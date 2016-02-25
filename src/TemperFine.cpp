@@ -337,6 +337,16 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             }
         }
     }
+
+    unsigned int techId;
+    if (techTreeWindow.TryGetHitTechTile(&techId))
+    {
+        // The player hit a tech, send it to the SyncBuffer so the physics engine can determine whether or not to change the current tech.
+        // TODO
+    }
+
+    // Read the current tech and progress from the SyncBuffer
+    // TODO
 }
 
 void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
