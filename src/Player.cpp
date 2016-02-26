@@ -5,6 +5,7 @@ Player::Player()
 {
     currentlyResearchingTech = -1;
     elapsedResearchTimeSeconds = 0.0f;
+    storedFuelAmount = 0.0f;
 }
 
 Player::Player(const std::string& name, int id) : Player()
@@ -67,8 +68,23 @@ void Player::MoveUnits()
     }
 }
 
+bool Player::SwitchResearch(unsigned int techId)
+{
+    WriteLock writeLock(techProgressMutex);
+
+    if (techProgress.CanStartTech(techId))
+    {
+        currentlyResearchingTech = techId;
+        return true;
+    }
+
+    return false;
+}
+
 void Player::UpdateResearchProgress(float lastElapsedTime)
 {
+    WriteLock writeLock(techProgressMutex);
+
     // TODO research multiplier by the number of research buildings the player has.
     elapsedResearchTimeSeconds += lastElapsedTime;
 
@@ -84,6 +100,30 @@ void Player::UpdateResearchProgress(float lastElapsedTime)
             elapsedResearchTimeSeconds -= (float)techResearchTimeSec;
         }
     }
+}
+
+int Player::GetResearchProgress(float* researchFraction)
+{
+    ReadLock readLock(techProgressMutex);
+    if (currentlyResearchingTech != -1)
+    {
+        *researchFraction = elapsedResearchTimeSeconds / (float)TechConfig::Techs[currentlyResearchingTech].researchTimeSeconds;
+        if (*researchFraction > 1.0f)
+        {
+            *researchFraction = 1.0f;
+        }
+    }
+
+    return currentlyResearchingTech;
+}
+
+void Player::GetStoredResources(float* storedTime, float* storedFuel)
+{
+    ReadLock readLock(techProgressMutex);
+    ReadLock readLock2(fuelMutex);
+
+    *storedTime = elapsedResearchTimeSeconds;
+    *storedFuel = storedFuelAmount;
 }
 
 void Player::ToggleUnitSelection(int unitId)

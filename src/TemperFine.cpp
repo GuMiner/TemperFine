@@ -252,8 +252,11 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     {
         return Constants::Status::BAD_UI;
     }
-
-    if (!techProgressWindow.Initialize(desktop))
+    else if (!techProgressWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
+    else if (!resourcesWindow.Initialize(desktop))
     {
         return Constants::Status::BAD_UI;
     }
@@ -282,6 +285,19 @@ void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
     {
         Logger::Log("Voxel Map Display updated!");
     }
+
+    // Update the progress of the current research and stored resources
+    int currentlyResearchingTech;
+    float currentTechProgress = 0.0f;
+    float fuelAmount, researchAmount;
+    
+    Player& currentPlayer = physicsSyncBuffer.LockPlayer(0);
+    currentlyResearchingTech = currentPlayer.GetResearchProgress(&currentTechProgress);
+    currentPlayer.GetStoredResources(&researchAmount, &fuelAmount);
+    physicsSyncBuffer.UnlockPlayer(0);
+
+    techProgressWindow.UpdateResearchProgress(currentlyResearchingTech, currentTechProgress);
+    resourcesWindow.UpdateStoredResources(researchAmount, fuelAmount);
 
     // Update useful statistics that are fancier than the standard GUI
     statistics.UpdateRunTime(currentGameTime);
@@ -327,7 +343,10 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             {
                 techProgressWindow.ToggleDisplay();
             }
-
+            else if (event.key.code == KeyBindingConfig::ToggleResourcesWindow)
+            {
+                resourcesWindow.ToggleDisplay();
+            }
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
@@ -338,15 +357,21 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
         }
     }
 
+    // Update the player's research progress. if the user clicked a tech tile on the tech tree.
     unsigned int techId;
     if (techTreeWindow.TryGetHitTechTile(&techId))
     {
-        // The player hit a tech, send it to the SyncBuffer so the physics engine can determine whether or not to change the current tech.
-        // TODO
-    }
+        bool switchedResearch = false;
+        Player& currentPlayer = physicsSyncBuffer.LockPlayer(0);
+        if (currentPlayer.SwitchResearch(techId))
+        {
+            switchedResearch = true;
+        }
 
-    // Read the current tech and progress from the SyncBuffer
-    // TODO
+        physicsSyncBuffer.UnlockPlayer(0);
+
+        // TODO play a sound if you fail to (or succeed in) switching research.
+    }
 }
 
 void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)

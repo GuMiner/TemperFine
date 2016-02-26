@@ -15,14 +15,14 @@ void SyncBuffer::AddPlayer(const std::string& playerName)
     gameRound.players.push_back(Player(playerName, (int)gameRound.players.size()));
 }
 
-// Locks a player for direct physics-thread use.
+// Locks a player for direct thread use.
 Player& SyncBuffer::LockPlayer(unsigned int playerId)
 {
     playerVectorMutex.ReadLock();
     return gameRound.players[playerId];
 }
 
-// Unlocks a player for direct physics-thread use.
+// Unlocks a player for direct thread use.
 void SyncBuffer::UnlockPlayer(unsigned int playerId)
 {
     // playerId is unused
@@ -119,11 +119,8 @@ void SyncBuffer::UpdateViewMatrix(const vec::vec3& position, const vec::quaterni
 // Retrives a copy of the current view matrix.
 vec::mat4 SyncBuffer::GetViewMatrix()
 {
-    vec::mat4 copy;
-
     ReadLock readLock(viewMatrixMutex);
-    copy = viewMatrix;
-    return copy;
+    return viewMatrix;
 }
 
 void SyncBuffer::UpdateViewerPosition(const vec::vec3& viewerPos)
@@ -134,11 +131,8 @@ void SyncBuffer::UpdateViewerPosition(const vec::vec3& viewerPos)
 
 vec::vec3 SyncBuffer::GetViewerPosition()
 {
-    vec::vec3 copy;
     ReadLock readLock(viewerPositionMutex);
-    copy = viewerPosition;
-
-    return copy;
+    return viewerPosition;
 }
 
 // Sets a new voxel as the selected voxel.

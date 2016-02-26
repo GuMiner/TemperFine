@@ -17,6 +17,7 @@
 #include "PhysicsConfig.h"
 #include "PhysicsOps.h"
 #include "Player.h"
+#include "ResourcesWindow.h"
 #include "RouteVisual.h"
 #include "Scenery.h"
 #include "ShaderManager.h"
@@ -47,6 +48,7 @@ class TemperFine
     // GUI
     TechTreeWindow techTreeWindow;
     TechProgressWindow techProgressWindow;
+    ResourcesWindow resourcesWindow;
 
     // Game Data Configuration
     TechConfig techConfig;

@@ -14,6 +14,7 @@ class KeyBindingConfig : public ConfigManager
 
         static sf::Keyboard::Key ToggleTechProgressWindow;
         static sf::Keyboard::Key ToggleTechTreeWindow;
+        static sf::Keyboard::Key ToggleResourcesWindow;
     protected:
     private:
         virtual bool LoadConfigValues(std::vector<std::string>& lines);

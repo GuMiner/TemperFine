@@ -26,6 +26,12 @@ void TechProgress::CompleteTech(unsigned int tech)
     }
 }
 
+// True if a tech can be started (all dependencies are satisfied), false otherwise.
+bool TechProgress::CanStartTech(unsigned int tech)
+{
+    return techsAvailableForResearch.find(tech) != techsAvailableForResearch.end();
+}
+
 // True if the tech exists, false otherwise.
 bool TechProgress::HasTech(const char* techInternalName)
 {

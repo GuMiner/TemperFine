@@ -24,3 +24,4 @@ MoveBackwards 74
 # Tab key
 ToggleTechProgressWindow 2
 ToggleTechTreeWindow 60
+ToggleResourcesWindow 17

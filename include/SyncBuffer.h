@@ -18,10 +18,10 @@ public:
     // Adds the player to the players in the round.
     void AddPlayer(const std::string& playerName);
 
-    // Locks a player for direct physics-thread use.
+    // Locks a player for direct thread use.
     Player& LockPlayer(unsigned int playerId);
 
-    // Unlocks a player for direct physics-thread use.
+    // Unlocks a player for direct thread use.
     void UnlockPlayer(unsigned int playerId);
 
     // Renders the players

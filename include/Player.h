@@ -40,8 +40,17 @@ class Player
         // Moves the player's units along their assigned routes.
         void MoveUnits();
 
+        // Attempts to switch the player's research to the given tech. Returns true on success, false otherwise.
+        bool SwitchResearch(unsigned int techId);
+
         // Updates the current player's research progress.
         void UpdateResearchProgress(float lastElapsedTime);
+
+        // Returns the current tech being researched (or -1) and fills in the fraction complete (if a tech is being researched).
+        int GetResearchProgress(float* researchFraction);
+
+        // Returns stored resources important to the application.
+        void GetStoredResources(float* storedTime, float* storedFuel);
 
     private:
         // ID of the player
@@ -64,4 +73,8 @@ class Player
 
         int currentlyResearchingTech;
         float elapsedResearchTimeSeconds;
+
+        // Player resources
+        SharedExclusiveLock fuelMutex;
+        float storedFuelAmount;
 };

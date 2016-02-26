@@ -12,6 +12,9 @@ public:
     // Completes a tech.
     void CompleteTech(unsigned int tech);
 
+    // True if a tech can be started (all dependencies are satisfied), false otherwise.
+    bool CanStartTech(unsigned int tech);
+
     // True if the tech exists, false otherwise.
     bool HasTech(const char* techInternalName);
     bool HasTech(unsigned int techId);

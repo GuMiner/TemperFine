@@ -117,6 +117,7 @@
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Projectile.h" />
     <ClInclude Include="include\RenderableSentence.h" />
+    <ClInclude Include="include\ResourcesWindow.h" />
     <ClInclude Include="include\RouteVisual.h" />
     <ClInclude Include="include\Scenery.h" />
     <ClInclude Include="include\ShaderManager.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\PhysicsOps.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Projectile.cpp" />
+    <ClCompile Include="src\ResourcesWindow.cpp" />
     <ClCompile Include="src\RouteVisual.cpp" />
     <ClCompile Include="src\Scenery.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
