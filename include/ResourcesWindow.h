@@ -17,6 +17,17 @@ private:
     std::string GetFuelString(float fuelAmount);
     std::string GetTimeString(float timeAmount);
 
+    // Updates the max time and fuel amounts for proper scrollbars.
+    void UpdateMaxTimeFuelAmounts(float timeAmount, float fuelAmount);
+
+    int minimumMaxAmount;
+
+    int lastMaxTime;
+    int lastMaxFuel;
+
+    int maxTime;
+    int maxFuel;
+
     sfg::Label::Ptr fuelLabel;
     sfg::Label::Ptr timeLabel;
 

@@ -2,7 +2,16 @@
 #include "ResourcesWindow.h"
 
 ResourcesWindow::ResourcesWindow()
-{ }
+{
+    // Constant
+    minimumMaxAmount = 1;
+
+    // Varying window for the scrollbar min/max amounts.
+    lastMaxTime = 1;
+    lastMaxFuel = 1;
+    maxTime = 1;
+    maxFuel = 1;
+}
 
 bool ResourcesWindow::Setup()
 {
@@ -43,6 +52,7 @@ bool ResourcesWindow::Setup()
     masterBox->Pack(fuelHorizontalBox);
 
     window->Add(masterBox);
+    window->SetStyle(sfg::Window::BACKGROUND);
     return true;
 }
 
@@ -52,7 +62,61 @@ void ResourcesWindow::UpdateStoredResources(float storedTime, float storedFuel)
     timeLabel->SetText(GetTimeString(storedTime));
     fuelLabel->SetText(GetFuelString(storedFuel));
 
-    // TODO also update the min, max, and progress bars.
+    // Updates the max and progress bars
+    UpdateMaxTimeFuelAmounts(storedTime, storedFuel);
+    storedTimeBar->SetFraction(storedTime / (float)maxTime);
+    storedFuelBar->SetFraction(storedFuel / (float)maxFuel);
+}
+
+void ResourcesWindow::UpdateMaxTimeFuelAmounts(float timeAmount, float fuelAmount)
+{
+    // Scale up as needed.
+    while (timeAmount > maxTime)
+    {
+        lastMaxTime = maxTime;
+        maxTime *= 10;
+    }
+
+    while (fuelAmount > maxFuel)
+    {
+        lastMaxFuel = maxFuel;
+        maxFuel *= 10;
+    }
+
+    // Scale down as needed
+    while (timeAmount < lastMaxTime)
+    {
+        if (maxTime == minimumMaxAmount)
+        {
+            // Can't go lower!
+            lastMaxTime = maxTime;
+            break;
+        }
+
+        maxTime /= 10;
+        lastMaxTime /= 10;
+    }
+
+    while (fuelAmount < lastMaxFuel)
+    {
+        if (maxFuel == minimumMaxAmount)
+        {
+            // Can't go lower!
+            lastMaxFuel = maxFuel;
+            break;
+        }
+
+        maxFuel /= 10;
+        lastMaxFuel /= 10;
+    }
+
+    std::stringstream maxTimeString;
+    maxTimeString << maxTime << " s";
+    maxTimeAmount->SetText(maxTimeString.str());
+
+    std::stringstream maxFuelString;
+    maxFuelString << maxFuel << " kg";
+    maxFuelAmount->SetText(maxFuelString.str());
 }
 
 std::string ResourcesWindow::GetFuelString(float fuelAmount)
