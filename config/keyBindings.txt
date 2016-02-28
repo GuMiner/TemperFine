@@ -25,3 +25,4 @@ MoveBackwards 74
 ToggleTechProgressWindow 2
 ToggleTechTreeWindow 60
 ToggleResourcesWindow 17
+ToggleBuildingsWindow 1

@@ -1,6 +1,7 @@
 #pragma once
 #include "GuiWindow.h"
 
+// Displays the current available resource for the player.
 class ResourcesWindow : public GuiWindow
 {
 public:

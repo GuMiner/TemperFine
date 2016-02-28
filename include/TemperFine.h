@@ -5,7 +5,9 @@
 #include <vector>
 #include "ArmorConfig.h"
 #include "BodyConfig.h"
+#include "BuildingsWindow.h"
 #include "Constants.h"
+#include "EscapeConfigWindow.h"
 #include "FontManager.h"
 #include "GraphicsConfig.h"
 #include "ImageManager.h"
@@ -46,9 +48,11 @@ class TemperFine
     ShaderManager shaderManager;
 
     // GUI
+    EscapeConfigWindow escapeConfigWindow;
     TechTreeWindow techTreeWindow;
     TechProgressWindow techProgressWindow;
     ResourcesWindow resourcesWindow;
+    BuildingsWindow buildingsWindow;
 
     // Game Data Configuration
     TechConfig techConfig;
@@ -82,10 +86,10 @@ class TemperFine
     void PerformGuiThreadUpdates(float currentGameTime);
 
     // Handles GUI-based events, such as closing the application, resizing the window, etc.
-    void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused);
+    void HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& focusPaused, bool& escapePaused);
 
     // Renders the scene.
-    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix);
+    void Render(sfg::Desktop& desktop, sf::RenderWindow& window, vec::mat4& viewMatrix);
 
 public:
     // Used just for data storage.

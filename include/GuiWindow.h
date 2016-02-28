@@ -2,6 +2,7 @@
 #include <SFGUI/SFGUI.hpp>
 #include <SFGUI/Widgets.hpp>
 
+// Base class for GUI windows that handles displaying, hiding, and visible bound computation.
 class GuiWindow
 {
     public:

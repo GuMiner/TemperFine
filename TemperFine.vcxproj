@@ -94,9 +94,12 @@
     <ClInclude Include="include\ArmorInfo.h" />
     <ClInclude Include="include\BodyConfig.h" />
     <ClInclude Include="include\BodyInfo.h" />
+    <ClInclude Include="include\Building.h" />
+    <ClInclude Include="include\BuildingsWindow.h" />
     <ClInclude Include="include\ConfigManager.h" />
     <ClInclude Include="include\Constants.h" />
     <ClInclude Include="include\ConversionUtils.h" />
+    <ClInclude Include="include\EscapeConfigWindow.h" />
     <ClInclude Include="include\FontManager.h" />
     <ClInclude Include="include\GraphicsConfig.h" />
     <ClInclude Include="include\GuiWindow.h" />
@@ -145,8 +148,11 @@
     <ClInclude Include="include\VoxelRoute.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\EscapeConfigWindow.cpp" />
     <ClCompile Include="src\ArmorConfig.cpp" />
     <ClCompile Include="src\BodyConfig.cpp" />
+    <ClCompile Include="src\Building.cpp" />
+    <ClCompile Include="src\BuildingsWindow.cpp" />
     <ClCompile Include="src\ConfigManager.cpp" />
     <ClCompile Include="src\Constants.cpp" />
     <ClCompile Include="src\ConversionUtils.cpp" />

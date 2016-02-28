@@ -8,6 +8,7 @@ sf::Keyboard::Key KeyBindingConfig::MoveDown;
 sf::Keyboard::Key KeyBindingConfig::ToggleTechProgressWindow;
 sf::Keyboard::Key KeyBindingConfig::ToggleTechTreeWindow;
 sf::Keyboard::Key KeyBindingConfig::ToggleResourcesWindow;
+sf::Keyboard::Key KeyBindingConfig::ToggleBuildingsWindow;;
 
 bool KeyBindingConfig::LoadConfigValues(std::vector<std::string>& configFileLines)
 {
@@ -17,7 +18,8 @@ bool KeyBindingConfig::LoadConfigValues(std::vector<std::string>& configFileLine
         ReadKey(configFileLines, MoveDown, "Error reading in the move down key!") &&
         ReadKey(configFileLines, ToggleTechProgressWindow, "Error reading in the tech progress key!") &&
         ReadKey(configFileLines, ToggleTechTreeWindow, "Error reading in the tech tree key!") && 
-        ReadKey(configFileLines, ToggleResourcesWindow, "Error reading in the resources key!"));
+        ReadKey(configFileLines, ToggleResourcesWindow, "Error reading in the resources key!") &&
+        ReadKey(configFileLines, ToggleBuildingsWindow, "Error reading in the buildings key!"));
 }
 
 void KeyBindingConfig::WriteConfigValues()
@@ -29,6 +31,7 @@ void KeyBindingConfig::WriteConfigValues()
     WriteKey("ToggleTechProgressWindow", ToggleTechProgressWindow);
     WriteKey("ToggleTechTreeWindow", ToggleTechTreeWindow);
     WriteKey("ToggleResourcesWindow", ToggleResourcesWindow);
+    WriteKey("ToggleBuildingsWindow", ToggleBuildingsWindow);
 }
 
 KeyBindingConfig::KeyBindingConfig(const char* configName)

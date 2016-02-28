@@ -2,6 +2,7 @@
 #include <string>
 #include "GuiWindow.h"
 
+// Displays the progress in completing the currently-selected tech.
 class TechProgressWindow : public GuiWindow
 {
 public:

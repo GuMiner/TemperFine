@@ -260,6 +260,14 @@ Constants::Status TemperFine::LoadAssets(sfg::Desktop* desktop)
     {
         return Constants::Status::BAD_UI;
     }
+    else if (!buildingsWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
+    else if (!escapeConfigWindow.Initialize(desktop))
+    {
+        return Constants::Status::BAD_UI;
+    }
 
     // Physics
     Logger::Log("Physics loading...");
@@ -304,7 +312,7 @@ void TemperFine::PerformGuiThreadUpdates(float currentGameTime)
     statistics.UpdateViewPos(physicsSyncBuffer.GetViewerPosition());
 }
 
-void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& paused)
+void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, bool& alive, bool& focusPaused, bool& escapePaused)
 {
     // Handle all events.
     sf::Event event;
@@ -319,15 +327,11 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
         }
         else if (event.type == sf::Event::LostFocus)
         {
-            paused = true;
-            physics.Pause();
-            // musicManager.Pause();
+            focusPaused = true;
         }
         else if (event.type == sf::Event::GainedFocus)
         {
-            paused = false;
-            physics.Resume();
-            // musicManager.Resume();
+            focusPaused = false;
         }
         else if (event.type == sf::Event::Resized)
         {
@@ -347,10 +351,23 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
             {
                 resourcesWindow.ToggleDisplay();
             }
+            else if (event.key.code == KeyBindingConfig::ToggleBuildingsWindow)
+            {
+                buildingsWindow.ToggleDisplay();
+            }
+            else if (event.key.code == sf::Keyboard::Escape)
+            {
+                // The Escape key is the consistent pause / unpause
+                escapePaused = !escapePaused;
+                escapeConfigWindow.ToggleDisplay();
+            }
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
-            if (event.mouseButton.button == sf::Mouse::Left && !techTreeWindow.WithinVisibleBounds(event.mouseButton.x, event.mouseButton.y))
+            if (event.mouseButton.button == sf::Mouse::Left && 
+                !techTreeWindow.WithinVisibleBounds(event.mouseButton.x, event.mouseButton.y) &&
+                !buildingsWindow.WithinVisibleBounds(event.mouseButton.x, event.mouseButton.y) &&
+                !escapeConfigWindow.WithinVisibleBounds(event.mouseButton.x, event.mouseButton.y))
             {
                 physics.QueueLeftMouseClick(event.mouseButton.x, event.mouseButton.y, window.getSize().x, window.getSize().y);
             }
@@ -376,9 +393,25 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
     // Update windows based on size resizing.
     resourcesWindow.MoveToScreenBottom(window.getSize());
     techProgressWindow.MoveToScreenBottomLeft(window.getSize());
+
+    // Handle pausing the physics thread if we're paused.
+    if (escapePaused || focusPaused)
+    {
+        physics.Pause();
+    }
+    else
+    {
+        physics.Resume();
+    }
+
+    // Handle alternative means of quitting.
+    if (escapeConfigWindow.ShouldQuit())
+    {
+        alive = false;
+    }
 }
 
-void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)
+void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, vec::mat4& viewMatrix)
 {
     vec::mat4 projectionMatrix = Constants::PerspectiveMatrix * viewMatrix;
 
@@ -400,11 +433,6 @@ void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clo
 
     // Renders the statistics. Note that this just takes the perspective matrix, not accounting for the viewer position.
     statistics.RenderStats(Constants::PerspectiveMatrix);
-
-    // Renders the UI, unbinding the current vertex array to avoid messiness.
-    glBindVertexArray(0);
-    glUseProgram(0);    
-    desktop.Update(guiClock.restart().asSeconds());
 }
 
 Constants::Status TemperFine::Run()
@@ -430,27 +458,35 @@ Constants::Status TemperFine::Run()
     sf::Clock guiClock;
     sf::Time clockStartTime;
     bool alive = true;
-    bool paused = false;
+    bool focusPaused = false;
+    bool escapePaused = false;
     vec::mat4 viewMatrix;
     while (alive)
     {
         clockStartTime = clock.getElapsedTime();
         viewMatrix = physicsSyncBuffer.GetViewMatrix();
 
-        HandleEvents(desktop, window, alive, paused);
+        HandleEvents(desktop, window, alive, focusPaused, escapePaused);
         PerformGuiThreadUpdates(clock.getElapsedTime().asSeconds());
 
         // Render, only if non-paused.
-        if (!paused)
+        if (!focusPaused && !escapePaused)
         {
-            Render(desktop, window, guiClock, viewMatrix);
-
-            glViewport(0, 0, window.getSize().x, window.getSize().y);
-            sfgui.Display(window);
-
-            UpdatePerspective(window.getSize().x, window.getSize().y);
-            window.display();
+            Render(desktop, window, viewMatrix);
         }
+
+        // GUI is always updated, as else when we're paused, we can't see it!
+        
+        // Renders the UI, unbinding the current vertex array to avoid messiness as SFGUI also uses OpenGL, of course.
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glViewport(0, 0, window.getSize().x, window.getSize().y);
+        desktop.Update(guiClock.restart().asSeconds());
+        sfgui.Display(window);
+
+        // Display what we rendered.
+        UpdatePerspective(window.getSize().x, window.getSize().y);
+        window.display();
 
         // Delay to run approximately at our maximum framerate.
         sf::Int64 sleepDelay = (1000000 / Constants::MAX_FRAMERATE) - clock.getElapsedTime().asMicroseconds() - clockStartTime.asMicroseconds();

@@ -2,6 +2,7 @@
 #include <string>
 #include <set>
 #include <vector>
+#include "Building.h"
 #include "ModelManager.h"
 #include "RouteVisual.h"
 #include "SharedExclusiveLock.h"
@@ -62,6 +63,10 @@ class Player
         // Units the player has under their control.
         SharedExclusiveLock playerUnitVectorMutex;
         std::vector<Unit> units;
+
+        // Buildings the player has under their control.
+        SharedExclusiveLock playerBuildingVectorMutex;
+        std::vector<Building> buildings;
 
         // The currently-selected units for the player.
         SharedExclusiveLock unitSelectionMutex; // STL isn't thread-safe, and we read this in the GUI, write in physics, as usual...

@@ -139,6 +139,15 @@
     <ClCompile Include="src\ResourcesWindow.cpp">
       <Filter>GUI\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Building.cpp">
+      <Filter>Source\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BuildingsWindow.cpp">
+      <Filter>GUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EscapeConfigWindow.cpp">
+      <Filter>GUI\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ArmorConfig.h">
@@ -298,6 +307,15 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="include\ResourcesWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Building.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BuildingsWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EscapeConfigWindow.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
