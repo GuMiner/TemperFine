@@ -6,6 +6,9 @@ class ResourcesWindow : public GuiWindow
 public:
     ResourcesWindow();
 
+    // Moves the resources window to the bottom-middle of the screen, regardless of screen size.
+    void MoveToScreenBottom(sf::Vector2u windowSize);
+
     // Updates the stored resources.
     void UpdateStoredResources(float storedTime, float storedFuel);
 

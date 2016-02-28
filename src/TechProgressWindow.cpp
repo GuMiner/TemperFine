@@ -27,9 +27,16 @@ bool TechProgressWindow::Setup()
     masterBox->Pack(researchProgressText);
 
     window->Add(masterBox);
-    
+    window->SetStyle(sfg::Window::BACKGROUND);
+
     SetToNoResearch();
     return true;
+}
+
+void TechProgressWindow::MoveToScreenBottomLeft(sf::Vector2u windowSize)
+{
+    const sf::FloatRect allocation = window->GetAllocation();
+    window->SetPosition(sf::Vector2f(0, windowSize.y - allocation.height));
 }
 
 void TechProgressWindow::UpdateResearchProgress(unsigned int currentTech, float techProgress)

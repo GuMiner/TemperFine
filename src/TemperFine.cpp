@@ -372,6 +372,10 @@ void TemperFine::HandleEvents(sfg::Desktop& desktop, sf::RenderWindow& window, b
 
         // TODO play a sound if you fail to (or succeed in) switching research.
     }
+
+    // Update windows based on size resizing.
+    resourcesWindow.MoveToScreenBottom(window.getSize());
+    techProgressWindow.MoveToScreenBottomLeft(window.getSize());
 }
 
 void TemperFine::Render(sfg::Desktop& desktop, sf::RenderWindow& window, sf::Clock& guiClock, vec::mat4& viewMatrix)

@@ -7,6 +7,9 @@ class TechProgressWindow : public GuiWindow
 public:
     TechProgressWindow();
     
+    // Moves the window to screen bottom-left, regardless of current window size.
+    void MoveToScreenBottomLeft(sf::Vector2u windowSize);
+
     // Updates the current research progress, switching techs if necessary.
     void UpdateResearchProgress(unsigned int currentTech, float techProgress);
 

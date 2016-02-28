@@ -16,7 +16,6 @@ ResourcesWindow::ResourcesWindow()
 bool ResourcesWindow::Setup()
 {
     window->SetTitle("Resources");
-    window->SetPosition(sf::Vector2f(20.0f, 10.0f));
 
     timeLabel = sfg::Label::Create("");
     fuelLabel = sfg::Label::Create("");
@@ -25,17 +24,18 @@ bool ResourcesWindow::Setup()
     minFuelAmount = sfg::Label::Create("0");
 
     storedTimeBar = sfg::ProgressBar::Create(sfg::ProgressBar::Orientation::HORIZONTAL);
-
+    storedTimeBar->SetRequisition(sf::Vector2f(200, 10));
     storedFuelBar = sfg::ProgressBar::Create(sfg::ProgressBar::Orientation::HORIZONTAL);
+    storedFuelBar->SetRequisition(sf::Vector2f(200, 10));
 
     maxTimeAmount = sfg::Label::Create("0");
     maxFuelAmount = sfg::Label::Create("0");
 
     timeHorizontalBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-    timeHorizontalBox->SetRequisition(sf::Vector2f(200.0f, 20.0f));
     fuelHorizontalBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-    fuelHorizontalBox->SetRequisition(sf::Vector2f(200.0f, 20.0f));
 
+    timeHorizontalBox->Pack(timeLabel);
+    fuelHorizontalBox->Pack(fuelLabel);
     timeHorizontalBox->Pack(minTimeAmount);
     fuelHorizontalBox->Pack(minFuelAmount);
 
@@ -46,14 +46,20 @@ bool ResourcesWindow::Setup()
     fuelHorizontalBox->Pack(maxFuelAmount);
 
     masterBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
-    masterBox->Pack(timeLabel);
     masterBox->Pack(timeHorizontalBox);
-    masterBox->Pack(fuelLabel);
     masterBox->Pack(fuelHorizontalBox);
 
     window->Add(masterBox);
     window->SetStyle(sfg::Window::BACKGROUND);
+    window->SetRequisition(sf::Vector2f(400, 30));
     return true;
+}
+
+// Moves the resources window to the bottom-middle of the screen, regardless of screen size.
+void ResourcesWindow::MoveToScreenBottom(sf::Vector2u windowSize)
+{
+    const sf::FloatRect allocation = window->GetAllocation();
+    window->SetPosition(sf::Vector2f(windowSize.x / 2 - allocation.width / 2, windowSize.y - allocation.height));
 }
 
 // Updates the stored resources.
@@ -70,17 +76,19 @@ void ResourcesWindow::UpdateStoredResources(float storedTime, float storedFuel)
 
 void ResourcesWindow::UpdateMaxTimeFuelAmounts(float timeAmount, float fuelAmount)
 {
+    const int scaleAmount = 2;
+
     // Scale up as needed.
     while (timeAmount > maxTime)
     {
         lastMaxTime = maxTime;
-        maxTime *= 10;
+        maxTime *= scaleAmount;
     }
 
     while (fuelAmount > maxFuel)
     {
         lastMaxFuel = maxFuel;
-        maxFuel *= 10;
+        maxFuel *= scaleAmount;
     }
 
     // Scale down as needed
@@ -93,8 +101,8 @@ void ResourcesWindow::UpdateMaxTimeFuelAmounts(float timeAmount, float fuelAmoun
             break;
         }
 
-        maxTime /= 10;
-        lastMaxTime /= 10;
+        maxTime /= scaleAmount;
+        lastMaxTime /= scaleAmount;
     }
 
     while (fuelAmount < lastMaxFuel)
@@ -106,8 +114,8 @@ void ResourcesWindow::UpdateMaxTimeFuelAmounts(float timeAmount, float fuelAmoun
             break;
         }
 
-        maxFuel /= 10;
-        lastMaxFuel /= 10;
+        maxFuel /= scaleAmount;
+        lastMaxFuel /= scaleAmount;
     }
 
     std::stringstream maxTimeString;
@@ -124,7 +132,7 @@ std::string ResourcesWindow::GetFuelString(float fuelAmount)
     std::stringstream fuelString;
     fuelString.precision(1);
     fuelString << std::fixed;
-    fuelString << "Fuel: " << fuelAmount;
+    fuelString << "Fuel: " << fuelAmount << " kg";
     return fuelString.str();
 }
 
@@ -133,6 +141,6 @@ std::string ResourcesWindow::GetTimeString(float timeAmount)
     std::stringstream timeString;
     timeString.precision(1);
     timeString << std::fixed;
-    timeString << "Research: " << timeAmount;
+    timeString << "Research: " << timeAmount << " s";
     return timeString.str();
 }
