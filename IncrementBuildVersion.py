@@ -2,7 +2,7 @@ import string
 
 # Load in the file
 print ("Reading in the versioning header file...")
-file = open("Version.h", "r+")
+file = open("version.h", "r+")
 lines = file.readlines()
 for index, line in enumerate(lines):
     if 'MINOR_VERSION' in line:

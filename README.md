@@ -1,4 +1,8 @@
 # TemperFine
+
+![Status.png][status]
+[status]:./Status.png
+
 ## About
 --------
 
@@ -6,12 +10,18 @@ TemperFine is a 3D voxel-based multiplayer real-time strategy game which takes p
 
 Written in C++ with raw OpenGL 4.0.
 
+## Status
+---------
+### SUPERSEDED
+
+Work on other game projects (such as [agow] (https://github.com/GuMiner/agow) not requiring detailed art assets has caused this project to be abandoned for the time being.
+
 ## Documentation
 ----------------
 
 * [Contributing to TemperFine] (./docs/Contributing.md)
 * [TemperFine Structure] (./docs/Structure.md)
-* [OpenGL Concepts] (./docs/OpenGL4.md)
+* [OpenGL Concepts] (./docs/OpenGL4.md) 
 * [Game Design] (./docs/GameDesign.md)
 * [Active Tasks] (./docs/ActiveTasks.md)
 

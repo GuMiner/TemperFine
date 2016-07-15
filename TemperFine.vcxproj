@@ -67,7 +67,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)\IncrementBuildVersion.py</Command>
+      <Command>python "$(ProjectDir)\IncrementBuildVersion.py"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,7 +86,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)\IncrementBuildVersion.py</Command>
+      <Command>python "$(ProjectDir)\IncrementBuildVersion.py"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
