@@ -14,7 +14,8 @@ Written in C++ with raw OpenGL 4.0.
 ---------
 ### SUPERSEDED
 
-Work on other game projects (such as [agow] (https://github.com/GuMiner/agow) not requiring detailed art assets has caused this project to be abandoned for the time being.
+Work on other game projects (such as [agow] (https://github.com/GuMiner/agow), which does not require detailed art assets) 
+has caused this project to be put on indefinite hold for the time being.
 
 ## Documentation
 ----------------
