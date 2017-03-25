@@ -1,7 +1,6 @@
 # TemperFine
 
-![Status.png][status]
-[status]:./Status.png
+![End status image of the game](./Status.png)
 
 ## About
 --------
